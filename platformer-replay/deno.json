@@ -1,0 +1,13 @@
+{
+  "name": "platformer-replay",
+  "version": "0.1.0",
+  "tasks": {
+    "dev":   "deno run --allow-net --allow-read --allow-env server.ts",
+    "build": "deno run --allow-net --allow-read --allow-write --allow-env build.ts"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"]
+  }
+}

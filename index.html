@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un replay, ce n'est pas une vidéo — BreizhCamp 2026</title>
+
+  <!-- Reveal.js core -->
+  <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css">
+
+  <!-- Highlight.js theme (base, overridden by our CSS) -->
+  <link rel="stylesheet" href="node_modules/reveal.js/plugin/highlight/monokai.css">
+
+  <!-- Notre thème Matrix Neon -->
+  <link rel="stylesheet" href="matrix-neon.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Matrix rain canvas (derrière tout) -->
+<canvas id="matrix-bg"></canvas>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 0 — TITRE
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide-title">
+    <div class="kicker">// BreizhCamp 2026 — 24 juin</div>
+
+    <h1>Un replay,<br>ce n'est pas<br>une vidéo</h1>
+
+    <div class="subtitle">
+      Du game replay à l'event sourcing — les mêmes idées, deux mondes différents
+    </div>
+
+    <div class="speaker-card">
+      <div class="dot"></div>
+      <div>
+        <div class="name">Pierre Fervel</div>
+        <span>Développeur Fullstack · BreizhCamp 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    Slide d'intro. Laisser la salle s'installer. Attendre le silence.
+    Commencer par : "Levez la main si vous avez déjà regardé un replay dans un jeu."
+    Puis : "Levez la main si vous avez déjà fait de l'event sourcing."
+    Les deux audiences sont souvent distinctes — c'est exactement le point.
+    Ce talk, c'est un pont entre les deux.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 1 — QUI SUIS-JE
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <h2>$ whoami</h2>
+
+  <div class="cols cols-60-40" style="margin-top:1.2em">
+    <div>
+      <div class="card green" style="margin-bottom:16px">
+        <div class="card-title">Dev</div>
+        <p>Développeur Fullstack — forte appétence Angular.<br>
+        Je rejoins des équipes pour apporter architecture et guidance technique.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">Passions</div>
+        <p>Jeux vidéo · Architecture logicielle · Homelab Proxmox · IA outillage</p>
+      </div>
+      <div class="card magenta">
+        <div class="card-title">Ce talk</div>
+        <p>Une métaphore qui m'a sauté aux yeux un soir en bricolant un système de replay maison.<br>
+        Je voulais la partager.</p>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; padding-top:8px">
+      <div class="highlight-box green">
+        <span class="mono glow-green">🎮</span> Gamer depuis l'enfance
+      </div>
+      <div class="highlight-box">
+        <span class="mono glow-cyan">⚙️</span> Backend / Event-driven architectures
+      </div>
+      <div class="highlight-box magenta">
+        <span class="mono glow-magenta">🐇</span> Le talk va vite — slides dispo après
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    Slide rapide, 1 minute max. L'idée c'est de créer la connexion : je suis quelqu'un qui touche
+    aux deux mondes (jeu + backend) et c'est pour ça que j'ai fait le lien.
+    Montrer que c'est une vraie curiosité personnelle, pas un talk académique.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 2 — PLAN DU TALK
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <h2>Plan</h2>
+
+  <div class="cols cols-2" style="margin-top:1em; gap:16px">
+    <div class="card green">
+      <div class="card-title">Partie 1 — ~10 min</div>
+      <p style="font-size:0.78em; line-height:1.7">
+        <span class="glow-green mono">01.</span> Un replay, ce n'est pas une vidéo<br>
+        <span class="muted small">Comment les jeux stockent et rejouent une partie</span>
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">Partie 2 — ~12 min</div>
+      <p style="font-size:0.78em; line-height:1.7">
+        <span class="glow-cyan mono">02.</span> De la partie au système<br>
+        <span class="muted small">Introduction concrète à l'event sourcing</span>
+      </p>
+    </div>
+    <div class="card magenta">
+      <div class="card-title">Partie 3 — ~10 min</div>
+      <p style="font-size:0.78em; line-height:1.7">
+        <span class="glow-magenta mono">03.</span> Cas d'usage réels<br>
+        <span class="muted small">Debug, audit, time travel, résilience</span>
+      </p>
+    </div>
+    <div class="card gold">
+      <div class="card-title">Partie 4 — ~10 min</div>
+      <p style="font-size:0.78em; line-height:1.7">
+        <span class="glow-gold mono">04.</span> Limites et conseils pragmatiques<br>
+        <span class="muted small">Snapshots, coût, tooling, quand NE PAS l'utiliser</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top:1.2em">
+    <span class="mono">→</span> Deux démos live : un mini-jeu + un event store backend — même log, deux mondes
+  </div>
+
+  <aside class="notes">
+    Présenter le plan rapidement. Insister sur les deux démos live qui ponctuent le talk.
+    Le fil rouge : le jeu et le backend sont deux implémentations du même pattern.
+    Durée totale visée : 45 min + 5 min questions.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <section>
+    <div class="slide-section">
+      <div class="section-number">// PARTIE 01</div>
+      <div class="section-title">Un replay,<br>ce n'est pas<br>une vidéo</div>
+      <div class="section-tag">Comment les jeux stockent une partie</div>
+    </div>
+
+    <aside class="notes">
+      Slide de transition. Prendre une seconde, laisser le titre s'installer.
+      Commencer à raconter l'histoire : "Imaginez que vous regardez un killcam dans CS2..."
+    </aside>
+  </section>
+
+  <!-- 1.1 — Le killcam, tout le monde connaît -->
+  <section>
+    <h2>Le killcam — tout le monde connaît</h2>
+
+    <div class="cols cols-60-40" style="margin-top:0.8em">
+      <div>
+        <p>Vous mourez dans <span class="glow-green mono">Counter-Strike</span>, <span class="glow-cyan mono">Overwatch</span>, <span class="glow-magenta mono">Fortnite</span>…</p>
+        <p class="mt">Le jeu vous montre les 5 dernières secondes depuis le point de vue de votre adversaire.</p>
+
+        <div class="highlight-box green" style="margin-top:1em">
+          Question : le jeu a-t-il enregistré une vidéo de ces 5 secondes en permanence&nbsp;?
+        </div>
+
+        <p class="mt fragment">Non. <span class="glow-green">Jamais.</span></p>
+        <p class="fragment small muted" style="line-height:1.6">
+          Une vidéo 60fps 1080p = ~150 Mo/min.<br>
+          Une session de jeu de 30 min = <span class="glow-magenta">4,5 Go</span>.<br>
+          En permanence, en RAM. Non.
+        </p>
+      </div>
+      <div>
+        <div class="card green">
+          <div class="card-title">Ce que le jeu stocke vraiment</div>
+          <div class="event-log">
+            <div class="line">
+              <span class="ev-v">[t=0]</span>
+              <span class="ev-type" style="color:var(--green)">GAME_START</span>
+              <span class="ev-data">seed=42</span>
+            </div>
+            <div class="line">
+              <span class="ev-v">[t=1]</span>
+              <span class="ev-type">MOVE_RIGHT</span>
+              <span class="ev-data">p=1</span>
+            </div>
+            <div class="line">
+              <span class="ev-v">[t=4]</span>
+              <span class="ev-type">JUMP</span>
+              <span class="ev-data">p=1</span>
+            </div>
+            <div class="line">
+              <span class="ev-v">[t=9]</span>
+              <span class="ev-type">SHOOT</span>
+              <span class="ev-data">p=2, dir=W</span>
+            </div>
+            <div class="line">
+              <span class="ev-v">[t=12]</span>
+              <span class="ev-type" style="color:var(--magenta)">PLAYER_HIT</span>
+              <span class="ev-data ev-auto">← auto</span>
+            </div>
+          </div>
+          <p class="small muted" style="margin-top:8px">Quelques dizaines d'octets par frame d'input</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Laisser la question résonner une seconde avant de faire apparaître la réponse.
+      Insister sur les chiffres : 4,5 Go en RAM, c'est absurde.
+      La révélation : le jeu ne stocke QUE les inputs et quelques événements système.
+      C'est la même idée qu'on va retrouver côté backend.
+    </aside>
+  </section>
+
+  <!-- 1.2 — La formule du replay -->
+  <section>
+    <h2>La formule du replay</h2>
+
+    <div style="text-align:center; margin: 1.4em 0 1em">
+      <div style="font-family:var(--font-display); font-size:1.5em; line-height:2; letter-spacing:0.05em">
+        <span class="glow-green">État initial</span>
+        <span class="muted" style="font-size:0.7em; margin: 0 0.4em">+</span>
+        <span class="glow-cyan">Log d'events</span>
+        <span class="muted" style="font-size:0.7em; margin: 0 0.4em">=</span>
+        <span class="glow-magenta">Replay identique</span>
+      </div>
+    </div>
+
+    <div class="cols cols-3" style="margin-top:0.6em">
+      <div class="card green">
+        <div class="card-title">État initial</div>
+        <p class="small">Position de départ, graine du générateur aléatoire (RNG seed), configuration de la map, stats des joueurs.</p>
+        <p class="small muted mt">→ Reproductible à l'identique</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Log d'events</div>
+        <p class="small">Uniquement les <strong>changements</strong> d'inputs (pas 60 snapshots/sec), plus les événements système (mort, victoire).</p>
+        <p class="small muted mt">→ Append-only, compact</p>
+      </div>
+      <div class="card magenta">
+        <div class="card-title">Résultat</div>
+        <p class="small">En réinjectant les events dans le moteur physique depuis l'état initial, on reconstruit exactement la même partie.</p>
+        <p class="small muted mt">→ Déterministe</p>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:1em">
+      <span class="mono glow-cyan">Le moteur physique est une fonction pure :</span>
+      <code>f(état, input) → nouvel_état</code>
+    </div>
+
+    <aside class="notes">
+      C'est la slide la plus importante de cette partie. Faire lire la formule à voix haute.
+      Insister sur "fonction pure" : c'est ce qui rend le replay possible.
+      Si la physique avait des effets de bord (accès au temps réel, random non seedé, etc.),
+      le replay serait impossible. C'est pour ça que les jeux seedent leur RNG.
+      Transition : "Et côté backend, on a exactement le même pattern..."
+    </aside>
+  </section>
+
+  <!-- 1.3 — Exemples concrets de replays dans les jeux -->
+  <section>
+    <h2>Replays dans les jeux — exemples concrets</h2>
+
+    <div class="cols cols-3" style="margin-top:1em">
+      <div class="card green">
+        <div class="card-title">🏎️ StarCraft / jeux de stratégie</div>
+        <p class="small">Fichier <code>.rep</code> de quelques Ko pour une partie d'1h. Contient uniquement les ordres des joueurs horodatés.</p>
+        <div class="tag green mt">Fichier replay &lt; 500 Ko</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎮 Doom (1993) — le pionnier</div>
+        <p class="small">Format <code>.lmp</code> : liste des inputs par tic (35/s). Rejoue exactement la même démo sur n'importe quelle machine.</p>
+        <div class="tag cyan mt">32 ans déjà</div>
+      </div>
+      <div class="card magenta">
+        <div class="card-title">🔫 CS2 / FPS modernes</div>
+        <p class="small">Le serveur enregistre tous les états réseau. Le killcam relit les derniers ticks côté client. La "caméra" n'existe pas en direct.</p>
+        <div class="tag magenta mt">Killcam = time travel</div>
+      </div>
+    </div>
+
+    <div class="card gold" style="margin-top:14px">
+      <div class="card-title">⚠️ La limite : le non-déterminisme</div>
+      <p class="small">Un bug de replay arrive quand un élément externe perturbe la reconstruction : latence réseau non rejouée, timer système, accès fichier… Exactement les mêmes problèmes qu'en event sourcing.</p>
+    </div>
+
+    <aside class="notes">
+      Doom 1993 est un excellent exemple car il est très connu et l'implémentation est simple.
+      Les .lmp peuvent être rejoués sur n'importe quelle version identique du jeu.
+      CS2 : souligner que le killcam N'EXISTE PAS en temps réel. Il est reconstruit à la demande.
+      Le bug de replay = parfait bridge pour parler des limites qu'on retrouvera en partie 4.
+    </aside>
+  </section>
+
+  <!-- 1.4 — Notre mini-jeu : architecture -->
+  <section>
+    <h2>Notre mini-jeu : <span class="glow-green">Platformer Replay</span></h2>
+
+    <div class="cols cols-60-40" style="margin-top:0.8em">
+      <div>
+        <p>Un platformer TypeScript minimal — conçu pour être transparent.</p>
+
+        <div class="event-log" style="margin-top:0.8em">
+          <div class="line"><span class="ev-v muted small">src/</span></div>
+          <div class="line" style="padding-left:1em">
+            <span class="ev-type" style="min-width:12ch">core/</span>
+            <span class="ev-data">types · level · <span style="color:var(--green)">physics.ts</span></span>
+          </div>
+          <div class="line" style="padding-left:1em">
+            <span class="ev-type" style="min-width:12ch">replay/</span>
+            <span class="ev-data"><span style="color:var(--cyan)">recorder.ts</span> · <span style="color:var(--cyan)">player.ts</span></span>
+          </div>
+          <div class="line" style="padding-left:1em">
+            <span class="ev-type" style="min-width:12ch">render/</span>
+            <span class="ev-data muted">canvas.ts (optionnel)</span>
+          </div>
+          <div class="line" style="padding-left:1em">
+            <span class="ev-type" style="min-width:12ch">ui/</span>
+            <span class="ev-data">eventlog.ts</span>
+          </div>
+        </div>
+
+        <div class="highlight-box green" style="margin-top:0.8em">
+          <span class="mono">render/</span> peut être supprimé sans casser la logique.<br>
+          <span class="small muted">Découplage total rendu / métier.</span>
+        </div>
+      </div>
+      <div>
+        <div class="card green">
+          <div class="card-title">physics.ts — la clé</div>
+          <pre style="font-size:0.55em"><code class="language-typescript" style="font-size:1em !important">// Fonction PURE — pas d'effet de bord
+  // C'est ce qui rend le replay possible
+  function applyTick(
+    state: GameState,
+    input: InputSnapshot
+  ): GameState {
+    // gravité, collisions, position
+    // même entrée → même sortie, toujours
+    return newState;
+  }</code></pre>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="card-title">recorder.ts</div>
+          <p class="small">On n'enregistre que les <strong>changements</strong> d'input — pas 60 snapshots/sec.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Expliquer rapidement l'architecture. Ne pas entrer dans les détails — la démo va suivre.
+      Insister sur physics.ts = fonction pure. C'est la colonne vertébrale du replay.
+      Mentionner que render/ peut être supprimé = bonne pratique d'architecture.
+    </aside>
+  </section>
+
+  <!-- ─────────────────── DÉMO 1 ─────────────────────── -->
+  <section data-background-color="#020408">
+    <div class="slide-demo">
+      <div class="demo-corners"></div>
+      <div class="demo-label">// live demo 01</div>
+      <div class="demo-title">PLATFORMER<br>REPLAY</div>
+      <div class="demo-subtitle">
+        Jouer · Regarder l'event log · Lancer le replay · Killcam
+      </div>
+    </div>
+
+    <aside class="notes">
+      DÉMO LIVE — switcher sur la fenêtre du jeu.
+
+      Script de démo :
+      1. Jouer une courte partie (10-15s), sauter quelques plateformes, mourir
+      2. Montrer l'event log à droite : "Regardez — uniquement les changements d'input"
+      3. Cliquer "Replay" — "On repart de l'état initial et on réinjecte les events"
+      4. Cliquer "Killcam" — "On recule de 5 secondes. C'est du time travel."
+      5. Changer le seed — "Nouveau niveau, même mécanique"
+
+      Message clé : "On vient de rejouer une partie à partir d'une liste d'events. 
+      Maintenant je vais vous montrer la même chose côté backend."
+
+      Durée : 4-5 minutes max.
+    </aside>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <section>
+    <div class="slide-section">
+      <div class="section-number">// PARTIE 02</div>
+      <div class="section-title">De la partie<br>au système</div>
+      <div class="section-tag">Introduction concrète à l'event sourcing</div>
+    </div>
+
+    <aside class="notes">
+      Slide de transition. 
+      "On vient de voir comment un jeu stocke une partie. 
+      Maintenant je vais vous montrer que votre backend peut faire exactement la même chose."
+    </aside>
+  </section>
+
+  <!-- 2.1 — CRUD vs Event Sourcing -->
+  <section>
+    <h2>CRUD vs Event Sourcing</h2>
+
+    <div class="cols cols-2" style="margin-top:0.8em; gap:20px">
+      <div>
+        <div class="card magenta" style="margin-bottom:12px">
+          <div class="card-title">🗃️ Approche CRUD classique</div>
+          <p class="small">On stocke l'<strong>état courant</strong>. Chaque UPDATE écrase le précédent.</p>
+          <pre style="font-size:0.48em; margin-top:8px"><code class="language-sql">-- Ce qu'on voit dans la DB
+  SELECT * FROM rooms WHERE id='amphi-a';
+  -- room_id | attendees | status
+  -- amphi-a | 2         | open
+
+  -- Ce qu'on a PERDU :
+  -- Qui est entré ? Quand ? Dans quel ordre ?
+  -- Pourquoi la salle était pleine à 14h30 ?
+  -- Qui a fait le checkout ?</code></pre>
+        </div>
+        <div class="tag magenta">État final uniquement · Passé effacé</div>
+      </div>
+      <div>
+        <div class="card green" style="margin-bottom:12px">
+          <div class="card-title">📋 Event Sourcing</div>
+          <p class="small">On stocke la <strong>chronologie des décisions</strong>. L'état se reconstruit par replay.</p>
+          <div class="event-log" style="margin-top:8px; font-size:0.46em">
+            <div class="line"><span class="ev-v">[1]</span><span class="ev-type">RoomOpened</span><span class="ev-data">cap=3</span></div>
+            <div class="line"><span class="ev-v">[2]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">Alice</span></div>
+            <div class="line"><span class="ev-v">[3]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">Bob</span></div>
+            <div class="line"><span class="ev-v">[4]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">Charlie</span></div>
+            <div class="line"><span class="ev-v">[5]</span><span class="ev-type" style="color:var(--magenta)">RoomFull</span><span class="ev-data ev-auto">← auto (règle métier)</span></div>
+            <div class="line"><span class="ev-v">[6]</span><span class="ev-type">AttendeeCheckedOut</span><span class="ev-data">Bob</span></div>
+          </div>
+        </div>
+        <div class="tag green">Audit complet · Time travel · Rejouable</div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      C'est la slide de rupture conceptuelle. Prendre le temps.
+      CRUD = photographier l'état final. On perd tout l'historique.
+      Event Sourcing = filmer le film. Chaque décision est enregistrée.
+      Analogie jeu : CRUD = screenshot de fin de partie. ES = fichier replay.
+      La question rhétorique : "Quand votre DSI vous demande 'pourquoi la salle était pleine à 14h30 ?',
+      vous pouvez répondre avec CRUD ? Non. Avec l'event sourcing ? Oui."
+    </aside>
+  </section>
+
+  <!-- 2.2 — Les domain events -->
+  <section>
+    <h2>Les domain events — <span class="glow-green">immuables, nommés au passé</span></h2>
+
+    <div class="cols cols-40-60" style="margin-top:0.8em">
+      <div>
+        <div class="card green">
+          <div class="card-title">Règles des events</div>
+          <ul style="font-size:0.7em; line-height:2">
+            <li>Nommés au <strong>passé</strong><br><span class="muted small">RoomOpened ≠ OpenRoom</span></li>
+            <li><strong>Immuables</strong> — jamais modifiés</li>
+            <li><strong>Append-only</strong> — jamais supprimés</li>
+            <li>Portent leur <strong>payload</strong> complet</li>
+            <li>Horodatés — <code>occurredAt</code></li>
+            <li>Versionnés dans le stream</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <pre><code class="language-typescript">// events.ts — types immuables, nommés au passé
+  export type DomainEvent =
+    | RoomOpened        // ← passé, pas "OpenRoom"
+    | AttendeeCheckedIn
+    | AttendeeCheckedOut
+    | RoomFull          // ← émis AUTO par la règle métier
+    | RoomClosed;
+
+  interface BaseEvent {
+    eventId:     string;   // identifiant unique
+    aggregateId: string;   // roomId — "amphi-a"
+    occurredAt:  string;   // ISO 8601 — quand ?
+    version:     number;   // position dans le stream
+  }
+
+  export interface AttendeeCheckedIn extends BaseEvent {
+    type: "AttendeeCheckedIn";
+    payload: {
+      attendeeId:   string; // qui ?
+      attendeeName: string;
+    };
+  }</code></pre>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Insister sur le nommage au passé. C'est pas une commande (OpenRoom), c'est un fait (RoomOpened).
+      Un fait ne peut pas être annulé — il peut seulement être compensé par un autre event.
+      "RoomFull émis automatiquement" : c'est la règle métier, pas le client. Point important.
+      Le version number = position dans le stream = exact analogie avec le tick du jeu.
+    </aside>
+  </section>
+
+  <!-- 2.3 — L'event store -->
+  <section>
+    <h2>L'event store — <span class="glow-cyan">append-only, toujours</span></h2>
+
+    <div class="cols cols-2" style="margin-top:0.8em">
+      <div>
+        <pre><code class="language-typescript">// eventStore.ts — le cœur du système
+  class EventStore {
+    // Le log global
+    // En prod : PostgreSQL, EventStoreDB, Kafka…
+    private events: DomainEvent[] = [];
+
+    // APPEND ONLY — jamais de UPDATE ni DELETE
+    append(events: DomainEvent[]): void {
+      for (const event of events) {
+        this.events.push(event);
+
+        // Log formaté — le parallèle avec le jeu
+        const v    = String(event.version).padStart(3,' ');
+        const type = event.type.padEnd(24,' ');
+        const data = JSON.stringify(event.payload);
+        console.log(`[${v}] ${type} ${data}`);
+      }
+    }
+
+    // Tous les events d'une salle, dans l'ordre
+    getStream(roomId: string): DomainEvent[] {
+      return this.events
+        .filter(e => e.aggregateId === roomId)
+        .sort((a, b) => a.version - b.version);
+    }
+  }</code></pre>
+      </div>
+      <div>
+        <div class="card green">
+          <div class="card-title">En production</div>
+          <ul style="font-size:0.7em; line-height:2">
+            <li><strong>PostgreSQL</strong> — table append-only, trigger sur UPDATE/DELETE</li>
+            <li><strong>EventStoreDB</strong> — conçu pour ça, streams natifs</li>
+            <li><strong>Kafka</strong> — event streaming distribué, retention configurable</li>
+            <li><strong>DynamoDB</strong> — streams + GSI pour la projection</li>
+          </ul>
+        </div>
+        <div class="highlight-box green" style="margin-top:12px">
+          <span class="mono">Un event écrit n'est jamais modifié.</span><br>
+          <span class="small muted">Une erreur ? On émet un event compensatoire.</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Montrer le code réel de l'event store. C'est simple exprès.
+      Insister sur "jamais de UPDATE ni DELETE" — c'est LA règle fondamentale.
+      Une erreur métier = on émet un event compensatoire (ex: AttendeeCheckedOut pour annuler un CheckIn erroné).
+      Pas de correction directe sur la DB. Jamais.
+      En prod : EventStoreDB est l'outil le plus adapté, mais PostgreSQL suffit pour commencer.
+    </aside>
+  </section>
+
+  <!-- 2.4 — Les projections -->
+  <section>
+    <h2>Les projections — <span class="glow-magenta">replay pur</span></h2>
+
+    <div class="cols cols-2" style="margin-top:0.8em">
+      <div>
+        <pre><code class="language-typescript">// projections.ts — reconstruction par replay
+  // 🎮 projectRoom() ≡ gameLoop.replayInputs()
+
+  export function projectRoom(
+    roomId: string,
+    events: DomainEvent[]  // le log complet
+  ): RoomState | null {
+    if (events.length === 0) return null;
+
+    // État vide initial — comme l'état de départ du jeu
+    let state: RoomState = {
+      roomId, attendees: new Map(),
+      isFull: false, isOpen: false, version: 0,
+      eventsReplayed: 0,
+    };
+
+    // On rejoue chaque event dans l'ordre
+    // Exactement comme un moteur de jeu rejoue les inputs
+    for (const event of events) {
+      state = applyEvent(state, event); // ← fonction pure
+      state.eventsReplayed++;
+    }
+
+    return state; // état reconstruit
+  }
+
+  // applyEvent = applyInput dans le jeu
+  // (état + event) → nouvel état, sans effet de bord
+  function applyEvent(state, event): RoomState {
+    switch (event.type) {
+      case "AttendeeCheckedIn": {
+        const attendees = new Map(state.attendees);
+        attendees.set(event.payload.attendeeId,
+                      event.payload.attendeeName);
+        return { ...state, attendees,
+                isFull: attendees.size >= state.capacity };
+      }
+      // ...
+    }
+  }</code></pre>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="card-title">Le parallèle exact</div>
+          <table class="mapping-table">
+            <tr>
+              <th class="game">🎮 Jeu</th>
+              <th class="arrow"></th>
+              <th class="backend">⚙️ Backend</th>
+            </tr>
+            <tr>
+              <td class="game">replayInputs()</td>
+              <td class="arrow">↔</td>
+              <td class="backend">projectRoom()</td>
+            </tr>
+            <tr>
+              <td class="game">applyInput()</td>
+              <td class="arrow">↔</td>
+              <td class="backend">applyEvent()</td>
+            </tr>
+            <tr>
+              <td class="game">GameState</td>
+              <td class="arrow">↔</td>
+              <td class="backend">RoomState</td>
+            </tr>
+            <tr>
+              <td class="game">tick</td>
+              <td class="arrow">↔</td>
+              <td class="backend">version</td>
+            </tr>
+            <tr>
+              <td class="game">seed RNG</td>
+              <td class="arrow">↔</td>
+              <td class="backend">état initial</td>
+            </tr>
+          </table>
+        </div>
+        <div class="highlight-box green">
+          Fonction pure = même events → même état, toujours.<br>
+          <span class="small muted">C'est ce qui rend le time travel possible.</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      C'est la slide centrale du talk. Faire lire la table de correspondance lentement.
+      Insister : projectRoom() est une FONCTION PURE. Pas d'appel réseau, pas d'état global,
+      pas d'accès à la date courante. Même log → même état. Toujours.
+      C'est exactement la contrainte qu'on impose à physics.ts dans le jeu.
+      Sans cette propriété, le time travel est impossible.
+    </aside>
+  </section>
+
+  <!-- 2.5 — Les command handlers -->
+  <section>
+    <h2>Command handlers — <span class="glow-green">la règle métier décide</span></h2>
+
+    <div class="cols cols-40-60" style="margin-top:0.8em">
+      <div>
+        <div class="card green">
+          <div class="card-title">Le flux complet</div>
+          <div class="event-log" style="font-size:0.55em; line-height:2.2">
+            <div class="line"><span style="color:var(--cyan)">1.</span><span style="margin-left:8px">Commande reçue (HTTP POST)</span></div>
+            <div class="line"><span style="color:var(--cyan)">2.</span><span style="margin-left:8px">Charger le stream</span></div>
+            <div class="line"><span style="color:var(--cyan)">3.</span><span style="margin-left:8px">Projeter l'état courant</span></div>
+            <div class="line"><span style="color:var(--cyan)">4.</span><span style="margin-left:8px">Valider les règles métier</span></div>
+            <div class="line"><span style="color:var(--green)">5.</span><span style="margin-left:8px">Émettre 0..N events</span></div>
+            <div class="line"><span style="color:var(--green)">6.</span><span style="margin-left:8px">Append dans le store</span></div>
+          </div>
+        </div>
+        <div class="highlight-box magenta" style="margin-top:12px; font-size:0.62em">
+          <strong>RoomFull</strong> est émis automatiquement par le handler.<br>
+          Le client ne décide pas. La règle vit ici.
+        </div>
+      </div>
+      <div>
+        <pre><code class="language-typescript">// commands.ts — la logique métier
+  export function checkIn(
+    roomId: string,
+    attendeeId: string,
+    attendeeName: string
+  ): void {
+    // 1. Charger + projeter l'état courant
+    const events = eventStore.getStream(roomId);
+    const state  = projectRoom(roomId, events);
+
+    // 2. Valider les règles métier
+    if (!state || !state.isOpen)
+      throw new Error("Room not found or closed");
+    if (state.isFull)
+      throw new Error("Room is full");
+
+    // 3. Construire les events à émettre
+    const toAppend: DomainEvent[] = [{
+      type: "AttendeeCheckedIn",
+      version: state.version + 1,
+      payload: { attendeeId, attendeeName },
+      // ...
+    }];
+
+    // ★ Règle métier : RoomFull émis auto
+    // Le CLIENT ne décide pas — le HANDLER décide
+    if (state.attendees.size + 1 >= state.capacity) {
+      toAppend.push({
+        type: "RoomFull",
+        version: state.version + 2,
+        payload: { capacity: state.capacity },
+      });
+    }
+
+    // 4. Écrire dans le store (append only)
+    eventStore.append(toAppend);
+  }</code></pre>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Pointer le moment où RoomFull est émis. C'est une règle métier, pas une décision du client.
+      Analogie jeu : c'est l'équivalent de PLAYER_HIT émis automatiquement quand deux hitboxes se touchent.
+      Le client (joueur) appuie sur SHOOT. Le moteur décide si ça touche et émet PLAYER_HIT.
+      Même logique : le client envoie checkIn. Le handler décide si la salle est pleine et émet RoomFull.
+      Cette séparation de responsabilité est fondamentale.
+    </aside>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <section>
+    <div class="slide-section">
+      <div class="section-number">// PARTIE 03</div>
+      <div class="section-title">Cas d'usage<br>réels</div>
+      <div class="section-tag">Debug · Audit · Time travel · Résilience</div>
+    </div>
+
+    <aside class="notes">
+      Transition. "Maintenant qu'on a le modèle, pourquoi est-ce qu'on fait ça ?
+      Qu'est-ce que ça nous apporte concrètement ?"
+    </aside>
+  </section>
+
+  <!-- 3.1 — Time travel -->
+  <section>
+    <h2>Time travel — <span class="glow-cyan">?at=2026-06-24T14:30:00</span></h2>
+
+    <div class="cols cols-60-40" style="margin-top:0.8em">
+      <div>
+        <pre><code class="language-typescript">// eventStore.ts — time travel
+  // 🎮 Analogie : rejouer jusqu'à la frame N
+
+  getStreamAt(roomId: string, until: Date): DomainEvent[] {
+    return this.getStream(roomId).filter(
+      e => new Date(e.occurredAt) <= until
+      //   ↑ on s'arrête à cette date
+      //   tout ce qui suit est ignoré
+    );
+  }
+
+  // api.ts — ?at= active le time travel
+  const events = atParam
+    ? eventStore.getStreamAt(roomId, new Date(atParam))
+    : eventStore.getStream(roomId);  // état courant
+
+  const state = projectRoom(roomId, events);
+  // → état reconstruit à cet instant précis</code></pre>
+
+        <div class="highlight-box" style="margin-top:0.6em">
+          <span class="mono glow-cyan">GET /rooms/amphi-a?at=2026-06-24T14:30:00</span><br>
+          <span class="small muted">→ "Combien de monde dans l'Amphi A à 14h30 ?"<br>
+          Réponse en quelques ms. Sans log externe. Sans alerting.</span>
+        </div>
+      </div>
+      <div>
+        <div class="card green" style="margin-bottom:12px">
+          <div class="card-title">Cas d'usage concrets</div>
+          <ul style="font-size:0.7em; line-height:2">
+            <li>Debug d'un bug en prod survenu à 3h du matin</li>
+            <li>Reconstitution d'un incident pour la postmortem</li>
+            <li>"L'état était comment avant le déploiement ?"</li>
+            <li>Audit réglementaire (RGPD, finance, santé)</li>
+          </ul>
+        </div>
+        <div class="card magenta">
+          <div class="card-title">🎮 Dans le jeu</div>
+          <p class="small">
+            Killcam = time travel sur les 5 derniers ticks.<br>
+            Spectator mode = time travel en temps réel.<br>
+            Rewind = time travel interactif.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Le time travel est souvent ce qui "convainc" l'audience.
+      Faire la question rhétorique : "Combien d'entre vous ont déjà eu un bug en prod
+      qu'ils n'ont pas pu reproduire parce qu'ils n'avaient pas l'état à ce moment-là ?"
+      Presque tout le monde lève la main.
+      "Avec l'event sourcing, cette question n'existe plus. Vous pouvez remonter à n'importe quand."
+    </aside>
+  </section>
+
+  <!-- 3.2 — L'audit trail -->
+  <section>
+    <h2>L'audit trail — <span class="glow-green">le log brut, toujours disponible</span></h2>
+
+    <div class="cols cols-2" style="margin-top:0.8em">
+      <div>
+        <div class="event-log" style="font-size:0.5em">
+          <div style="color:var(--muted); margin-bottom:8px; font-size:0.9em">GET /rooms/amphi-a/events</div>
+          <div class="line"><span class="ev-v">[  1]</span><span class="ev-type">RoomOpened        </span><span class="ev-data">{"roomName":"Amphi A","capacity":3}</span></div>
+          <div class="line"><span class="ev-v">[  2]</span><span class="ev-type">AttendeeCheckedIn </span><span class="ev-data">{"attendeeName":"Alice Martin"}</span></div>
+          <div class="line"><span class="ev-v">[  3]</span><span class="ev-type">AttendeeCheckedIn </span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
+          <div class="line"><span class="ev-v">[  4]</span><span class="ev-type">AttendeeCheckedIn </span><span class="ev-data">{"attendeeName":"Charlie Leroy"}</span></div>
+          <div class="line"><span class="ev-v">[  5]</span><span class="ev-type ev-auto" style="min-width:26ch">RoomFull          </span><span class="ev-data">{"capacity":3}  <span class="ev-auto">← règle métier</span></span></div>
+          <div class="line"><span class="ev-v">[  6]</span><span class="ev-type">AttendeeCheckedOut</span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
+          <div class="line"><span class="ev-snap ev-type">[💾 ]</span><span class="ev-type ev-snap">SNAPSHOT          </span><span class="ev-data ev-snap">savedAtVersion=6  ← save state</span></div>
+          <div class="line"><span class="ev-v">[  7]</span><span class="ev-type">RoomClosed        </span><span class="ev-data">{"reason":"Talk terminé !"}</span></div>
+        </div>
+        <div class="highlight-box green" style="margin-top:0.6em; font-size:0.6em">
+          Ce log EST la source de vérité.<br>
+          Pas un log applicatif ajouté après coup. Les events eux-mêmes.
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-title">Ce qu'on peut répondre</div>
+          <ul style="font-size:0.7em; line-height:2">
+            <li>Qui a fait quoi, quand, dans quel ordre ?</li>
+            <li>Pourquoi la salle était pleine à 14h30 ?</li>
+            <li>Bob est-il entré avant ou après Charlie ?</li>
+            <li>La règle "RoomFull" a-t-elle été déclenchée ?</li>
+          </ul>
+        </div>
+        <div class="card magenta" style="margin-top:12px">
+          <div class="card-title">🎮 Dans le jeu</div>
+          <p class="small">
+            Le fichier replay = cet audit trail.<br>
+            Les anti-cheat analysent ce log.<br>
+            Les game designers rejouent des sessions pour équilibrer.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Montrer le log et faire la correspondance avec l'event log du jeu côte à côte.
+      "Vous voyez que le format est identique. Tick/version, type, payload."
+      L'audit trail n'est pas un ajout : c'est la nature même du système.
+      Dans CRUD, l'audit trail est une couche supplémentaire (trigger DB, log applicatif).
+      En event sourcing, c'est gratuit — c'est la donnée primaire.
+    </aside>
+  </section>
+
+  <!-- 3.3 — Reconstruction d'état / migration -->
+  <section>
+    <h2>Reconstruction & migration</h2>
+
+    <div class="cols cols-2" style="margin-top:0.8em; gap:20px">
+      <div>
+        <div class="card green">
+          <div class="card-title">🏗️ Migration de schéma</div>
+          <p class="small">Nouvelle version de l'application, nouveau modèle de données ?</p>
+          <p class="small mt">En CRUD : migration SQL complexe, point of no return.</p>
+          <p class="small mt" style="color:var(--green)">En ES : on rejoue tous les events avec la nouvelle projection. L'ancien log reste intact.</p>
+          <div class="highlight-box green" style="margin-top:8px; font-size:0.7em">
+            Nouvelle projection = nouvelle lecture du même log
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card magenta">
+          <div class="card-title">🔄 Reconstruire sur une nouvelle archi</div>
+          <p class="small">Migration vers un nouveau système ?</p>
+          <p class="small mt">On rejoue les events dans le nouveau système depuis le début. L'état se reconstruit.</p>
+          <div class="highlight-box magenta" style="margin-top:8px; font-size:0.7em">
+            "Blue-green" à l'event level
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="card-title">🧪 Tests</div>
+          <p class="small">Rejouer un scénario réel de prod dans les tests d'intégration.</p>
+          <p class="small muted mt">Extraire le stream d'events de prod → rejouer en test → vérifier l'état final.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      La migration est un argument fort pour les architectes dans la salle.
+      Le fait de pouvoir rejouer les events dans un nouveau système est une migration sans risque.
+      L'ancien système continue à tourner pendant que le nouveau se "rattrape".
+      Pour les tests : extraire un stream de prod et le rejouer en test = test de régression parfait.
+    </aside>
+  </section>
+
+  <!-- ─────────────────── DÉMO 2 ─────────────────────── -->
+  <section data-background-color="#020408">
+    <div class="slide-demo">
+      <div class="demo-corners"></div>
+      <div class="demo-label">// live demo 02</div>
+      <div class="demo-title">EVENT STORE<br>BACKEND</div>
+      <div class="demo-subtitle">
+        seed.ts · event log · time travel · audit trail
+      </div>
+    </div>
+
+    <aside class="notes">
+      DÉMO LIVE — switcher sur le terminal avec api.ts + seed.ts
+
+      Script de démo (seed.ts interactif) :
+      1. [Entrée] — Ouvrir les salles → montrer les events dans le terminal
+      2. [Entrée] — Check-ins Alice + Bob → "regardez le format [v] TYPE {payload} — même structure que le jeu"
+      3. [Entrée] — Mémoriser la date pour le time travel
+      4. [Entrée] — 3ème check-in → RoomFull émis automatiquement → "la règle métier a décidé, pas le client"
+      5. [Entrée] — Tentative sur salle pleine → erreur propre
+      6. [Entrée] — Check-out Bob
+      7. [Entrée] — GET /rooms/amphi-a → état courant reconstruit par replay
+      8. [Entrée] — GET /rooms/amphi-a?at=... → TIME TRAVEL → "on remonte avant le 3ème check-in"
+      9. [Entrée] — GET /rooms/amphi-a/events → audit trail complet
+      10. [Entrée] — Snapshot → "save state"
+      11. [Entrée] — Clôture
+
+      Insister à chaque étape sur la correspondance avec le jeu.
+
+      Durée : 5-6 minutes.
+    </aside>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 4
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <section>
+    <div class="slide-section">
+      <div class="section-number">// PARTIE 04</div>
+      <div class="section-title">Limites,<br>pièges &<br>conseils</div>
+      <div class="section-tag">Snapshots · Complexité · Quand NE PAS l'utiliser</div>
+    </div>
+
+    <aside class="notes">
+      Transition importante. "Je ne suis pas là pour vous vendre l'event sourcing.
+      Je vais vous dire franchement quand c'est une mauvaise idée."
+    </aside>
+  </section>
+
+  <!-- 4.1 — Les snapshots -->
+  <section>
+    <h2>Les snapshots — <span class="glow-gold">save states</span></h2>
+
+    <div class="cols cols-60-40" style="margin-top:0.8em">
+      <div>
+        <pre><code class="language-typescript">// snapshots.ts — optimisation de la relecture
+  // 🎮 Analogie : les save states d'un émulateur
+
+  class SnapshotStore {
+    save(roomId: string, state: RoomState): void {
+      this.snapshots.set(roomId, {
+        state,
+        takenAt:      new Date().toISOString(),
+        eventVersion: state.version, // dernier event inclus
+      });
+      // [💾] SNAPSHOT  { roomId, savedAtVersion: 6 }  ← save state
+    }
+
+    // Prendre un snapshot tous les N events
+    shouldSnapshot(
+      eventsReplayed: number,
+      threshold = 50    // ← configurable
+    ): boolean {
+      return eventsReplayed >= threshold;
+    }
+  }
+
+  // Usage : au lieu de rejouer depuis le début…
+  // 1. Charger le dernier snapshot (état à version N)
+  // 2. Rejouer uniquement les events après N
+  // → O(events_depuis_snapshot) au lieu de O(total)</code></pre>
+      </div>
+      <div>
+        <div class="card gold">
+          <div class="card-title">🎮 Save state = snapshot</div>
+          <p class="small">Un émulateur peut sauvegarder l'état complet de la machine à un instant T.</p>
+          <p class="small mt">Pour reprendre, on charge le save state et on continue — pas besoin de rejouer depuis le début.</p>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="card-title">⚠️ Limite importante</div>
+          <p class="small">
+            Le snapshot ne <strong>remplace pas</strong> le log d'events.<br>
+            Audit trail et time travel <em>avant</em> le snapshot nécessitent toujours le log complet.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Problème : 10 000 check-ins = rejouer 10 000 events à chaque requête = O(n).
+      Solution : snapshot = sauvegarder l'état projeté à un instant T.
+      Reprendre depuis le snapshot + rejouer uniquement les events récents.
+      Mais : le snapshot ne remplace pas le log. C'est une optimisation de lecture, pas un remplacement.
+      L'analogie émulateur est parfaite et concrète.
+    </aside>
+  </section>
+
+  <!-- 4.2 — Limites et pièges -->
+  <section>
+    <h2>Limites — <span class="glow-magenta">soyons honnêtes</span></h2>
+
+    <div style="margin-top:0.8em">
+      <div class="warning-item fragment">
+        <span class="icon">⚡</span>
+        <div>
+          <span class="label">Coût de relecture — O(n)</span>
+          Sans snapshot, chaque requête rejoue tous les events. Sur des streams de milliers d'events, ça coûte. Mitigation : snapshots périodiques, caches de projection.
+        </div>
+      </div>
+      <div class="warning-item fragment">
+        <span class="icon">🔧</span>
+        <div>
+          <span class="label">Pas de correction directe</span>
+          Une erreur = un event compensatoire. Pas de UPDATE en base. Mental model différent pour les équipes habituées au CRUD.
+        </div>
+      </div>
+      <div class="warning-item fragment">
+        <span class="icon">📋</span>
+        <div>
+          <span class="label">Versioning des events</span>
+          Si le schéma d'un event change, les anciens snapshots deviennent incompatibles. Il faut versionner les events et gérer les migrations de schéma.
+        </div>
+      </div>
+      <div class="warning-item fragment">
+        <span class="icon">🧰</span>
+        <div>
+          <span class="label">Complexité outillage</span>
+          Migrations, debugging plus indirect, tests d'intégration plus complexes. Le tooling event sourcing est moins mature que le tooling SQL classique.
+        </div>
+      </div>
+      <div class="warning-item fragment">
+        <span class="icon">📊</span>
+        <div>
+          <span class="label">Requêtes cross-aggregates coûteuses</span>
+          "Toutes les salles avec plus de 10 check-ins ce mois-ci" = rejouer tous les streams. Les projections doivent être construites et maintenues à part (read models).
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      Faire apparaître les limites une par une avec les fragments.
+      Insister sur l'honnêteté : ce n'est pas une solution magique.
+      Le versioning des events est le piège le plus sous-estimé.
+      Les read models (CQRS) sont souvent nécessaires et ajoutent de la complexité.
+    </aside>
+  </section>
+
+  <!-- 4.3 — Quand NE PAS utiliser l'event sourcing -->
+  <section>
+    <h2>Quand <span class="glow-magenta">NE PAS</span> utiliser l'event sourcing</h2>
+
+    <div class="cols cols-2" style="margin-top:0.8em; gap:16px">
+      <div>
+        <div class="card magenta">
+          <div class="card-title">❌ Mauvais candidats</div>
+          <ul style="font-size:0.72em; line-height:2">
+            <li><strong>CRUD simple</strong> — catalogue produits, CMS, settings</li>
+            <li><strong>Faible volume</strong> — quelques dizaines d'entités, pas d'audit nécessaire</li>
+            <li><strong>Pas besoin d'historique</strong> — "on veut juste stocker l'état courant"</li>
+            <li><strong>Équipe non formée</strong> — sans investissement formation, ça devient du cargo cult</li>
+            <li><strong>Deadline serrée</strong> — la courbe d'apprentissage est réelle</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card green">
+          <div class="card-title">✅ Bons candidats</div>
+          <ul style="font-size:0.72em; line-height:2">
+            <li><strong>Audit réglementaire obligatoire</strong> — finance, santé, légal</li>
+            <li><strong>Workflow complexe</strong> — commandes, réservations, processus métier long</li>
+            <li><strong>Debug en prod critique</strong> — "on doit savoir exactement ce qui s'est passé"</li>
+            <li><strong>Systèmes distribués</strong> — Kafka, CQRS, microservices event-driven</li>
+            <li><strong>Collaboration temps réel</strong> — Google Docs = event sourcing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box gold" style="margin-top:0.8em; font-size:0.68em">
+      <strong>Règle pragmatique :</strong> si votre client ne vous demande jamais "qu'est-ce qui s'est passé ici ?", vous n'avez probablement pas besoin d'event sourcing.
+    </div>
+
+    <aside class="notes">
+      Slide importante pour la crédibilité.
+      Insister : l'event sourcing n'est pas une silver bullet.
+      C'est un outil pour des problèmes spécifiques.
+      La règle pragmatique à la fin résume bien le propos.
+      Mentionner que Google Docs est de l'event sourcing (les opérations CRDT sont des events).
+    </aside>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CONCLUSION
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <h2>Ce qu'on a vu ensemble</h2>
+
+  <div style="margin-top:0.8em">
+    <div class="takeaway fragment">
+      <div class="num">01</div>
+      <div class="text">Un replay de jeu = état initial + log d'events rejoués par une fonction pure. Pas une vidéo. Jamais.</div>
+    </div>
+    <div class="takeaway fragment">
+      <div class="num">02</div>
+      <div class="text">L'event sourcing applique exactement cette idée à nos SI : on stocke les décisions métier, pas l'état final.</div>
+    </div>
+    <div class="takeaway fragment">
+      <div class="num">03</div>
+      <div class="text">La projection est une fonction pure : <code>f(events) → état</code>. Déterministe = time travel possible.</div>
+    </div>
+    <div class="takeaway fragment">
+      <div class="num">04</div>
+      <div class="text">Use cases réels : audit trail gratuit, debug en prod, migration de schéma, reconstruction sur nouvelle archi.</div>
+    </div>
+    <div class="takeaway fragment" style="border-left-color:var(--gold)">
+      <div class="num" style="color:var(--gold)">05</div>
+      <div class="text">Mais : coût de relecture, versioning, complexité outillage. NE PAS utiliser pour du CRUD simple.</div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    Faire apparaître les takeaways un par un.
+    Sur le dernier (en or) : insister sur l'honnêteté. 
+    Ce n'est pas parce que c'est cool qu'il faut le mettre partout.
+    Transition vers la slide finale.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE FINALE
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <div class="slide-title">
+    <div class="kicker">// fin du talk — merci BreizhCamp 2026 🎮</div>
+
+    <h1>Questions ?</h1>
+
+    <div class="subtitle">
+      "Un jeu et un SI stockent tous les deux<br>
+      une chronologie d'événements, pas un état figé."
+    </div>
+
+    <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:1.4em">
+      <div class="card green" style="flex:1; min-width:220px">
+        <div class="card-title">Code source</div>
+        <p class="small mono">github.com/pierref/<br>breizhcamp-event-sourcing</p>
+      </div>
+      <div class="card" style="flex:1; min-width:220px">
+        <div class="card-title">Ressources</div>
+        <ul style="font-size:0.62em; line-height:2">
+          <li>Martin Fowler — Event Sourcing (martinfowler.com)</li>
+          <li>Greg Young — CQRS and Event Sourcing</li>
+          <li>EventStoreDB docs</li>
+          <li>Implementing DDD — Vaughn Vernon</li>
+        </ul>
+      </div>
+      <div class="card magenta" style="flex:1; min-width:220px">
+        <div class="card-title">Me retrouver</div>
+        <p class="small">Venez tester la démo<br>après le talk !</p>
+        <p class="small muted mt">Les deux projets sont<br>dans le repo.</p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    Slide finale. Remercier la salle.
+    Inviter les gens à venir tester la démo sur l'ordinateur après.
+    Questions : typiquement on aura :
+    - "EventStoreDB vs Kafka ?" → deux outils différents, EventStoreDB = store, Kafka = bus
+    - "Comment gérer les migrations de schéma d'events ?" → upcasting, version dans le type
+    - "CQRS obligatoire avec ES ?" → Non, mais souvent complémentaire
+    - "Performances en prod ?" → snapshots + projections persistées = OK
+    Durée visée pour les questions : 5 minutes.
+  </aside>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDES BONUS (après les questions si temps)
+     ═══════════════════════════════════════════════════════════ -->
+<section>
+  <h2>Bonus — <span class="glow-gold">Le grand mapping</span></h2>
+
+  <p class="muted small" style="margin-bottom:0.6em">Le parallèle complet jeu ↔ backend</p>
+
+  <table class="mapping-table" style="font-size:0.6em">
+    <thead>
+      <tr>
+        <th class="game">🎮 Jeu vidéo</th>
+        <th class="arrow"></th>
+        <th class="backend">⚙️ Backend ES</th>
+        <th style="color:var(--muted); padding-left:16px">Concept commun</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="game">État initial (seed)</td>
+        <td class="arrow">↔</td>
+        <td class="backend">Aggregate vide</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Point de départ déterministe</td>
+      </tr>
+      <tr>
+        <td class="game">Input joueur (JUMP)</td>
+        <td class="arrow">↔</td>
+        <td class="backend">Command (CheckIn)</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">L'intention, pas le fait</td>
+      </tr>
+      <tr>
+        <td class="game">Event système (PLAYER_HIT)</td>
+        <td class="arrow">↔</td>
+        <td class="backend">Domain event (RoomFull)</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Fait passé, immuable</td>
+      </tr>
+      <tr>
+        <td class="game">applyInput(state, input)</td>
+        <td class="arrow">↔</td>
+        <td class="backend">applyEvent(state, event)</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Fonction pure</td>
+      </tr>
+      <tr>
+        <td class="game">replayInputs()</td>
+        <td class="arrow">↔</td>
+        <td class="backend">projectRoom()</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Reconstruction par replay</td>
+      </tr>
+      <tr>
+        <td class="game">Fichier replay (.rep)</td>
+        <td class="arrow">↔</td>
+        <td class="backend">Event stream</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Append-only log</td>
+      </tr>
+      <tr>
+        <td class="game">Tick N</td>
+        <td class="arrow">↔</td>
+        <td class="backend">Version N</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Position dans le stream</td>
+      </tr>
+      <tr>
+        <td class="game">Killcam (rejouer jusqu'au tick T)</td>
+        <td class="arrow">↔</td>
+        <td class="backend">?at= (time travel)</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Reconstruction historique</td>
+      </tr>
+      <tr>
+        <td class="game">Save state (émulateur)</td>
+        <td class="arrow">↔</td>
+        <td class="backend">Snapshot</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Optimisation O(n)</td>
+      </tr>
+      <tr>
+        <td class="game">RNG seed</td>
+        <td class="arrow">↔</td>
+        <td class="backend">Déterminisme projection</td>
+        <td class="muted" style="padding-left:16px; font-size:0.9em">Reproductibilité garantie</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <aside class="notes">
+    Slide bonus — à montrer si les questions amènent sur le mapping complet,
+    ou si il reste du temps à la fin.
+    C'est le résumé visuel le plus complet du talk.
+  </aside>
+</section>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

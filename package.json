@@ -1,0 +1,15 @@
+{
+  "name": "breizhcamp-2026-event-sourcing",
+  "version": "1.0.0",
+  "description": "Un replay, ce n'est pas une vidéo — BreizhCamp 2026",
+  "author": "Pierre Fervel",
+  "license": "MIT",
+  "scripts": {
+    "start": "npx serve .",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "highlight.js": "^11.11.1",
+    "reveal.js": "^5.2.1"
+  }
+}
