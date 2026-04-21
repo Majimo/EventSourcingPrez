@@ -49,12 +49,16 @@
   </div>
 
   <aside class="notes">
-    Slide d'intro. Laisser la salle s'installer. Attendre le silence.
-    Commencer par : "Levez la main si vous avez déjà regardé un replay dans un jeu."
-    Puis : "Levez la main si vous avez déjà fait de l'event sourcing."
-    Les deux audiences sont souvent distinctes — c'est exactement le point.
-    Ce talk, c'est un pont entre les deux.
-  </aside>
+Laisser la salle se poser, regarder le public, sourire.
+
+Démarrage possible : « Levez la main si vous avez déjà regardé un replay dans un jeu vidéo. » Puis : « Et maintenant, levez la main si vous avez déjà fait de l'event sourcing. »
+
+Le contraste doit faire sourire. C'est l'accroche.
+
+Ensuite tu poses la promesse : « Ce soir, mon objectif, c'est de vous montrer que ces deux mondes racontent en fait la même histoire technique. »
+
+Ne va pas trop vite. Cette slide sert à ouvrir une curiosité, pas à délivrer du contenu.
+</aside>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -94,10 +98,14 @@
   </div>
 
   <aside class="notes">
-    Slide rapide, 1 minute max. L'idée c'est de créer la connexion : je suis quelqu'un qui touche
-    aux deux mondes (jeu + backend) et c'est pour ça que j'ai fait le lien.
-    Montrer que c'est une vraie curiosité personnelle, pas un talk académique.
-  </aside>
+Slide courte, très incarnée.
+
+Tu peux dire : « Je fais du backend, je bidouille des jeux, et un soir en bricolant un système de replay, j'ai eu ce moment un peu bête où je me suis dit : mais attends… c'est littéralement de l'event sourcing. »
+
+Le but n'est pas de raconter ton CV. Le but est de montrer que le parallèle vient d'une vraie pratique, pas d'une analogie inventée pour faire une jolie intro de conf.
+
+Une minute max. Puis on enchaîne.
+</aside>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -142,10 +150,14 @@
   </div>
 
   <aside class="notes">
-    Présenter le plan rapidement. Insister sur les deux démos live qui ponctuent le talk.
-    Le fil rouge : le jeu et le backend sont deux implémentations du même pattern.
-    Durée totale visée : 45 min + 5 min questions.
-  </aside>
+Annonce le plan avec énergie, mais sans lire les titres.
+
+« D'abord on va démonter le replay d'un jeu. Ensuite on va faire exactement le même mouvement côté backend. Puis on va voir à quoi ça sert en vrai. Et je terminerai par la partie la plus importante : pourquoi il ne faut surtout pas faire ça partout. »
+
+Insiste sur les deux démos live : ça rassure, ça donne un fil rouge concret, et ça annonce un talk vivant.
+
+Le message implicite : on va passer du fun au sérieux sans rupture brutale.
+</aside>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -160,9 +172,14 @@
     </div>
 
     <aside class="notes">
-      Slide de transition. Prendre une seconde, laisser le titre s'installer.
-      Commencer à raconter l'histoire : "Imaginez que vous regardez un killcam dans CS2..."
-    </aside>
+Fais une petite pause avant de parler. Laisse le titre vivre.
+
+Puis démarre en mode storytelling : « Imaginez : vous mourez dans Counter-Strike, Overwatch, Fortnite… et le jeu vous montre instantanément les cinq dernières secondes du point de vue de votre adversaire. »
+
+Là, tout le monde voit la scène.
+
+Ton boulot sur cette slide, c'est d'installer une image mentale partagée. Pas encore d'expliquer. Juste de mettre la salle dans le bon souvenir.
+</aside>
   </section>
 
   <!-- 1.1 — Le killcam, tout le monde connaît -->
@@ -221,11 +238,16 @@
     </div>
 
     <aside class="notes">
-      Laisser la question résonner une seconde avant de faire apparaître la réponse.
-      Insister sur les chiffres : 4,5 Go en RAM, c'est absurde.
-      La révélation : le jeu ne stocke QUE les inputs et quelques événements système.
-      C'est la même idée qu'on va retrouver côté backend.
-    </aside>
+Ici, la réponse doit tomber sèchement.
+
+« Non. Jamais. »
+
+Puis tu enchaînes : si c'était une vraie vidéo 1080p 60 fps stockée en continu, ce serait monstrueux en bande passante, en mémoire, en stockage. Donc non, ce n'est pas ça que le jeu garde.
+
+Joue bien l'effet de rupture : c'est le premier petit moment “aha”.
+
+La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de la partie.
+</aside>
   </section>
 
   <!-- 1.2 — La formule du replay -->
@@ -266,12 +288,16 @@
     </div>
 
     <aside class="notes">
-      C'est la slide la plus importante de cette partie. Faire lire la formule à voix haute.
-      Insister sur "fonction pure" : c'est ce qui rend le replay possible.
-      Si la physique avait des effets de bord (accès au temps réel, random non seedé, etc.),
-      le replay serait impossible. C'est pour ça que les jeux seedent leur RNG.
-      Transition : "Et côté backend, on a exactement le même pattern..."
-    </aside>
+C'est la slide la plus importante de cette première partie, donc ralentis.
+
+Quand tu montres la formule, dis-la simplement : « Si je prends un état, que j'applique un input, j'obtiens un nouvel état. Et surtout : même entrée, même sortie. »
+
+Le mot clé, c'est déterminisme. Ou au moins quasi-déterminisme maîtrisé.
+
+Tu peux ajouter : « Si ma physique regarde l'heure système, le réseau, ou fait n'importe quoi avec le hasard, mon replay casse. »
+
+Cette slide prépare directement applyEvent côté backend.
+</aside>
   </section>
 
   <!-- 1.3 — Exemples concrets de replays dans les jeux -->
@@ -302,11 +328,14 @@
     </div>
 
     <aside class="notes">
-      Doom 1993 est un excellent exemple car il est très connu et l'implémentation est simple.
-      Les .lmp peuvent être rejoués sur n'importe quelle version identique du jeu.
-      CS2 : souligner que le killcam N'EXISTE PAS en temps réel. Il est reconstruit à la demande.
-      Le bug de replay = parfait bridge pour parler des limites qu'on retrouvera en partie 4.
-    </aside>
+Prends les exemples comme des preuves historiques, pas comme un détour nostalgie.
+
+« Doom le faisait déjà. Les .lmp, ce n'était pas des vidéos : c'était une partition d'inputs. »
+
+Puis sur Counter-Strike 2 : « Le killcam n'existe pas comme objet autonome. C'est une reconstruction. La caméra est une illusion. Le vrai matériau, c'est le log. »
+
+L'idée que tu veux faire passer : cette approche n'est pas exotique, elle est éprouvée parce qu'elle est compacte et robuste.
+</aside>
   </section>
 
   <!-- 1.4 — Notre mini-jeu : architecture -->
@@ -364,10 +393,14 @@
     </div>
 
     <aside class="notes">
-      Expliquer rapidement l'architecture. Ne pas entrer dans les détails — la démo va suivre.
-      Insister sur physics.ts = fonction pure. C'est la colonne vertébrale du replay.
-      Mentionner que render/ peut être supprimé = bonne pratique d'architecture.
-    </aside>
+Présente rapidement l'architecture de ta démo.
+
+« Mon jeu est volontairement simple. Son but n'est pas d'être fun, son but est d'être lisible. »
+
+Insiste sur physics.ts ou l'équivalent comme cœur du système : la partie importante, c'est la fonction qui transforme l'état sans effet de bord. Le rendu est presque accessoire pour la démonstration.
+
+Tu peux même dire : « Si je supprime le rendu, mon replay continue d'exister. » Ça aide bien à séparer simulation et affichage.
+</aside>
   </section>
 
   <!-- ─────────────────── DÉMO 1 ─────────────────────── -->
@@ -382,20 +415,16 @@
     </div>
 
     <aside class="notes">
-      DÉMO LIVE — switcher sur la fenêtre du jeu.
+DÉMO LIVE. Respire, ralentis, et parle moins que d'habitude.
 
-      Script de démo :
-      1. Jouer une courte partie (10-15s), sauter quelques plateformes, mourir
-      2. Montrer l'event log à droite : "Regardez — uniquement les changements d'input"
-      3. Cliquer "Replay" — "On repart de l'état initial et on réinjecte les events"
-      4. Cliquer "Killcam" — "On recule de 5 secondes. C'est du time travel."
-      5. Changer le seed — "Nouveau niveau, même mécanique"
+Script simple : jouer 10 à 15 secondes, faire deux ou trois actions visibles, mourir. Puis montrer le log d'inputs à côté : « Regardez, on ne stocke que les changements utiles. »
 
-      Message clé : "On vient de rejouer une partie à partir d'une liste d'events. 
-      Maintenant je vais vous montrer la même chose côté backend."
+Ensuite lancer le replay : « Je repars de l'état initial, je réinjecte les mêmes événements, et j'obtiens exactement la même histoire. »
 
-      Durée : 4-5 minutes max.
-    </aside>
+C'est le moment de montrer le "Replay" & la "Killcam" : c'est ton pont naturel vers le time travel backend.
+
+Ne cherche pas la performance de joueur. Cherche la lisibilité de la mécanique.
+</aside>
   </section>
 </section>
 
@@ -411,10 +440,12 @@
     </div>
 
     <aside class="notes">
-      Slide de transition. 
-      "On vient de voir comment un jeu stocke une partie. 
-      Maintenant je vais vous montrer que votre backend peut faire exactement la même chose."
-    </aside>
+Transition nette.
+
+« On vient de voir comment un jeu stocke une partie sans stocker de vidéo. Maintenant, je vais vous montrer qu'un backend peut stocker un processus métier sans stocker uniquement son état final. »
+
+L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on change juste de décor.
+</aside>
   </section>
 
   <!-- 2.1 — CRUD vs Event Sourcing -->
@@ -456,13 +487,16 @@
     </div>
 
     <aside class="notes">
-      C'est la slide de rupture conceptuelle. Prendre le temps.
-      CRUD = photographier l'état final. On perd tout l'historique.
-      Event Sourcing = filmer le film. Chaque décision est enregistrée.
-      Analogie jeu : CRUD = screenshot de fin de partie. ES = fichier replay.
-      La question rhétorique : "Quand votre DSI vous demande 'pourquoi la salle était pleine à 14h30 ?',
-      vous pouvez répondre avec CRUD ? Non. Avec l'event sourcing ? Oui."
-    </aside>
+C'est la slide de rupture conceptuelle, donc prends ton temps.
+
+« En CRUD, on photographie l'état courant. En event sourcing, on garde la chronologie de ce qui l'a produit. »
+
+Formule à dire : « Le problème du CRUD, ce n'est pas ce qu'il montre. C'est tout ce qu'il efface. »
+
+Tu peux reprendre le parallèle jeu : CRUD, c'est comme une capture d'écran de fin de partie. Event sourcing, c'est le replay complet.
+
+Important : ne caricature pas le CRUD. Dis clairement que CRUD est très bien dans plein de cas. Sinon tu perds une partie de la salle.
+</aside>
   </section>
 
   <!-- 2.2 — Les domain events -->
@@ -510,11 +544,16 @@
     </div>
 
     <aside class="notes">
-      Insister sur le nommage au passé. C'est pas une commande (OpenRoom), c'est un fait (RoomOpened).
-      Un fait ne peut pas être annulé — il peut seulement être compensé par un autre event.
-      "RoomFull émis automatiquement" : c'est la règle métier, pas le client. Point important.
-      Le version number = position dans le stream = exact analogie avec le tick du jeu.
-    </aside>
+Sur les événements, insiste sur le vocabulaire.
+
+« On parle au passé parce qu'on décrit des faits. Pas des intentions. Pas des ordres. Des faits. »
+
+Tu peux faire ressortir trois choses : qui, quand, sur quel aggregate.
+
+Et le détail qui vaut de l'or : RoomFull n'est pas quelque chose que le client décide. C'est une conséquence métier émise automatiquement par le domaine.
+
+C'est souvent là qu'on sent la différence entre une simple liste de logs et un vrai modèle événementiel.
+</aside>
   </section>
 
   <!-- 2.3 — L'event store -->
@@ -568,12 +607,14 @@
     </div>
 
     <aside class="notes">
-      Montrer le code réel de l'event store. C'est simple exprès.
-      Insister sur "jamais de UPDATE ni DELETE" — c'est LA règle fondamentale.
-      Une erreur métier = on émet un event compensatoire (ex: AttendeeCheckedOut pour annuler un CheckIn erroné).
-      Pas de correction directe sur la DB. Jamais.
-      En prod : EventStoreDB est l'outil le plus adapté, mais PostgreSQL suffit pour commencer.
-    </aside>
+Présente l'event store comme l'équivalent direct du fichier replay.
+
+« Le cœur du système, ce n'est pas une ligne qui contient la vérité finale. C'est un journal append-only. On ajoute. On n'écrase pas. »
+
+Martèle ce point : jamais d'UPDATE, jamais de DELETE sur l'histoire métier. S'il y a une erreur, on émet un autre événement qui la compense ou la corrige.
+
+Le log console est utile visuellement : tu veux que les gens voient défiler une chronologie, pas juste une structure de données abstraite.
+</aside>
   </section>
 
   <!-- 2.4 — Les projections -->
@@ -667,12 +708,16 @@
     </div>
 
     <aside class="notes">
-      C'est la slide centrale du talk. Faire lire la table de correspondance lentement.
-      Insister : projectRoom() est une FONCTION PURE. Pas d'appel réseau, pas d'état global,
-      pas d'accès à la date courante. Même log → même état. Toujours.
-      C'est exactement la contrainte qu'on impose à physics.ts dans le jeu.
-      Sans cette propriété, le time travel est impossible.
-    </aside>
+C'est la slide centrale du talk. SAVOURE-LA !!!
+
+« projectRoom(), c'est replayInputs(). applyEvent(), c'est applyInput(). »
+
+Dis-le lentement, presque comme une révélation.
+
+Le point vraiment important : la projection est une fonction. Pas d'appel réseau, pas de dépendance à l'heure courante, pas d'état global magique. Même log, même résultat.
+
+C'est souvent ici que la salle a le déclic complet. Laisse-leur une seconde pour l'avoir.
+</aside>
   </section>
 
   <!-- 2.5 — Les command handlers -->
@@ -739,12 +784,14 @@
     </div>
 
     <aside class="notes">
-      Pointer le moment où RoomFull est émis. C'est une règle métier, pas une décision du client.
-      Analogie jeu : c'est l'équivalent de PLAYER_HIT émis automatiquement quand deux hitboxes se touchent.
-      Le client (joueur) appuie sur SHOOT. Le moteur décide si ça touche et émet PLAYER_HIT.
-      Même logique : le client envoie checkIn. Le handler décide si la salle est pleine et émet RoomFull.
-      Cette séparation de responsabilité est fondamentale.
-    </aside>
+Sur cette slide, raconte une séquence métier complète.
+
+« Une commande arrive. On recharge le stream. On projette l'état courant. On vérifie les règles métier. Puis le système décide quels faits doivent être émis. »
+
+Insiste sur RoomFull : « Le client ne demande jamais “mets la salle pleine”. Comme dans un jeu, il fait une action. Et le moteur métier déduit les conséquences. »
+
+Très bonne analogie : le joueur appuie sur une touche, mais c'est le moteur qui décide qu'il y a collision, hit, mort, score, etc.
+</aside>
   </section>
 </section>
 
@@ -760,9 +807,12 @@
     </div>
 
     <aside class="notes">
-      Transition. "Maintenant qu'on a le modèle, pourquoi est-ce qu'on fait ça ?
-      Qu'est-ce que ça nous apporte concrètement ?"
-    </aside>
+Transition simple et utile.
+
+« Ok, le modèle est en place. Maintenant la vraie question, c'est : pourquoi s'infliger ça ? Qu'est-ce que ça apporte concrètement ? »
+
+Tu fais sentir qu'on passe de la mécanique à la valeur.
+</aside>
   </section>
 
   <!-- 3.1 — Time travel -->
@@ -818,12 +868,14 @@
     </div>
 
     <aside class="notes">
-      Le time travel est souvent ce qui "convainc" l'audience.
-      Faire la question rhétorique : "Combien d'entre vous ont déjà eu un bug en prod
-      qu'ils n'ont pas pu reproduire parce qu'ils n'avaient pas l'état à ce moment-là ?"
-      Presque tout le monde lève la main.
-      "Avec l'event sourcing, cette question n'existe plus. Vous pouvez remonter à n'importe quand."
-    </aside>
+Le time travel est souvent le moment qui convertit les sceptiques.
+
+Bonne accroche : « Combien d'entre vous ont déjà eu un bug de prod impossible à reproduire parce qu'ils n'avaient pas l'état exact du système à cet instant-là ? »
+
+« Avec un log d'événements, je peux rejouer jusqu'à la date T comme un killcam rejoue jusqu'au tick N. »
+
+Rends-le très concret. Le time travel n'est pas un super-pouvoir mystérieux. C'est juste une relecture tronquée dans le temps.
+</aside>
   </section>
 
   <!-- 3.2 — L'audit trail -->
@@ -870,12 +922,14 @@
     </div>
 
     <aside class="notes">
-      Montrer le log et faire la correspondance avec l'event log du jeu côte à côte.
-      "Vous voyez que le format est identique. Tick/version, type, payload."
-      L'audit trail n'est pas un ajout : c'est la nature même du système.
-      Dans CRUD, l'audit trail est une couche supplémentaire (trigger DB, log applicatif).
-      En event sourcing, c'est gratuit — c'est la donnée primaire.
-    </aside>
+Ici, fais bien le parallèle visuel entre les deux logs.
+
+« Regardez le format. Dans un cas j'ai des ticks ou des frames. Dans l'autre j'ai des versions ou des dates. Mais dans les deux cas, j'ai une séquence ordonnée de faits et de payloads. »
+
+A dire : « L'audit trail n'est pas un bonus ajouté après coup. C'est la forme naturelle du système. »
+
+Et ça, pour l'audit, le debug, l'explicabilité, c'est extrêmement puissant.
+</aside>
   </section>
 
   <!-- 3.3 — Reconstruction d'état / migration -->
@@ -912,11 +966,14 @@
     </div>
 
     <aside class="notes">
-      La migration est un argument fort pour les architectes dans la salle.
-      Le fait de pouvoir rejouer les events dans un nouveau système est une migration sans risque.
-      L'ancien système continue à tourner pendant que le nouveau se "rattrape".
-      Pour les tests : extraire un stream de prod et le rejouer en test = test de régression parfait.
-    </aside>
+Cette slide parle beaucoup aux architectes et aux gens qui ont vécu des migrations.
+
+« Si mon modèle de lecture change, si mon read model change, si je change même de système cible, mon histoire métier reste intacte. Je peux rejouer. »
+
+Ne vends pas ça comme une baguette magique : « Ça transforme une migration destructrice en exercice de réinterprétation. »
+
+Et ça, c'est beaucoup plus crédible techniquement.
+</aside>
   </section>
 
   <!-- ─────────────────── DÉMO 2 ─────────────────────── -->
@@ -931,25 +988,16 @@
     </div>
 
     <aside class="notes">
-      DÉMO LIVE — switcher sur le terminal avec api.ts + seed.ts
+DÉMO LIVE backend. Là aussi, simplicité absolue.
 
-      Script de démo (seed.ts interactif) :
-      1. [Entrée] — Ouvrir les salles → montrer les events dans le terminal
-      2. [Entrée] — Check-ins Alice + Bob → "regardez le format [v] TYPE {payload} — même structure que le jeu"
-      3. [Entrée] — Mémoriser la date pour le time travel
-      4. [Entrée] — 3ème check-in → RoomFull émis automatiquement → "la règle métier a décidé, pas le client"
-      5. [Entrée] — Tentative sur salle pleine → erreur propre
-      6. [Entrée] — Check-out Bob
-      7. [Entrée] — GET /rooms/amphi-a → état courant reconstruit par replay
-      8. [Entrée] — GET /rooms/amphi-a?at=... → TIME TRAVEL → "on remonte avant le 3ème check-in"
-      9. [Entrée] — GET /rooms/amphi-a/events → audit trail complet
-      10. [Entrée] — Snapshot → "save state"
-      11. [Entrée] — Clôture
+Script suggéré : ouvrir une salle, faire entrer Alice et Bob, montrer l'event log, puis provoquer RoomFull. Ensuite afficher l'état courant, puis faire un appel avec ?at= pour remonter à un instant antérieur.
 
-      Insister à chaque étape sur la correspondance avec le jeu.
+Pendant la démo, verbalise ce que tu fais : « Là je n'interroge pas une table d'état. Je rejoue une histoire jusqu'à maintenant… ou jusqu'à ce moment précis. »
 
-      Durée : 5-6 minutes.
-    </aside>
+Si le seed.ts est interactif, garde un rythme calme et lisible. Pas d'effet tunnel terminal.
+
+Le moment fort, c'est quand tu montres le time travel.
+</aside>
   </section>
 </section>
 
@@ -965,9 +1013,12 @@
     </div>
 
     <aside class="notes">
-      Transition importante. "Je ne suis pas là pour vous vendre l'event sourcing.
-      Je vais vous dire franchement quand c'est une mauvaise idée."
-    </aside>
+Transition importante pour la crédibilité.
+
+Dis-le franchement : « Je ne suis pas là pour vous vendre l'event sourcing comme une religion. Je suis surtout là pour vous éviter de l'utiliser au mauvais endroit. »
+
+Cette phrase remet tout le monde avec toi.
+</aside>
   </section>
 
   <!-- 4.1 — Les snapshots -->
@@ -1020,12 +1071,14 @@
     </div>
 
     <aside class="notes">
-      Problème : 10 000 check-ins = rejouer 10 000 events à chaque requête = O(n).
-      Solution : snapshot = sauvegarder l'état projeté à un instant T.
-      Reprendre depuis le snapshot + rejouer uniquement les events récents.
-      Mais : le snapshot ne remplace pas le log. C'est une optimisation de lecture, pas un remplacement.
-      L'analogie émulateur est parfaite et concrète.
-    </aside>
+Sur les snapshots, reste très pragmatique.
+
+« Rejouer 10 000 événements à chaque requête, c'est élégant sur les slides, mais en prod ça finit par coûter. Donc on fait comme les émulateurs avec les save states : on prend un point de reprise. »
+
+Puis la nuance essentielle : « Le snapshot accélère la reconstruction, il ne remplace pas le log. »
+
+Si tu veux marquer les esprits : « Le snapshot est un accélérateur, pas une substitution. »
+</aside>
   </section>
 
   <!-- 4.2 — Limites et pièges -->
@@ -1071,11 +1124,14 @@
     </div>
 
     <aside class="notes">
-      Faire apparaître les limites une par une avec les fragments.
-      Insister sur l'honnêteté : ce n'est pas une solution magique.
-      Le versioning des events est le piège le plus sous-estimé.
-      Les read models (CQRS) sont souvent nécessaires et ajoutent de la complexité.
-    </aside>
+Fais apparaître les limites une à une et commente-les franchement.
+
+« Les coûts de relecture sont réels. Le versioning des events est difficile. Les projections et les read models ajoutent de la complexité. Le tooling est moins banal qu'un CRUD classique. Et l'onboarding des équipes est plus exigeant. »
+
+Tu veux que la salle sente que tu n'essaies pas de vendre du rêve.
+
+C'est souvent cette honnêteté qui rend tout le reste beaucoup plus convaincant.
+</aside>
   </section>
 
   <!-- 4.3 — Quand NE PAS utiliser l'event sourcing -->
@@ -1114,12 +1170,14 @@
     </div>
 
     <aside class="notes">
-      Slide importante pour la crédibilité.
-      Insister : l'event sourcing n'est pas une silver bullet.
-      C'est un outil pour des problèmes spécifiques.
-      La règle pragmatique à la fin résume bien le propos.
-      Mentionner que Google Docs est de l'event sourcing (les opérations CRDT sont des events).
-    </aside>
+Slide importante : le fameux “quand ne pas l'utiliser”.
+
+Dis très clairement : « Si vous avez juste besoin d'éditer un état courant et que l'historique détaillé n'apporte pas de valeur, restez en CRUD. Vraiment. »
+
+Citer des contre-exemples simples : CRUD d'administration banal, référentiels simples, cas où l'audit fin n'a pas de valeur métier.
+
+L'idée à faire passer : event sourcing est un outil spécialisé pour des problèmes où l'histoire a une valeur. Pas un badge d'architecture cool.
+</aside>
   </section>
 </section>
 
@@ -1153,11 +1211,14 @@
   </div>
 
   <aside class="notes">
-    Faire apparaître les takeaways un par un.
-    Sur le dernier (en or) : insister sur l'honnêteté. 
-    Ce n'est pas parce que c'est cool qu'il faut le mettre partout.
-    Transition vers la slide finale.
-  </aside>
+Fais apparaître les takeaways un par un, avec un vrai rythme de fin de conf.
+
+À chaque point, reformule oralement plutôt que de lire.
+
+Sur le dernier, appuie fort : « Ce n'est pas parce que la métaphore est belle, ni parce que la démo est cool, qu'il faut en mettre partout. »
+
+C'est ta dernière grande note de pragmatisme avant la conclusion.
+</aside>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -1197,15 +1258,19 @@
   </div>
 
   <aside class="notes">
-    Slide finale. Remercier la salle.
-    Inviter les gens à venir tester la démo sur l'ordinateur après.
-    Questions : typiquement on aura :
-    - "EventStoreDB vs Kafka ?" → deux outils différents, EventStoreDB = store, Kafka = bus
-    - "Comment gérer les migrations de schéma d'events ?" → upcasting, version dans le type
-    - "CQRS obligatoire avec ES ?" → Non, mais souvent complémentaire
-    - "Performances en prod ?" → snapshots + projections persistées = OK
-    Durée visée pour les questions : 5 minutes.
-  </aside>
+Slide finale. Remercie, respire, et ouvre la discussion.
+
+Tu peux conclure comme ça : « Si vous retenez une seule chose, retenez que replay de jeu et event sourcing sont deux variantes d'une même idée : enregistrer l'histoire pour pouvoir la rejouer. »
+
+Invite les gens à venir voir la démo après le talk. C'est une sortie naturelle et sympa.
+
+Prépare-toi à des questions classiques : 
+  - "EventStoreDB vs Kafka ?" → deux outils différents, EventStoreDB = store, Kafka = bus
+  - "Comment gérer les migrations de schéma d'events ?" → upcasting, version dans le type
+  - "CQRS obligatoire avec ES ?" → Non, mais souvent complémentaire
+  - "Performances en prod ?" → snapshots + projections persistées = OK
+Garde de l'énergie à ce moment-là : la fin doit sembler ouverte et accessible.
+</aside>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -1290,10 +1355,14 @@
   </table>
 
   <aside class="notes">
-    Slide bonus — à montrer si les questions amènent sur le mapping complet,
-    ou si il reste du temps à la fin.
-    C'est le résumé visuel le plus complet du talk.
-  </aside>
+Slide bonus, à utiliser si une question t'y amène ou s'il reste un peu de temps.
+
+Ne la présente pas comme “une slide en plus”, mais comme un récap visuel complet.
+
+Tu peux finir avec une phrase de fermeture un peu plus marquante : « Au fond, l'event sourcing, c'est peut-être simplement arrêter de regarder une photo de son système… et recommencer à lire son replay. »
+
+C'est une bonne toute dernière image mentale pour clore la boucle.
+</aside>
 </section>
 
 </div><!-- .slides -->
