@@ -29,11 +29,11 @@
 <!-- ═══════════════════════════════════════════════════════════
      SLIDE 0 — TITRE
      ═══════════════════════════════════════════════════════════ -->
-<section>
+<section data-background-color="#020408">
   <div class="slide-title">
     <div class="kicker">// BreizhCamp 2026 — 24 juin</div>
 
-    <h1>Un replay,<br>ce n'est pas<br>une vidéo</h1>
+    <h1>Rejouer une partie,<br>rejouer le système de<br>la matrice</h1>
 
     <div class="subtitle">
       Du game replay à l'event sourcing — les mêmes idées, deux mondes différents
@@ -374,7 +374,7 @@ L'idée que tu veux faire passer : cette approche n'est pas exotique, elle est �
       <div>
         <div class="card green">
           <div class="card-title">physics.ts — la clé</div>
-          <pre style="font-size:0.55em"><code class="language-typescript" style="font-size:1em !important">// Fonction PURE — pas d'effet de bord
+          <pre style="font-size:0.75em"><code class="language-typescript" style="font-size:1em !important">// Fonction PURE — pas d'effet de bord
   // C'est ce qui rend le replay possible
   function applyTick(
     state: GameState,
@@ -457,7 +457,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         <div class="card magenta" style="margin-bottom:12px">
           <div class="card-title">🗃️ Approche CRUD classique</div>
           <p class="small">On stocke l'<strong>état courant</strong>. Chaque UPDATE écrase le précédent.</p>
-          <pre style="font-size:0.48em; margin-top:8px"><code class="language-sql">-- Ce qu'on voit dans la DB
+          <pre style="margin-top:8px"><code class="language-sql">-- Ce qu'on voit dans la DB
   SELECT * FROM rooms WHERE id='amphi-a';
   -- room_id | attendees | status
   -- amphi-a | 2         | open
@@ -473,7 +473,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         <div class="card green" style="margin-bottom:12px">
           <div class="card-title">📋 Event Sourcing</div>
           <p class="small">On stocke la <strong>chronologie des décisions</strong>. L'état se reconstruit par replay.</p>
-          <div class="event-log" style="margin-top:8px; font-size:0.46em">
+          <div class="event-log" style="margin-top:8px;">
             <div class="line"><span class="ev-v">[1]</span><span class="ev-type">RoomOpened</span><span class="ev-data">cap=3</span></div>
             <div class="line"><span class="ev-v">[2]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">Alice</span></div>
             <div class="line"><span class="ev-v">[3]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">Bob</span></div>
@@ -507,7 +507,7 @@ Important : ne caricature pas le CRUD. Dis clairement que CRUD est très bien da
       <div>
         <div class="card green">
           <div class="card-title">Règles des events</div>
-          <ul style="font-size:0.7em; line-height:2">
+          <ul style="font-size:0.9em; line-height:2">
             <li>Nommés au <strong>passé</strong><br><span class="muted small">RoomOpened ≠ OpenRoom</span></li>
             <li><strong>Immuables</strong> — jamais modifiés</li>
             <li><strong>Append-only</strong> — jamais supprimés</li>
@@ -592,7 +592,7 @@ C'est souvent là qu'on sent la différence entre une simple liste de logs et un
       <div>
         <div class="card green">
           <div class="card-title">En production</div>
-          <ul style="font-size:0.7em; line-height:2">
+          <ul style="font-size:0.9em; line-height:2">
             <li><strong>PostgreSQL</strong> — table append-only, trigger sur UPDATE/DELETE</li>
             <li><strong>EventStoreDB</strong> — conçu pour ça, streams natifs</li>
             <li><strong>Kafka</strong> — event streaming distribué, retention configurable</li>
@@ -728,16 +728,16 @@ C'est souvent ici que la salle a le déclic complet. Laisse-leur une seconde pou
       <div>
         <div class="card green">
           <div class="card-title">Le flux complet</div>
-          <div class="event-log" style="font-size:0.55em; line-height:2.2">
+          <div class="event-log" style="font-size:0.9em; line-height:2.2">
             <div class="line"><span style="color:var(--cyan)">1.</span><span style="margin-left:8px">Commande reçue (HTTP POST)</span></div>
             <div class="line"><span style="color:var(--cyan)">2.</span><span style="margin-left:8px">Charger le stream</span></div>
             <div class="line"><span style="color:var(--cyan)">3.</span><span style="margin-left:8px">Projeter l'état courant</span></div>
             <div class="line"><span style="color:var(--cyan)">4.</span><span style="margin-left:8px">Valider les règles métier</span></div>
-            <div class="line"><span style="color:var(--green)">5.</span><span style="margin-left:8px">Émettre 0..N events</span></div>
-            <div class="line"><span style="color:var(--green)">6.</span><span style="margin-left:8px">Append dans le store</span></div>
+            <div class="line"><span style="color:var(--cyan)">5.</span><span style="margin-left:8px">Émettre 0..N events</span></div>
+            <div class="line"><span style="color:var(--cyan)">6.</span><span style="margin-left:8px">Append dans le store</span></div>
           </div>
         </div>
-        <div class="highlight-box magenta" style="margin-top:12px; font-size:0.62em">
+        <div class="highlight-box magenta" style="margin-top:12px; font-size:0.72em">
           <strong>RoomFull</strong> est émis automatiquement par le handler.<br>
           Le client ne décide pas. La règle vit ici.
         </div>
@@ -849,7 +849,7 @@ Tu fais sentir qu'on passe de la mécanique à la valeur.
       <div>
         <div class="card green" style="margin-bottom:12px">
           <div class="card-title">Cas d'usage concrets</div>
-          <ul style="font-size:0.7em; line-height:2">
+          <ul style="font-size:0.9em; line-height:2">
             <li>Debug d'un bug en prod survenu à 3h du matin</li>
             <li>Reconstitution d'un incident pour la postmortem</li>
             <li>"L'état était comment avant le déploiement ?"</li>
@@ -886,14 +886,14 @@ Rends-le très concret. Le time travel n'est pas un super-pouvoir mystérieux. C
       <div>
         <div class="event-log" style="font-size:0.5em">
           <div style="color:var(--muted); margin-bottom:8px; font-size:0.9em">GET /rooms/amphi-a/events</div>
-          <div class="line"><span class="ev-v">[  1]</span><span class="ev-type">RoomOpened        </span><span class="ev-data">{"roomName":"Amphi A","capacity":3}</span></div>
-          <div class="line"><span class="ev-v">[  2]</span><span class="ev-type">AttendeeCheckedIn </span><span class="ev-data">{"attendeeName":"Alice Martin"}</span></div>
-          <div class="line"><span class="ev-v">[  3]</span><span class="ev-type">AttendeeCheckedIn </span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
-          <div class="line"><span class="ev-v">[  4]</span><span class="ev-type">AttendeeCheckedIn </span><span class="ev-data">{"attendeeName":"Charlie Leroy"}</span></div>
-          <div class="line"><span class="ev-v">[  5]</span><span class="ev-type ev-auto" style="min-width:26ch">RoomFull          </span><span class="ev-data">{"capacity":3}  <span class="ev-auto">← règle métier</span></span></div>
+          <div class="line"><span class="ev-v">[  1]</span><span class="ev-type">RoomOpened</span><span class="ev-data">{"roomName":"Amphi A","capacity":3}</span></div>
+          <div class="line"><span class="ev-v">[  2]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">{"attendeeName":"Alice Martin"}</span></div>
+          <div class="line"><span class="ev-v">[  3]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
+          <div class="line"><span class="ev-v">[  4]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">{"attendeeName":"Charlie Leroy"}</span></div>
+          <div class="line"><span class="ev-v">[  5]</span><span class="ev-type ev-auto" style="min-width:26ch">RoomFull</span><span class="ev-data">{"capacity":3}  <span class="ev-auto">← règle métier</span></span></div>
           <div class="line"><span class="ev-v">[  6]</span><span class="ev-type">AttendeeCheckedOut</span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
-          <div class="line"><span class="ev-snap ev-type">[💾 ]</span><span class="ev-type ev-snap">SNAPSHOT          </span><span class="ev-data ev-snap">savedAtVersion=6  ← save state</span></div>
-          <div class="line"><span class="ev-v">[  7]</span><span class="ev-type">RoomClosed        </span><span class="ev-data">{"reason":"Talk terminé !"}</span></div>
+          <div class="line"><span class="ev-snap ev-v">[💾]</span><span class="ev-type ev-snap">SNAPSHOT</span><span class="ev-data ev-snap">savedAtVersion=6  ← save state</span></div>
+          <div class="line"><span class="ev-v">[  7]</span><span class="ev-type">RoomClosed</span><span class="ev-data">{"reason":"Talk terminé !"}</span></div>
         </div>
         <div class="highlight-box green" style="margin-top:0.6em; font-size:0.6em">
           Ce log EST la source de vérité.<br>
@@ -903,7 +903,7 @@ Rends-le très concret. Le time travel n'est pas un super-pouvoir mystérieux. C
       <div>
         <div class="card">
           <div class="card-title">Ce qu'on peut répondre</div>
-          <ul style="font-size:0.7em; line-height:2">
+          <ul style="font-size:0.9em; line-height:2">
             <li>Qui a fait quoi, quand, dans quel ordre ?</li>
             <li>Pourquoi la salle était pleine à 14h30 ?</li>
             <li>Bob est-il entré avant ou après Charlie ?</li>
@@ -1142,7 +1142,7 @@ C'est souvent cette honnêteté qui rend tout le reste beaucoup plus convaincant
       <div>
         <div class="card magenta">
           <div class="card-title">❌ Mauvais candidats</div>
-          <ul style="font-size:0.72em; line-height:2">
+          <ul style="font-size:0.9em; line-height:2">
             <li><strong>CRUD simple</strong> — catalogue produits, CMS, settings</li>
             <li><strong>Faible volume</strong> — quelques dizaines d'entités, pas d'audit nécessaire</li>
             <li><strong>Pas besoin d'historique</strong> — "on veut juste stocker l'état courant"</li>
@@ -1154,7 +1154,7 @@ C'est souvent cette honnêteté qui rend tout le reste beaucoup plus convaincant
       <div>
         <div class="card green">
           <div class="card-title">✅ Bons candidats</div>
-          <ul style="font-size:0.72em; line-height:2">
+          <ul style="font-size:0.9em; line-height:2">
             <li><strong>Audit réglementaire obligatoire</strong> — finance, santé, légal</li>
             <li><strong>Workflow complexe</strong> — commandes, réservations, processus métier long</li>
             <li><strong>Debug en prod critique</strong> — "on doit savoir exactement ce qui s'est passé"</li>
@@ -1224,7 +1224,7 @@ C'est ta dernière grande note de pragmatisme avant la conclusion.
 <!-- ═══════════════════════════════════════════════════════════
      SLIDE FINALE
      ═══════════════════════════════════════════════════════════ -->
-<section>
+<section data-background-color="#020408">
   <div class="slide-title">
     <div class="kicker">// fin du talk — merci BreizhCamp 2026 🎮</div>
 
@@ -1242,7 +1242,7 @@ C'est ta dernière grande note de pragmatisme avant la conclusion.
       </div>
       <div class="card" style="flex:1; min-width:220px">
         <div class="card-title">Ressources</div>
-        <ul style="font-size:0.62em; line-height:2">
+        <ul style="font-size:0.9em; line-height:2">
           <li>Martin Fowler — Event Sourcing (martinfowler.com)</li>
           <li>Greg Young — CQRS and Event Sourcing</li>
           <li>EventStoreDB docs</li>
@@ -1281,7 +1281,7 @@ Garde de l'énergie à ce moment-là : la fin doit sembler ouverte et accessible
 
   <p class="muted small" style="margin-bottom:0.6em">Le parallèle complet jeu ↔ backend</p>
 
-  <table class="mapping-table" style="font-size:0.6em">
+  <table class="mapping-table" style="font-size:0.7em">
     <thead>
       <tr>
         <th class="game">🎮 Jeu vidéo</th>
