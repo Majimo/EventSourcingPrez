@@ -3,9 +3,6 @@ import RevealHighlight from './node_modules/reveal.js/plugin/highlight/highlight
 import RevealNotes from './node_modules/reveal.js/plugin/notes/notes.esm.js';
 
 // ── Matrix burst — transition orchestrée ────────────────────
-// Séquence : slide-titre fondu out → canvas burst → slide whoami fondu in
-// Reveal.js est mis en pause pendant toute la durée de la transition.
-
 const matrixBurst = (function () {
   const canvas = document.getElementById('matrix-bg');
   if (!canvas) return { trigger: (cb) => cb && cb() };
@@ -14,16 +11,15 @@ const matrixBurst = (function () {
   const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const SIZE  = 16;
 
-  // Overlay sombre pour fondus d'entrée/sortie des slides
   const overlay = document.createElement('div');
   Object.assign(overlay.style, {
-    position:       'fixed',
-    inset:          '0',
-    background:     '#020810',
-    opacity:        '0',
-    pointerEvents:  'none',
-    zIndex:         '9997',
-    transition:     'opacity 0s',
+    position:      'fixed',
+    inset:         '0',
+    background:    '#020810',
+    opacity:       '0',
+    pointerEvents: 'none',
+    zIndex:        '9997',
+    transition:    'opacity 0s',
   });
   document.body.appendChild(overlay);
 
@@ -34,7 +30,6 @@ const matrixBurst = (function () {
   resize();
   window.addEventListener('resize', resize);
 
-  // ── Helpers promesses ──
   function fadeOverlay(toOpacity, durationMs) {
     return new Promise(resolve => {
       overlay.style.transition = `opacity ${durationMs}ms ease`;
@@ -51,7 +46,6 @@ const matrixBurst = (function () {
     });
   }
 
-  // ── Pluie Matrix ──
   function initDrops() {
     const cols = Math.floor(canvas.width / SIZE);
     return Array.from({ length: cols }, (_, i) => -(i % 8) * 1.5);
@@ -63,7 +57,6 @@ const matrixBurst = (function () {
   function startRain() {
     drops = initDrops();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     function frame() {
       ctx.fillStyle = 'rgba(2,4,8,0.09)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -85,43 +78,27 @@ const matrixBurst = (function () {
     if (animId) { cancelAnimationFrame(animId); animId = null; }
   }
 
-  // Canvas invisible au départ
   canvas.style.opacity       = '0';
   canvas.style.transition    = 'none';
   canvas.style.zIndex        = '9998';
   canvas.style.pointerEvents = 'none';
 
-  // ── Séquence complète ──────────────────────────────────────
-  // Timings (ms) — ajustables ici
-  const T_FADE_OUT   = 400;  // fondu noir sur slide titre
-  const T_RAIN_IN    = 200;  // apparition canvas
-  const T_RAIN_HOLD  = 1400;  // pluie à pleine opacité
-  const T_RAIN_OUT   = 300;  // disparition canvas
-  const T_FADE_IN    = 400;  // révélation slide whoami
+  const T_FADE_OUT  = 500;
+  const T_RAIN_IN   = 200;
+  const T_RAIN_HOLD = 1800;
+  const T_RAIN_OUT  = 300;
+  const T_FADE_IN   = 700;
 
   async function trigger(onMidpoint) {
-    // 1. Fondu noir — masque la slide titre
     await fadeOverlay('1', T_FADE_OUT);
-
-    // 2. Reveal.js navigue vers la slide suivante (invisible sous l'overlay)
     onMidpoint && onMidpoint();
-
-    // 3. Canvas Matrix apparaît par-dessus le noir
     startRain();
     await fadeCanvas('1', T_RAIN_IN);
-
-    // 4. Pluie tient le temps voulu
     await new Promise(r => setTimeout(r, T_RAIN_HOLD));
-
-    // 5. Canvas disparaît — laisse entrevoir le noir
     await fadeCanvas('0', T_RAIN_OUT);
     stopRain();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 6. Fondu révèle la slide whoami
     await fadeOverlay('0', T_FADE_IN);
-
-    // Nettoyage
     overlay.style.transition = 'opacity 0s';
   }
 
@@ -148,6 +125,8 @@ deck.initialize({
 
 // ── Speaker notes CSS injection ──────────────────────────────
 deck.on('ready', () => {
+  wrapCodeLines(); // ← ajouter cette ligne
+
   const originalOpen = window.open;
   window.open = function (...args) {
     const w = originalOpen.apply(window, args);
@@ -155,7 +134,7 @@ deck.on('ready', () => {
       if (w.document && w.document.head) {
         const link = w.document.createElement('link');
         link.rel  = 'stylesheet';
-        link.href = 'css/notes.css';
+        link.href = 'notes.css';
         w.document.head.appendChild(link);
         clearInterval(interval);
       }
@@ -164,13 +143,9 @@ deck.on('ready', () => {
   };
 });
 
-// ── Interception de la navigation ────────────────────────────
-let transitioning = false;
-
+// ── Slide-specific logic ─────────────────────────────────────
 deck.on('slidechanged', (event) => {
   const { indexh, indexv } = event;
-
-  // Hauteur slides avec code long
   const tallSlides = [[3,2],[3,3],[4,1],[5,2],[6,1]];
   const slides = document.querySelector('.slides');
   if (tallSlides.some(([h,v]) => h === indexh && v === indexv)) {
@@ -180,23 +155,117 @@ deck.on('slidechanged', (event) => {
   }
 });
 
-// On intercepte AVANT le changement de slide pour prendre le contrôle
+// ── Interception transition titre → whoami ───────────────────
+let transitioning = false;
+
 deck.addEventListener('beforeslidechange', (event) => {
   const from = deck.getCurrentSlide();
   const isFromTitle = from && from.querySelector('.slide-title');
   const toIndex = event.indexh;
 
-  // Uniquement pour la transition titre → whoami (0 → 1)
   if (!isFromTitle || toIndex !== 1 || transitioning) return;
 
-  // Bloquer reveal.js
   event.preventDefault();
   transitioning = true;
 
   matrixBurst.trigger(() => {
-    // Ce callback s'exécute sous l'overlay noir — on navigue en silence
     deck.slide(1, 0, 0);
   }).then(() => {
     transitioning = false;
+  });
+});
+
+// ── Injection des wrappers après highlight.js ────────────────
+// Groupes de lignes à wrapper par étape (index 0-based, inclusif)
+const CODE_HL_GROUPS = [
+  [0, 2],   // step-0 : signature de la fonction
+  [4, 4],   // step-1 : getStream
+  [6, 6],   // step-2 : projectRoom
+  [8, 11],  // step-3 : validations
+  [13, 20], // step-4 : construction events + RoomFull
+  [22, 22], // step-5 : append
+];
+
+function wrapCodeLines() {
+  const codeEl = document.querySelector('#cmd-code code');
+  if (!codeEl) return;
+
+  // Découper le contenu en lignes (highlight.js produit du HTML)
+  const html   = codeEl.innerHTML;
+  const lines  = html.split('\n');
+
+  // Reconstruire en wrappant les groupes dans des spans data-hl
+  let result = '';
+  let hlIndex = 0;
+  let inGroup = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const group = CODE_HL_GROUPS.findIndex(([start, end]) => i === start);
+    if (group !== -1) {
+      result += `<span class="code-hl" data-hl="${group}" style="display:block">`;
+      inGroup = true;
+      hlIndex = group;
+    }
+
+    result += lines[i] + (i < lines.length - 1 ? '\n' : '');
+
+    const currentGroup = CODE_HL_GROUPS[hlIndex];
+    if (inGroup && currentGroup && i === currentGroup[1]) {
+      result += '</span>';
+      inGroup = false;
+    }
+  }
+
+  codeEl.innerHTML = result;
+}
+
+// Appeler dans ready, après que highlight.js a tourné
+deck.on('ready', () => {
+  wrapCodeLines();
+
+  // ... (le reste du ready existant — injection CSS notes)
+});
+
+// ── Synchronisation flux ↔ code ──────────────────────────────
+deck.on('fragmentshown', ({ fragment }) => {
+  if (!fragment.classList.contains('flux-step')) return;
+
+  const step = fragment.id.split('-')[1];
+
+  document.querySelectorAll('.flux-step').forEach(el => {
+    el.style.background   = '';
+    el.style.borderRadius = '';
+    el.style.fontWeight   = '';
+  });
+
+  document.querySelectorAll('.code-hl').forEach(el => {
+    el.style.background = 'rgba(255,215,0,0)';
+  });
+
+  fragment.style.background   = 'rgba(88,166,255,0.13)';
+  fragment.style.borderRadius = '4px';
+  fragment.style.fontWeight   = '600';
+  fragment.style.fontSize     = '0.5em !important';
+
+  const codeEl = document.querySelector(`.code-hl[data-hl="${step}"]`);
+  if (codeEl) {
+    codeEl.style.opacity    = '1';
+    codeEl.style.background = 'rgba(255,215,0,0.25)';
+    codeEl.style.borderRadius = '3px';
+  }
+});
+
+deck.on('fragmenthidden', ({ fragment }) => {
+  if (!fragment.classList.contains('flux-step')) return;
+
+  document.querySelectorAll('.flux-step').forEach(el => {
+    el.style.background   = '';
+    el.style.borderRadius = '';
+    el.style.fontWeight   = '';
+  });
+  document.querySelectorAll('.code-hl').forEach(el => {
+    el.style.opacity    = '';
+    el.style.background = 'none';
+    el.style.borderRadius = '';
   });
 });

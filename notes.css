@@ -1,0 +1,20 @@
+#speaker-controls {
+    font-size: 14px !important;
+}
+
+.speaker-controls-notes .value [data-notes-step] {
+  display: none;
+}
+
+.speaker-controls-notes .value [data-notes-step].is-active {
+  display: block;
+  font-size: 0.95em !important;
+  line-height: 1.15;
+}
+
+.speaker-controls-notes .value .notes-compact,
+.speaker-controls-notes .value .notes-compact p,
+.speaker-controls-notes .value .notes-compact li {
+  font-size: 0.95em !important;
+  line-height: 1.15;
+}
