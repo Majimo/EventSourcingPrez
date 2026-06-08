@@ -49,16 +49,13 @@
   </div>
 
   <aside class="notes">
-Laisser la salle se poser, regarder le public, sourire.
-
-Démarrage possible : « Levez la main si vous avez déjà regardé un replay dans un jeu vidéo. » Puis : « Et maintenant, levez la main si vous avez déjà fait de l'event sourcing. »
-
-Le contraste doit faire sourire. C'est l'accroche.
-
-Ensuite tu poses la promesse : « Ce soir, mon objectif, c'est de vous montrer que ces deux mondes racontent en fait la même histoire technique. »
-
-Ne va pas trop vite. Cette slide sert à ouvrir une curiosité, pas à délivrer du contenu.
-</aside>
+  Laisser la salle se poser, regarder le public, sourire.
+  "Bonsoir à tous. Je suis ravi d'être là pour parler d'un sujet qui me passionne : comment les jeux vidéo et les systèmes backend utilisent des techniques similaires pour rejouer des événements passés."
+  </br>
+  « Levez la main si vous avez déjà regardé un replay dans un jeu vidéo. » Puis : « Et maintenant, levez la main si vous avez déjà fait de l'event sourcing. »
+  </br>
+  « Ce soir, mon objectif, c'est de vous montrer que ces deux mondes racontent en fait la même histoire technique. »
+  </aside>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -98,13 +95,9 @@ Ne va pas trop vite. Cette slide sert à ouvrir une curiosité, pas à délivrer
   </div>
 
   <aside class="notes">
-Slide courte, très incarnée.
-
-Tu peux dire : « Je fais du backend, je bidouille des jeux, et un soir en bricolant un système de replay, j'ai eu ce moment un peu bête où je me suis dit : mais attends… c'est littéralement de l'event sourcing. »
-
-Le but n'est pas de raconter ton CV. Le but est de montrer que le parallèle vient d'une vraie pratique, pas d'une analogie inventée pour faire une jolie intro de conf.
-
-Une minute max. Puis on enchaîne.
+    Je me présente, je remercie le BreizCamp pour l'invitation, et je remercie les sponsors pour leur soutien à l'event.
+    </br>
+    « Je fais du backend, je bidouille des jeux, et un soir en bricolant un système de replay, j'ai eu ce moment un peu bête où je me suis dit : mais attends… c'est littéralement de l'event sourcing. »
 </aside>
 </section>
 
@@ -189,14 +182,12 @@ Une minute max. Puis on enchaîne.
     </div>
 
     <aside class="notes">
-Fais une petite pause avant de parler. Laisse le titre vivre.
-
-Puis démarre en mode storytelling : « Imaginez : vous mourez dans Counter-Strike, Overwatch, Fortnite… et le jeu vous montre instantanément les cinq dernières secondes du point de vue de votre adversaire. »
-
-Là, tout le monde voit la scène.
-
-Ton boulot sur cette slide, c'est d'installer une image mentale partagée. Pas encore d'expliquer. Juste de mettre la salle dans le bon souvenir.
-</aside>
+      Fais une petite pause avant de parler. Laisse le titre vivre.
+      </br>
+      Puis démarre en mode storytelling : « Imaginez : vous mourez dans Counter-Strike, Overwatch, Fortnite… et le jeu vous montre instantanément les cinq dernières secondes du point de vue de votre adversaire. »
+      </br>
+      Là, tout le monde voit la scène. Ton boulot sur cette slide, c'est d'installer une image mentale partagée. Pas encore d'expliquer. Juste de mettre la salle dans le bon souvenir.
+    </aside>
   </section>
 
   <!-- 1.1 — Le killcam, tout le monde connaît -->
@@ -255,15 +246,15 @@ Ton boulot sur cette slide, c'est d'installer une image mentale partagée. Pas e
     </div>
 
     <aside class="notes">
+      "Lorsque vous mourrez dans votre FPS, qu'est-ce que le jeu garde en mémoire pour pouvoir vous montrer ce killcam ? Il stocke la vidéo de ce qui vient de se passer ?"
+    </br>
 Ici, la réponse doit tomber sèchement.
-
 « Non. Jamais. »
-
-Puis tu enchaînes : si c'était une vraie vidéo 1080p 60 fps stockée en continu, ce serait monstrueux en bande passante, en mémoire, en stockage. Donc non, ce n'est pas ça que le jeu garde.
-
+</br>
+Puis tu enchaînes : "si c'était une vraie vidéo 1080p 60 fps stockée en continu, ce serait monstrueux en bande passante, en mémoire, en stockage. Donc non, ce n'est pas ça que le jeu garde."
+</br>
 Joue bien l'effet de rupture : c'est le premier petit moment “aha”.
-
-La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de la partie.
+"On ne stocke pas des images. On stocke l'histoire de la partie."
 </aside>
   </section>
 
@@ -271,7 +262,7 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
   <section>
     <h2>La formule du replay</h2>
 
-    <div style="text-align:center; margin: 1.4em 0 1em">
+    <div class="fragment" style="text-align:center; margin: 1.4em 0 1em">
       <div style="font-family:var(--font-display); font-size:1.5em; line-height:2; letter-spacing:0.05em">
         <span class="glow-green">État initial</span>
         <span class="muted" style="font-size:0.7em; margin: 0 0.4em">+</span>
@@ -282,85 +273,87 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
     </div>
 
     <div class="cols cols-3" style="margin-top:0.6em">
-      <div class="card green">
+      <div class="fragment card green">
         <div class="card-title">État initial</div>
         <p class="small">Position de départ, graine du générateur aléatoire (RNG seed), configuration de la map, stats des joueurs.</p>
         <p class="small muted mt">→ Reproductible à l'identique</p>
       </div>
-      <div class="card">
+      <div class="fragment card">
         <div class="card-title">Log d'events</div>
         <p class="small">Uniquement les <strong>changements</strong> d'inputs (pas 60 snapshots/sec), plus les événements système (mort, victoire).</p>
         <p class="small muted mt">→ Append-only, compact</p>
       </div>
-      <div class="card magenta">
+      <div class="fragment card magenta">
         <div class="card-title">Résultat</div>
         <p class="small">En réinjectant les events dans le moteur physique depuis l'état initial, on reconstruit exactement la même partie.</p>
         <p class="small muted mt">→ Déterministe</p>
       </div>
     </div>
 
-    <div class="highlight-box" style="margin-top:1em">
+    <div class="fragment highlight-box" style="margin-top:1em">
       <span class="mono glow-cyan">Le moteur physique est une fonction pure :</span>
       <code>f(état, input) → nouvel_état</code>
     </div>
 
     <aside class="notes">
-    RALENTIR — c'est la slide pivot de toute la partie 1.
-    Tout ce qui suit en découle. Prendre le temps de la formule.
-</br>
-    LIRE LA FORMULE À VOIX HAUTE, LENTEMENT
-    "État initial... plus log d'events... égale replay identique."
-    Silence d'une seconde. Laisser atterrir.
-    "C'est tout. C'est le principe entier."
+      <div class="notes-fragment" data-fragment-index="0">
+        RALENTIR — c'est la slide pivot de toute la partie 1.
+        Tout ce qui suit en découle. Prendre le temps de la formule.
+      </br>
+        LIRE LA FORMULE À VOIX HAUTE, LENTEMENT
+        "État initial... plus log d'events... égale replay identique."
+        Silence d'une seconde. Laisser atterrir.
+        "C'est tout. C'est le principe entier."
+      </div>
 
-</br>
-    EXPLIQUER CHAQUE TERME DANS L'ORDRE
+      <div class="notes-fragment" data-fragment-index="1">
+        État initial :
+      </br>
+        "C'est le point de départ. Dans notre mini-jeu : la position du joueur,
+        la seed qui a généré les plateformes, la gravité. Rien d'autre.
+        Ce n'est pas une capture complète de la partie — c'est juste ce dont
+        le moteur a besoin pour partir de zéro."
+        Insister : la seed RNG est critique. Si deux machines partent avec la même
+        seed, elles génèrent exactement le même niveau. C'est pour ça que le replay
+        est possible sur n'importe quelle machine.
+      </div>
 
-</br>
-    État initial :
-</br>
-    "C'est le point de départ. Dans notre mini-jeu : la position du joueur,
-    la seed qui a généré les plateformes, la gravité. Rien d'autre.
-    Ce n'est pas une capture complète de la partie — c'est juste ce dont
-    le moteur a besoin pour partir de zéro."
-    Insister : la seed RNG est critique. Si deux machines partent avec la même
-    seed, elles génèrent exactement le même niveau. C'est pour ça que le replay
-    est possible sur n'importe quelle machine.
+      <div class="notes-fragment" data-fragment-index="2">
+        Log d'events :
+      </br>
+        "On n'enregistre pas 60 photos par seconde. On enregistre uniquement les
+        moments où quelque chose change : le joueur appuie sur droite au tick 4,
+        il saute au tick 9, il lâche droite au tick 23. Entre ces moments,
+        le moteur calcule tout seul. Le log est donc très compact."
+        Chifire si possible : Doom tourne à 35 tics/sec, un .lmp d'une heure
+        tient en quelques centaines de Ko. Pas en gigaoctets.
+        </div>
 
-</br>
-    Log d'events :
-</br>
-    "On n'enregistre pas 60 photos par seconde. On enregistre uniquement les
-    moments où quelque chose change : le joueur appuie sur droite au tick 4,
-    il saute au tick 9, il lâche droite au tick 23. Entre ces moments,
-    le moteur calcule tout seul. Le log est donc très compact."
-    Chifire si possible : Doom tourne à 35 tics/sec, un .lmp d'une heure
-    tient en quelques centaines de Ko. Pas en gigaoctets.
-
-</br>
-    Résultat — le déterminisme :
-</br>
-    "Si je pars du même état initial et que je rejoue les mêmes events dans
-    le même ordre, j'arrive exactement au même endroit. Toujours.
-    C'est ça, le déterminisme. Ce n'est pas une propriété magique —
-    c'est une contrainte qu'on impose au moteur."
-
-</br>
-    LA HIGHLIGHT-BOX — FONCTION PURE
-</br>
-    "f(état, input) → nouvel_état. Même entrée, même sortie.
-    Si ma fonction regarde l'heure système, génère un random non seedé,
-    fait un appel réseau — elle n'est plus pure. Le replay casse.
-    C'est pour ça que les jeux seedent leur RNG. C'est une décision
-    d'architecture, pas un détail d'implémentation."
-
-</br>
-    TRANSITION VERS LA SUITE
-</br>
-    Ne pas dire "et côté backend c'est pareil" tout de suite —
-    garder cette révélation pour la partie 2. Juste planter la graine :
-    "Cette formule, on va la retrouver ailleurs. Gardez-la en tête."
-  </aside>
+      <div class="notes-fragment" data-fragment-index="3">
+        Résultat — le déterminisme :
+      </br>
+        "Si je pars du même état initial et que je rejoue les mêmes events dans
+        le même ordre, j'arrive exactement au même endroit. Toujours.
+        C'est ça, le déterminisme. Ce n'est pas une propriété magique —
+        c'est une contrainte qu'on impose au moteur."
+        </div>
+              
+      <div class="notes-fragment" data-fragment-index="4">
+        LA HIGHLIGHT-BOX — FONCTION PURE
+      </br>
+        "f(état, input) → nouvel_état. Même entrée, même sortie.
+        Si ma fonction regarde l'heure système, génère un random non seedé,
+        fait un appel réseau — elle n'est plus pure. Le replay casse.
+        C'est pour ça que les jeux seedent leur RNG. C'est une décision
+        d'architecture, pas un détail d'implémentation."
+      </br>
+        TRANSITION VERS LA SUITE
+      </br>
+        Ne pas dire "et côté backend c'est pareil" tout de suite —
+        garder cette révélation pour la partie 2. Juste planter la graine :
+        "Cette formule, on va la retrouver ailleurs. Gardez-la en tête."
+      </div>
+    </aside>
   </section>
 
   <!-- 1.3 — Exemples concrets de replays dans les jeux -->
@@ -368,29 +361,30 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
     <h2>Replays dans les jeux — exemples concrets</h2>
 
     <div class="cols cols-3" style="margin-top:1em">
-      <div class="card green">
+      <div class="fragment card green">
         <div class="card-title">🏎️ StarCraft / jeux de stratégie</div>
         <p class="small">Fichier <code>.rep</code> de quelques Ko pour une partie d'1h. Contient uniquement les ordres des joueurs horodatés.</p>
         <div class="tag green mt">Fichier replay &lt; 500 Ko</div>
       </div>
-      <div class="card">
+      <div class="fragment card">
         <div class="card-title">🎮 Doom (1993) — le pionnier</div>
         <p class="small">Format <code>.lmp</code> : liste des inputs par tic (35/s). Rejoue exactement la même démo sur n'importe quelle machine.</p>
         <div class="tag cyan mt">32 ans déjà</div>
       </div>
-      <div class="card magenta">
+      <div class="fragment card magenta">
         <div class="card-title">🔫 CS2 / FPS modernes</div>
         <p class="small">Le serveur enregistre tous les états réseau. Le killcam relit les derniers ticks côté client. La "caméra" n'existe pas en direct.</p>
         <div class="tag magenta mt">Killcam = time travel</div>
       </div>
     </div>
 
-    <div class="card gold" style="margin-top:14px">
+    <div class="fragment card gold" style="margin-top:14px">
       <div class="card-title">⚠️ La limite : le non-déterminisme</div>
       <p class="small">Un bug de replay arrive quand un élément externe perturbe la reconstruction : latence réseau non rejouée, timer système, accès fichier… Exactement les mêmes problèmes qu'en event sourcing.</p>
     </div>
 
    <aside class="notes">
+      <div class="notes-fragment" data-fragment-index="0">
       STARCRAFT / STRATÉGIE
       Le fichier .rep contient uniquement les ordres des joueurs avec leur timestamp :
       "à t=2:14, le joueur 1 déplace l'unité #42 vers (128,96)". Pas les positions
@@ -399,7 +393,8 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
       devient invalide si la version du jeu change (patch de balancing) parce que
       la fonction de recalcul change. C'est exactement le problème du versioning
       des events en event sourcing — à mentionner ici comme avant-goût de la partie 4.
-
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
       DOOM (1993) — LES .LMP
       Doom tourne à 35 tics/seconde. À chaque tic, le moteur enregistre 4 octets :
       forwardmove, sidemove, angleturn, buttons (tirer/utiliser/changer d'arme).
@@ -411,7 +406,8 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
       de leurs runs — pas des captures vidéo. Le fichier EST la preuve parce qu'il
       est rejouable et vérifiable. Insister : 1993. Ça fait 32 ans que cette idée
       fonctionne. Ce n'est pas une nouveauté architecturale.
-
+      </div>
+      <div class="notes-fragment" data-fragment-index="2">
       CS2 / FPS MODERNES
       Le serveur autoritaire enregistre en continu les états réseau (positions,
       santé, munitions) de tous les joueurs sous forme de ticks compressés. Quand
@@ -421,7 +417,8 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
       un log. Point fort pour l'audience : tout le monde a vu un killcam. Presque
       personne ne sait que c'est du rejoue d'events. C'est la révélation concrète
       du talk.
-
+      </div>
+      <div class="notes-fragment" data-fragment-index="3">
       NON-DÉTERMINISME — LE BRIDGE VERS LA PARTIE 4
       Un bug de replay Starcraft classique : deux joueurs qui ont des latences
       réseau différentes voient les unités se désynchroniser au fil du replay.
@@ -432,6 +429,7 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
       deux cas : la fonction de reconstruction doit être pure. Tout ce qui est
       externe doit être dans le log, pas recalculé.
       Ne pas s'étendre — juste planter la graine pour la partie 4.
+      </div>
     </aside>
   </section>
 
@@ -490,50 +488,44 @@ La révélation, c'est qu'on ne stocke pas des images. On stocke l'histoire de l
     </div>
 
     <aside class="notes">
-      OBJECTIF DE CETTE SLIDE
-      Pas besoin de tout expliquer — la démo suit dans 2 minutes.
-      L'objectif est uniquement de donner les repères pour que la démo
-      soit lisible. Pointer les fichiers, pas les détailler.
-
-      INTRO — LE JEU EST UN OUTIL, PAS UNE FIN
       "Ce jeu n'est pas là pour être fun. Il est là pour être transparent.
       Chaque fichier a une responsabilité unique, et je veux que vous puissiez
       lire ce qui se passe pendant la démo sans avoir besoin de connaître
       le code."
-
-      POINTER L'ARBORESCENCE DANS L'ORDRE
-
+      <br>
       core/physics.ts — pointer en vert, insister :
+      <br>
       "C'est le fichier le plus important du projet. Pas le plus gros — le plus
       important. applyTick prend un état et un input, et retourne un nouvel état.
       C'est tout. Pas d'appel réseau, pas de Date.now(), pas d'accès au DOM.
       Même entrée, même sortie. Toujours. C'est cette propriété qui rend
       le replay possible — rien d'autre."
-
+      <br>
       replay/recorder.ts et player.ts — pointer en cyan :
+      <br>
       "recorder enregistre les changements d'input pendant que vous jouez.
       Pas 60 snapshots par seconde — uniquement quand quelque chose change.
       player rejoue ces inputs depuis l'état initial. C'est lui qui fait
       tourner le killcam et le replay complet."
-
+      <br>
       render/canvas.ts — pointer en muted, ton détaché :
+      <br>
       "Et là, le rendu. Volontairement en gris parce que c'est le moins
       intéressant pour nous aujourd'hui."
-      Pause.
+      ! PAUSE ! 
       "Je peux supprimer ce dossier entier et le replay continue de fonctionner.
       La simulation existe indépendamment de ce qu'on affiche à l'écran.
       C'est un principe d'architecture qu'on va retrouver côté backend :
       la logique ne doit rien savoir de la couche de présentation."
-
+      <br>
       ui/eventlog.ts :
+      <br>
       "Et ce fichier-là, vous allez le voir en action dans 30 secondes —
       c'est le panneau de droite qui affiche les events en temps réel
       pendant la démo."
-
+      <br>
       TRANSITION VERS LA DÉMO
-      "Voilà pour la carte. Maintenant on joue."
-      Passer directement à la slide DEMO TIME sans s'attarder.
-      Cette slide ne doit pas durer plus de 90 secondes.
+      "Bon allez, maintenant on joue."
     </aside>
   </section>
 
@@ -587,7 +579,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     <h2>CRUD vs Event Sourcing</h2>
 
     <div class="cols cols-2" style="margin-top:0.8em; gap:20px">
-      <div>
+      <div class="fragment">
         <div class="card magenta" style="margin-bottom:12px">
           <div class="card-title">🗃️ Approche CRUD classique</div>
           <p class="small">On stocke l'<strong>état courant</strong>. Chaque UPDATE écrase le précédent.</p>
@@ -603,7 +595,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         </div>
         <div class="tag magenta">État final uniquement · Passé effacé</div>
       </div>
-      <div>
+      <div class="fragment">
         <div class="card green" style="margin-bottom:12px">
           <div class="card-title">📋 Event Sourcing</div>
           <p class="small">On stocke la <strong>chronologie des décisions</strong>. L'état se reconstruit par replay.</p>
@@ -621,57 +613,60 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     </div>
 
     <aside class="notes">
-      OBJECTIF DE CETTE SLIDE
-      C'est la rupture conceptuelle du talk. Tout ce qui précède
+      <div class="notes-fragment" data-fragment-index="0">
+      <strong>OBJECTIF DE CETTE SLIDE</strong>
+      <p>C'est la rupture conceptuelle du talk. Tout ce qui précède
       (le jeu, la formule, les exemples) converge ici.
-      Ralentir. Une idée à la fois.
-
-      COMMENCER PAR LE CRUD — NE PAS LE CARICATURER
-      "Le CRUD, c'est le modèle par défaut. Et pour cause : il est simple,
+      Ralentir. Une idée à la fois.</p>
+      <br>
+      <strong>COMMENCER PAR LE CRUD — NE PAS LE CARICATURER</strong> 
+      <br>
+      <p>"Le CRUD, c'est le modèle par défaut. Et pour cause : il est simple,
       outillé, connu de tout le monde. Une table, des colonnes, des lignes.
       On lit, on écrit, on met à jour. Ça marche très bien pour énormément
       de cas — on reviendra là-dessus en partie 4."
-      Pause.
+      <br>! PAUSE !<br>
       "Mais il y a quelque chose que le CRUD fait silencieusement,
-      à chaque UPDATE : il efface le passé."
-
-      POINTER LE CODE SQL
-      "Regardez ce SELECT. La salle amphi-a a 2 participants, statut open.
+      à chaque UPDATE : il efface le passé."</p>
+      <br>
+      <strong>POINTER LE CODE SQL</strong>
+      <p>"Regardez ce SELECT. La salle amphi-a a 2 participants, statut open.
       C'est tout ce que la base sait. Elle ne sait pas qui est entré en premier.
       Elle ne sait pas si la salle était pleine il y a 10 minutes.
       Elle ne sait pas pourquoi il y a 2 participants et pas 3.
-      L'histoire a eu lieu. La base n'en a aucune trace."
-
-      LA FORMULE À DIRE À VOIX HAUTE
-      "Le problème du CRUD, ce n'est pas ce qu'il montre.
-      C'est tout ce qu'il efface."
-      Silence. Laisser résonner.
-
-      BASCULER SUR L'EVENT SOURCING
-      "En event sourcing, on ne stocke pas l'état. On stocke les décisions
+      L'histoire a eu lieu. La base n'en a aucune trace."</p>
+      <br>
+      <strong>LA FORMULE À DIRE À VOIX HAUTE</strong>
+      <p>"Le problème du CRUD, ce n'est pas ce qu'il montre.
+      C'est tout ce qu'il efface."</p>
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
+      <strong>BASCULER SUR L'EVENT SOURCING</strong>
+      <p>"En event sourcing, on ne stocke pas l'état. On stocke les décisions
       qui ont mené à cet état. Chaque fait métier est enregistré dans l'ordre,
-      avec son contexte."
-      Pointer le log event par event :
-      "La salle a été ouverte. Alice est entrée. Bob est entré. Charlie est entré.
+      avec son contexte."</p>
+      <p>Pointer le log event par event :</p>
+      <p>"La salle a été ouverte. Alice est entrée. Bob est entré. Charlie est entré.
       La salle est devenue pleine — automatiquement, par règle métier.
       Bob est reparti. Voilà l'histoire complète."
       "À partir de ce log, je peux reconstruire l'état à n'importe quel moment.
       Maintenant, il y a 10 minutes, au moment où la salle était pleine —
-      je peux répondre à toutes ces questions."
+      je peux répondre à toutes ces questions."</p>
 
-      LE PARALLÈLE JEU — L'UTILISER ICI
-      "C'est exactement la différence entre un screenshot de fin de partie
+      <strong>LE PARALLÈLE JEU — L'UTILISER ICI</strong>
+      <p>"C'est exactement la différence entre un screenshot de fin de partie
       et un fichier replay. Le screenshot vous dit où tout le monde était
-      à la fin. Le replay vous dit comment on en est arrivé là."
+      à la fin. Le replay vous dit comment on en est arrivé là."</p>
 
-      POINTER ROOMFULL EN MAGENTA
-      "Et ce RoomFull marqué 'auto' — ce n'est pas le client qui l'a envoyé.
+      <strong>POINTER ROOMFULL EN MAGENTA</strong>
+      <p>"Et ce RoomFull marqué 'auto' — ce n'est pas le client qui l'a envoyé.
       C'est la règle métier qui l'a émis automatiquement quand la capacité
-      a été atteinte. On y reviendra dans la slide suivante."
+      a été atteinte. On y reviendra dans la slide suivante."</p>
 
-      TRANSITION
-      "Donc : même idée que le replay de jeu. Même structure.
-      Voyons maintenant comment ça s'organise concrètement."
+      <strong>TRANSITION</strong>
+      <p>"Donc : même idée que le replay de jeu. Même structure.
+      Voyons maintenant comment ça s'organise concrètement."</p>
+      </div>
     </aside>
   </section>
 
@@ -679,7 +674,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
   <section>
     <h2>Les domain events — <span class="glow-green">immuables, nommés au passé</span></h2>
 
-    <div class="cols cols-40-60" style="margin-top:0.8em">
+    <div class="fragment cols cols-40-60" style="margin-top:0.8em">
       <div>
         <div class="card green">
           <div class="card-title">Règles des events</div>
@@ -693,8 +688,8 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
           </ul>
         </div>
       </div>
-      <div>
-        <pre><code class="language-typescript">// events.ts — types immuables, nommés au passé
+      <div class="fragment">
+        <pre style="height:23em;margin-block:auto;"><code class="language-typescript">// events.ts — types immuables, nommés au passé
   export type DomainEvent =
     | RoomOpened        // ← passé, pas "OpenRoom"
     | AttendeeCheckedIn
@@ -720,66 +715,66 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     </div>
 
     <aside class="notes">
-      OBJECTIF DE CETTE SLIDE
-      Poser le vocabulaire une fois pour toutes.
-      Tout le reste du talk utilise ces concepts — si les gens ne les ont
-      pas bien compris ici, ils seront perdus sur les slides suivantes.
-      Pas besoin d'aller vite : c'est une slide de fondations.
+      <div class="notes-fragment" data-fragment-index="0">
+        <strong>OBJECTIF DE CETTE SLIDE</strong>
+        <p>Poser le vocabulaire une fois pour toutes.
+        Tout le reste du talk utilise ces concepts — si les gens ne les ont
+        pas bien compris ici, ils seront perdus sur les slides suivantes.</p>
 
-      LE NOMMAGE AU PASSÉ — COMMENCER PAR LÀ
-      "Première règle, et c'est plus qu'une convention :
-      un event se nomme au passé. RoomOpened, pas OpenRoom.
-      AttendeeCheckedIn, pas CheckInAttendee."
-      Pause.
-      "La différence n'est pas stylistique. OpenRoom, c'est un ordre —
-      quelqu'un demande quelque chose. RoomOpened, c'est un fait —
-      quelque chose s'est passé. Un fait ne peut pas être annulé.
-      Il peut seulement être compensé par un autre fait."
-      Exemple concret : "Si j'ai écrit RoomOpened dans mon log,
-      je ne peux pas l'effacer. Si j'ai fait une erreur, j'émets
-      RoomClosed. L'erreur reste visible. La correction aussi."
+        <strong>LE NOMMAGE AU PASSÉ — COMMENCER PAR LÀ</strong>
+        <p>"Première règle, et c'est plus qu'une convention :
+        un event se nomme au passé. RoomOpened, pas OpenRoom.
+        AttendeeCheckedIn, pas CheckInAttendee." ! Pause ! "La différence n'est pas stylistique. OpenRoom, c'est un ordre —
+        quelqu'un demande quelque chose. RoomOpened, c'est un fait —
+        quelque chose s'est passé. Un fait ne peut pas être annulé.
+        Il peut seulement être compensé par un autre fait."</p>
+        <p>"Si j'ai écrit RoomOpened dans mon log,
+        je ne peux pas l'effacer. Si j'ai fait une erreur, j'émets
+        RoomClosed. L'erreur reste visible. La correction aussi."</p>
 
-      L'IMMUABILITÉ — INSISTER
-      "Immuable signifie qu'une fois écrit, un event ne change jamais.
-      Pas de UPDATE sur un event. Jamais.
-      C'est la même contrainte que dans un fichier replay de jeu :
-      on n'efface pas un input du passé. On ajoute la suite."
+        <strong>L'IMMUABILITÉ — INSISTER</strong>
+        <p>"Immuable signifie qu'une fois écrit, un event ne change jamais.
+        Pas de UPDATE sur un event. Jamais.
+        C'est la même contrainte que dans un fichier replay de jeu :
+        on n'efface pas un input du passé. On ajoute la suite."</p>
+      </div>
 
-      POINTER LE CODE — BASEEVENT
-      Montrer les quatre champs de BaseEvent un par un :
-      "eventId : chaque event est unique, identifiable, traçable.
-      aggregateId : sur quel objet métier ça s'est passé — ici la salle.
-      occurredAt : quand. Pas quand on l'a traité — quand ça s'est passé.
-      version : la position dans le stream. C'est l'équivalent du tick
-      dans le jeu. C'est ce qui garantit l'ordre et permet le time travel."
+      <div class="notes-fragment" data-fragment-index="1">
+        <strong>POINTER LE CODE — BASEEVENT</strong>
+        <p>Montrer les quatre champs de BaseEvent un par un :
+        "eventId : chaque event est unique, identifiable, traçable.
+        aggregateId : sur quel objet métier ça s'est passé — ici la salle.
+        occurredAt : quand. Pas quand on l'a traité — quand ça s'est passé.
+        version : la position dans le stream. C'est l'équivalent du tick
+        dans le jeu. C'est ce qui garantit l'ordre et permet le time travel."</p>
 
-      POINTER ROOMFULL — LE POINT D'OR
-      "Regardez RoomFull dans la liste. Il porte un commentaire :
-      émis AUTO par la règle métier. Ce n'est pas le client qui envoie
-      cet event. C'est le domaine qui le produit automatiquement quand
-      la capacité est atteinte."
-      "C'est là qu'on voit la différence entre une simple liste de logs
-      et un vrai modèle événementiel. Les events ne sont pas des traces
-      de ce que l'utilisateur a fait. Ce sont des faits métier —
-      certains viennent des actions utilisateur, d'autres viennent
-      des règles du domaine lui-même."
-      Analogie jeu : "Le joueur appuie sur SHOOT. C'est son action.
-      PLAYER_HIT est émis par le moteur si la hitbox correspond.
-      Le joueur ne décide pas si ça touche — le moteur décide."
+        <strong>POINTER ROOMFULL — LE POINT D'OR</strong>
+        <p>"Regardez RoomFull dans la liste. Il porte un commentaire :
+        émis AUTO par la règle métier. Ce n'est pas le client qui envoie
+        cet event. C'est le domaine qui le produit automatiquement quand
+        la capacité est atteinte."</p>
+        <p>"C'est là qu'on voit la différence entre une simple liste de logs
+        et un vrai modèle événementiel. Les events ne sont pas des traces
+        de ce que l'utilisateur a fait. Ce sont des faits métier —
+        certains viennent des actions utilisateur, d'autres viennent
+        des règles du domaine lui-même."</p>
+        <p>Analogie jeu : "Le joueur appuie sur SHOOT. C'est son action.
+        PLAYER_HIT est émis par le moteur si la hitbox correspond.
+        Le joueur ne décide pas si ça touche — le moteur décide."</p>
 
-      TRANSITION
-      "Ces events vont quelque part. Dans un store.
-      C'est la prochaine slide."
+        <strong>TRANSITION</strong>
+        <p>"Ces events vont quelque part. Dans un store.
+        C'est la prochaine slide."</p>
+      </div>
     </aside>
   </section>
 
   <!-- 2.3 — L'event store -->
-  <section>
+  <section data-slide-offset="-80">
     <h2>L'event store — <span class="glow-cyan">append-only, toujours</span></h2>
 
-    <div class="cols cols-2" style="margin-top:0.8em">
-      <div>
-        <pre><code class="language-typescript">// eventStore.ts — le cœur du système
+    <div class="fragment cols cols-2" style="margin-top:0.8em">
+        <pre style="height:26.5em;margin-block:auto;"><code class="language-typescript">// eventStore.ts — le cœur du système
   class EventStore {
     // Le log global — ici en mémoire pour la démo
     // En prod : PostgreSQL, EventStoreDB, Kafka…
@@ -791,7 +786,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         this.events.push(event);
 
         // Log formaté — le parallèle avec le jeu
-        const v    = String(event.version).padStart(3,' ');
+        const v = String(event.version).padStart(3,' ');
         const type = event.type.padEnd(24,' ');
         const data = JSON.stringify(event.payload);
         console.log(`[${v}] ${type} ${data}`);
@@ -805,9 +800,12 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         .sort((a, b) => a.version - b.version);
     }
   }</code></pre>
-      </div>
       <div>
-        <div class="card green">
+        <div class="fragment highlight-box green" style="margin-top:12px">
+          <span class="mono">Un event écrit n'est jamais modifié.</span><br>
+          <span class="small muted">Une erreur ? On émet un event compensatoire.</span>
+        </div>
+        <div class="fragment card green">
           <div class="card-title">En prod, ce tableau devient…</div>
           <ul style="font-size:0.9em; line-height:2">
             <li><strong>PostgreSQL</strong> — table append-only, trigger qui bloque UPDATE/DELETE</li>
@@ -816,61 +814,71 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
             <li><strong>DynamoDB</strong> — streams + GSI pour les projections cross-aggregate</li>
           </ul>
         </div>
-        <div class="highlight-box green" style="margin-top:12px">
-          <span class="mono">Un event écrit n'est jamais modifié.</span><br>
-          <span class="small muted">Une erreur ? On émet un event compensatoire.</span>
-        </div>
       </div>
     </div>
 
     <aside class="notes">
-      LE CODE — CE QU'IL FAUT POINTER
+      <div class="notes-fragment" data-fragment-index="0">
+      <strong>LE CODE — CE QU'IL FAUT POINTER</strong>
+      <br>
       La ligne clé : this.events.push(event). C'est tout. Pas de UPDATE, pas de
       REPLACE, pas de upsert. On ajoute à la fin. Toujours.
+      <br>
       Le tableau privé est volontairement simplifié pour la démo — mais l'interface
       publique (append / getStream) est exactement celle d'un vrai event store.
       Le contrat est là : on ne lit que par getStream(), on n'écrit que par append().
       Rien d'autre ne touche au tableau.
-
-      LE LOG CONSOLE — POINTER LA RESSEMBLANCE AVEC LE JEU
+      <br>
+      <strong>LE LOG CONSOLE — POINTER LA RESSEMBLANCE AVEC LE JEU</strong>
+      <br>
       Le format [  v] TYPE  {payload} n'est pas décoratif. C'est exactement le même
       format que l'event log du platformer à gauche de l'écran dans la démo jeu.
+      <br>
       Tick → version. Input type → event type. State delta → payload.
-      Si tu peux avoir les deux terminaux côte à côte au moment de cette slide,
-      c'est le moment de le faire. La ressemblance visuelle est le meilleur argument.
-
-      LA CARD "EN PROD" — POURQUOI ELLE EST LÀ
-      Quelqu'un dans la salle va lever la main : "ouais mais un tableau en mémoire
-      c'est pas sérieux". C'est pour ça que cette card existe — couper l'objection
-      avant qu'elle soit posée. Ce n'est pas une digression, c'est une validation.
-      Dire : "Évidemment, en prod ce tableau devient une vraie persistence. Les
-      options sont nombreuses — PostgreSQL suffit pour commencer, EventStoreDB si
-      vous voulez les streams natifs, Kafka si vous êtes déjà dans un contexte
-      event-driven."
-      Ne pas s'étendre sur les détails de chaque outil — c'est un autre talk.
-      L'objectif est juste de montrer que l'idée est battle-tested, pas académique.
-
-      L'EVENT COMPENSATOIRE — INSISTER
+      <br>
+      <em>Si tu peux avoir les deux terminaux côte à côte au moment de cette slide,
+      c'est le moment de le faire. La ressemblance visuelle est le meilleur argument.</em>
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
+      <strong>L'EVENT COMPENSATOIRE — INSISTER</strong>
+      <br>
       "Une erreur ? On n'efface pas. On émet un event compensatoire."
+      <br>
       Exemple concret : Alice s'est checkée dans la mauvaise salle → on émet
       AttendeeCheckedOut pour annuler, puis AttendeeCheckedIn dans la bonne salle.
       Le log garde la trace de l'erreur ET de la correction. C'est une feature,
       pas un bug. En CRUD on aurait juste fait un UPDATE silencieux et perdu
       l'information que l'erreur a eu lieu.
+      <br>
       Analogie jeu : dans un replay, si le joueur fait un mauvais mouvement, le
       fichier replay l'enregistre quand même. L'histoire est complète.
+      </div>
+      <div class="notes-fragment" data-fragment-index="2">
+      <strong>LA CARD "EN PROD" — POURQUOI ELLE EST LÀ</strong>
+      <br>
+      <em>Quelqu'un dans la salle va lever la main : "ouais mais un tableau en mémoire
+      c'est pas sérieux". C'est pour ça que cette card existe — couper l'objection
+      avant qu'elle soit posée. Ce n'est pas une digression, c'est une validation.</em>
+      <br>
+      Dire : "Évidemment, en prod ce tableau devient une vraie persistence. Les
+      options sont nombreuses — PostgreSQL suffit pour commencer, EventStoreDB si
+      vous voulez les streams natifs, Kafka si vous êtes déjà dans un contexte
+      event-driven."
+      <br>
+      <em>Ne pas s'étendre sur les détails de chaque outil — c'est un autre talk.
+      L'objectif est juste de montrer que l'idée est battle-tested, pas académique.</em>
+      </div>
     </aside>
   </section>
 
   <!-- 2.4 — Les projections -->
-  <section>
+  <section data-slide-offset="-80">
     <h2>Les projections — <span class="glow-magenta">replay pur</span></h2>
 
     <div class="cols cols-2" style="margin-top:0.8em">
-      <div>
-        <pre><code class="language-typescript">// projections.ts — reconstruction par replay
+      <div class="fragment">
+        <pre style="margin-block:auto;height:23.5em;"><code class="language-typescript">// projections.ts — reconstruction par replay
   // 🎮 projectRoom() ≡ gameLoop.replayInputs()
-
   export function projectRoom(
     roomId: string,
     events: DomainEvent[]  // le log complet
@@ -890,11 +898,12 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       state = applyEvent(state, event); // ← fonction pure
       state.eventsReplayed++;
     }
-
     return state; // état reconstruit
-  }
-
-  // applyEvent = applyInput dans le jeu
+  }</code></pre>
+      </div>
+      <div>
+        <div class="fragment">
+  <pre style="margin-block:auto;"><code class="language-typescript">// applyEvent = applyInput dans le jeu
   // (état + event) → nouvel état, sans effet de bord
   function applyEvent(state, event): RoomState {
     switch (event.type) {
@@ -908,9 +917,8 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       // ...
     }
   }</code></pre>
-      </div>
-      <div>
-        <div class="card" style="margin-bottom:12px">
+        </div>
+        <div class="fragment card" style="margin-bottom:12px">
           <div class="card-title">Le parallèle exact</div>
           <table class="mapping-table">
             <tr>
@@ -945,87 +953,102 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
             </tr>
           </table>
         </div>
-        <div class="highlight-box green">
-          Fonction pure = même events → même état, toujours.<br>
-          <span class="small muted">C'est ce qui rend le time travel possible.</span>
-        </div>
       </div>
+    </div>
+    <div class="fragment highlight-box green">
+      Fonction pure = même events → même état, toujours.<br>
+      <span class="small muted">C'est ce qui rend le time travel possible.</span>
     </div>
 
     <aside class="notes">
-      CETTE SLIDE EST LE CŒUR DU TALK.
-      Tout ce qui précède l'a préparée. Tout ce qui suit en découle.
-      Ne pas la survendre — la laisser parler d'elle-même.
-      Ralentir au maximum.
-
-      COMMENCER PAR LE CODE — LIRE LA SIGNATURE
-      "Regardez cette fonction. projectRoom prend deux choses :
-      un identifiant de salle, et une liste d'events.
-      Elle retourne un état."
-      Pause.
-      "C'est tout. Pas de base de données. Pas d'appel réseau.
-      Pas de Date.now(). Pas d'état global.
-      Elle prend des events, elle rejoue, elle retourne un état."
-
-      POINTER LA BOUCLE FOR — L'ANALOGIE JEU
-      "Ce for loop ici — c'est littéralement le moteur de replay du jeu.
-      On part d'un état vide, et on applique chaque event dans l'ordre.
-      applyEvent transforme l'état à chaque pas.
-      C'est exactement ce que fait replayInputs() dans le platformer."
-      Pointer le commentaire dans le code :
-      "J'ai mis le commentaire volontairement : projectRoom ≡ replayInputs.
-      Ce n'est pas une métaphore. C'est la même opération."
-
-      POINTER APPLYEVENT — LA FONCTION PURE
-      "applyEvent prend un état et un event, et retourne un nouvel état.
-      Regardez AttendeeCheckedIn : on crée une nouvelle Map,
-      on y ajoute le participant, on retourne le nouvel état.
-      On ne modifie pas l'état précédent — on en crée un nouveau.
-      Même entrée, même sortie. Toujours. Sans exception."
-      "Si cette fonction appelle new Date(), lit un fichier, fait une
-      requête HTTP — elle n'est plus pure, et le time travel devient
-      impossible. C'est la même contrainte que physics.ts dans le jeu."
-
-      LA TABLE DE CORRESPONDANCE — LIRE LENTEMENT
-      "Maintenant regardez la table à droite."
-      Lire chaque ligne en faisant une pause entre jeu et backend :
-      "replayInputs()... projectRoom().
-      applyInput()... applyEvent().
-      GameState... RoomState.
-      tick... version.
-      seed RNG... état initial."
-      Silence.
-      "Ce ne sont pas des analogies approximatives.
-      Ce sont les mêmes concepts, dans deux domaines différents.
-      Les jeux vidéo ont résolu ce problème il y a trente ans.
-      On fait exactement la même chose côté backend."
-
-      LA HIGHLIGHT-BOX — LE DÉCLIC
-      "Fonction pure = même events, même état, toujours.
-      C'est cette propriété — et uniquement celle-là — qui rend
-      le time travel possible. Qu'on verra dans dix minutes."
-      Pause.
-      "Si votre projection est pure, vous pouvez reconstruire
-      l'état de votre système à n'importe quel instant passé.
-      Sans log externe. Sans backup. Juste en rejouant les events
-      jusqu'à ce point."
-
-      LAISSER ATTERRIR
-      Ne pas enchaîner immédiatement sur la slide suivante.
-      Regarder la salle. Laisser cinq secondes.
-      Si quelqu'un a une question spontanée ici, c'est le bon moment.
-      C'est souvent ici que le déclic se produit — ne pas l'écraser
-      en avançant trop vite.
-
-      TRANSITION
-      "On a le store, on a les projections.
-      Il reste une pièce : qui décide quels events sont émis ?
-      C'est le command handler."
+      <div class="notes-fragment" data-fragment-index="0">
+        <strong>CETTE SLIDE EST LE CŒUR DU TALK.</strong>
+        Tout ce qui précède l'a préparée. Tout ce qui suit en découle.
+        Ne pas la survendre — la laisser parler d'elle-même.
+        Ralentir au maximum.
+        <br>
+        <strong>COMMENCER PAR LE CODE — LIRE LA SIGNATURE</strong>
+        "Regardez cette fonction. projectRoom prend deux choses :
+        un identifiant de salle, et une liste d'events.
+        Elle retourne un état."
+        <br>
+        Pause.
+        <br>
+        "C'est tout. Pas de base de données. Pas d'appel réseau.
+        Pas de Date.now(). Pas d'état global.
+        Elle prend des events, elle rejoue, elle retourne un état."
+        <br>
+        <strong>POINTER LA BOUCLE FOR — L'ANALOGIE JEU</strong>
+        "Ce for loop ici — c'est littéralement le moteur de replay du jeu.
+        On part d'un état vide, et on applique chaque event dans l'ordre.
+        applyEvent transforme l'état à chaque pas.
+        C'est exactement ce que fait replayInputs() dans le platformer."
+        <br>
+        "J'ai mis le commentaire volontairement : projectRoom ≡ replayInputs.
+        Ce n'est pas une métaphore. C'est la même opération."
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
+        <strong>POINTER APPLYEVENT — LA FONCTION PURE</strong>
+        "applyEvent prend un état et un event, et retourne un nouvel état.
+        Regardez AttendeeCheckedIn : on crée une nouvelle Map,
+        on y ajoute le participant, on retourne le nouvel état.
+        On ne modifie pas l'état précédent — on en crée un nouveau.
+        Même entrée, même sortie. Toujours. Sans exception."
+        <br>
+        "Si cette fonction appelle new Date(), lit un fichier, fait une
+        requête HTTP — elle n'est plus pure, et le time travel devient
+        impossible. C'est la même contrainte que physics.ts dans le jeu."
+      </div>
+      <div class="notes-fragment" data-fragment-index="2">
+        <strong>LA TABLE DE CORRESPONDANCE — LIRE LENTEMENT</strong>
+        "Maintenant regardez la table à droite."
+        <br>
+        Lire chaque ligne en faisant une pause entre jeu et backend :
+        <br>
+        "replayInputs()... projectRoom().
+        <br>
+        applyInput()... applyEvent().
+        <br>
+        GameState... RoomState.
+        <br>
+        tick... version.
+        <br>
+        seed RNG... état initial."
+        <br>
+        Silence.
+        <br>
+        "Ce ne sont pas des analogies approximatives.
+        Ce sont les mêmes concepts, dans deux domaines différents.
+        Les jeux vidéo ont résolu ce problème il y a trente ans.
+        On fait exactement la même chose côté backend."
+      </div>
+      <div class="notes-fragment" data-fragment-index="3">
+        <strong>LA HIGHLIGHT-BOX — LE DÉCLIC</strong>
+        "Fonction pure = même events, même état, toujours.
+        C'est cette propriété — et uniquement celle-là — qui rend
+        le time travel possible. Qu'on verra dans dix minutes."
+        <br>
+        Pause.
+        <br>
+        "Si votre projection est pure, vous pouvez reconstruire
+        l'état de votre système à n'importe quel instant passé.
+        Sans log externe. Sans backup. Juste en rejouant les events
+        jusqu'à ce point."
+        <br>
+        <strong>LAISSER ATTERRIR</strong>
+        Ne pas enchaîner immédiatement sur la slide suivante.
+        Regarder la salle. Laisser cinq secondes.
+        <br>
+        <strong>TRANSITION</strong>
+        "On a le store, on a les projections.
+        Il reste une pièce : qui décide quels events sont émis ?
+        C'est le command handler."
+      </div>
     </aside>
   </section>
 
   <!-- 2.5 — Les command handlers -->
-  <section>
+  <section data-slide-offset="-80">
   <h2>Command handlers — <span class="glow-green">la règle métier décide</span></h2>
 
   <div class="cols cols-40-60" style="margin-top:0.8em">
@@ -1047,7 +1070,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       </div>
     </div>
     <div>
-      <pre id="cmd-code"><code class="language-typescript">export function checkIn(
+      <pre style="margin-block:auto;height:25em;" id="cmd-code"><code class="language-typescript">export function checkIn(
   roomId: string, attendeeId: string, attendeeName: string
 ): void {
 
@@ -1075,35 +1098,35 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
   </div>
 
   <aside class="notes">
-    ÉTAPE 1 — COMMANDE REÇUE
+    <strong>ÉTAPE 1 — COMMANDE REÇUE</strong>
     L'API reçoit un POST /rooms/amphi-a/checkin avec { attendeeId, attendeeName }.
     C'est une intention, pas un fait. On ne sait pas encore si elle va réussir.
     Analogie jeu : le joueur appuie sur une touche. Le moteur n'a pas encore décidé
     ce qui se passe.
-
-    ÉTAPE 2 — CHARGER LE STREAM
+    <br>
+    <strong>ÉTAPE 2 — CHARGER LE STREAM</strong>
     eventStore.getStream(roomId) retourne tous les events de cette salle dans l'ordre.
     Pas de SELECT * FROM rooms WHERE id=... — on charge l'historique complet.
     En prod avec snapshots : on charge le snapshot + les events postérieurs seulement.
-
-    ÉTAPE 3 — PROJETER L'ÉTAT COURANT
+    <br>
+    <strong>ÉTAPE 3 — PROJETER L'ÉTAT COURANT</strong>
     projectRoom() rejoue les events un par un pour reconstruire l'état actuel.
     Fonction pure — même events → même état, toujours.
     C'est ici qu'on sait combien de gens sont dans la salle en ce moment.
-
-    ÉTAPE 4 — VALIDER LES RÈGLES MÉTIER
+    <br>
+    <strong>ÉTAPE 4 — VALIDER LES RÈGLES MÉTIER</strong>
     Trois vérifications : la salle existe et est ouverte, elle n'est pas pleine,
     le participant n'est pas déjà inscrit. Si une règle échoue, on lève une erreur —
     aucun event n'est émis. Rien ne s'est passé dans le store.
-
-    ÉTAPE 5 — ÉMETTRE LES EVENTS (le cœur du talk)
+    <br>
+    <strong>ÉTAPE 5 — ÉMETTRE LES EVENTS (le cœur du talk)</strong>
     C'est ici que RoomFull entre en jeu. Si le check-in porte le nombre de
     participants à la capacité max, le handler émet RoomFull automatiquement —
     sans que le client l'ait demandé. Le client a fait une action (checkIn),
     le moteur métier a déduit la conséquence (RoomFull). Exactement comme le
     joueur appuie sur SHOOT et le moteur décide PLAYER_HIT si la hitbox correspond.
-
-    ÉTAPE 6 — APPEND ONLY
+    <br>
+    <strong>ÉTAPE 6 — APPEND ONLY</strong>
     eventStore.append() écrit les events dans le log. Jamais de UPDATE, jamais
     de DELETE. Une erreur future sera un event compensatoire, pas une correction
     en base. Une fois append() appelé, c'est un fait historique.
@@ -1132,12 +1155,12 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
   </section>
 
   <!-- 3.1 — Time travel -->
-  <section>
+  <section data-slide-offset="-40">
     <h2>Time travel — <span class="glow-cyan">?at=2026-06-24T14:30:00</span></h2>
 
     <div class="cols cols-60-40" style="margin-top:0.8em">
-      <div>
-        <pre><code class="language-typescript">// eventStore.ts — time travel
+      <div class="fragment">
+        <pre style="margin-block:auto;"><code class="language-typescript">// eventStore.ts — time travel
   // 🎮 Analogie : rejouer jusqu'à la frame N
 
   getStreamAt(roomId: string, until: Date): DomainEvent[] {
@@ -1155,15 +1178,9 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
 
   const state = projectRoom(roomId, events);
   // → état reconstruit à cet instant précis</code></pre>
-
-        <div class="highlight-box" style="margin-top:0.6em">
-          <span class="mono glow-cyan">GET /rooms/amphi-a?at=2026-06-24T14:30:00</span><br>
-          <span class="small muted">→ "Combien de monde dans l'Amphi A à 14h30 ?"<br>
-          Réponse en quelques ms. Sans log externe. Sans alerting.</span>
-        </div>
       </div>
       <div>
-        <div class="card green" style="margin-bottom:12px">
+        <div class="fragment card green" style="margin-bottom:12px">
           <div class="card-title">Cas d'usage concrets</div>
           <ul style="font-size:0.9em; line-height:2">
             <li>Debug d'un bug en prod survenu à 3h du matin</li>
@@ -1172,7 +1189,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
             <li>Audit réglementaire (RGPD, finance, santé)</li>
           </ul>
         </div>
-        <div class="card magenta">
+        <div class="fragment card magenta">
           <div class="card-title">🎮 Dans le jeu</div>
           <p class="small">
             Killcam = time travel sur les 5 derniers ticks.<br>
@@ -1182,47 +1199,50 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         </div>
       </div>
     </div>
+    <div class="fragment highlight-box" style="margin-top:0.6em">
+      <span class="mono glow-cyan">GET /rooms/amphi-a?at=2026-06-24T14:30:00</span><br>
+      <span class="small muted">→ "Combien de monde dans l'Amphi A à 14h30 ?"<br>
+      Réponse en quelques ms. Sans log externe. Sans alerting.</span>
+    </div>
 
     <aside class="notes">
-      OUVRIR AVEC LA QUESTION RHÉTORIQUE — LEVER LES MAINS
+      <div class="notes-fragment" data-fragment-index="0">
+      <b>OUVRIR AVEC LA QUESTION RHÉTORIQUE — LEVER LES MAINS</b>
+      <br>
       "Levez la main si vous avez déjà eu un bug en prod
       qui s'est passé à 3h du matin, et quand vous avez regardé
       le lendemain matin, vous n'aviez aucun moyen de savoir
       dans quel état était le système à ce moment-là."
-      Laisser les mains se lever. Regarder la salle.
+      <br>
       "Gardez la main levée si vous avez perdu plus d'une heure
       à essayer de reconstituer ce qui s'était passé."
+      <br>
       Pause.
       "C'est le problème que le time travel résout."
+      <br>
 
-      EXPLIQUER LE CODE — C'EST SIMPLE, INSISTER LÀ-DESSUS
+      <b>EXPLIQUER LE CODE — C'EST SIMPLE, INSISTER LÀ-DESSUS</b>
+      <br>
       "Regardez ce que ça prend pour implémenter le time travel.
       Une ligne de filtre. C'est tout."
+      <br>
       Pointer getStreamAt :
       "On prend le stream complet, on filtre les events dont
       occurredAt est antérieur ou égal à la date demandée.
       Les events postérieurs sont ignorés — comme si le temps
       s'était arrêté à cet instant."
+      <br>
       "Puis on appelle projectRoom sur ce stream tronqué.
       Et on obtient l'état exact du système à cette date."
+      <br>
       "Pas de backup à restaurer. Pas de snapshot à chercher.
       Pas de log Kibana à parcourir. Juste un filtre et un replay."
-
-      LA HIGHLIGHT-BOX — RENDRE CONCRET
-      Lire la requête à voix haute :
-      "GET /rooms/amphi-a?at=2026-06-24T14:30:00"
-      "Cette requête me répond : combien de personnes étaient
-      dans l'Amphi A à 14h30 aujourd'hui. Pas maintenant —
-      à 14h30. Dans le passé."
-      "Sans log externe. Sans alerting mis en place à l'avance.
-      Sans avoir anticipé cette question au moment du développement.
-      Parce que l'information est dans le log d'events, elle l'a
-      toujours été."
-
-      LES CAS D'USAGE — LES RENDRE VIVANTS
-      Ne pas lire la liste. Choisir un ou deux et les raconter.
-
-      Bug à 3h du matin :
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
+      <b>LES CAS D'USAGE — LES RENDRE VIVANTS</b>
+      <br>
+      <em>Bug à 3h du matin :</em>
+      <br>
       "Votre système a eu un comportement bizarre à 3h17.
       Vous arrivez le matin. Avec un système CRUD, vous avez
       les logs applicatifs si vous avez pensé à les mettre.
@@ -1230,29 +1250,49 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       voyez exactement dans quel état était chaque aggregate
       à ce moment-là. Vous rejouez depuis 03:00 si vous voulez
       voir l'évolution. L'information était là, elle attendait."
-
-      Avant le déploiement :
+      <br>
+      <em>Avant le déploiement :</em>
+      <br>
       "Un déploiement a introduit un bug. Vous voulez comparer
       l'état avant et après. Deux requêtes ?at= — une avec
       le timestamp avant le déploiement, une après.
       Diff immédiat. Sans rollback, sans restauration de backup."
-
-      LE PARALLÈLE JEU — L'ANCRER
+      </div>
+      <div class="notes-fragment" data-fragment-index="2">
+      <b>LE PARALLÈLE JEU — L'ANCRER</b>
+      <br>
       "C'est exactement le killcam. Le killcam ne stocke pas
       une vidéo des 5 dernières secondes en permanence.
       Il rejoue les ticks jusqu'au tick de votre mort.
       getStreamAt fait exactement la même chose :
       il rejoue les events jusqu'à la date demandée."
+      <br>
       "Spectator mode dans les jeux en ligne : vous regardez
       une partie en cours avec quelques secondes de délai.
       C'est du time travel en temps quasi-réel sur le stream
       d'events du serveur."
-
-      TRANSITION
+      </div>
+      <div class="notes-fragment" data-fragment-index="3">
+      <b>LA HIGHLIGHT-BOX — RENDRE CONCRET</b>
+      <br>
+      "GET /rooms/amphi-a?at=2026-06-24T14:30:00"
+      <br>
+      "Cette requête me répond : combien de personnes étaient
+      dans l'Amphi A à 14h30 aujourd'hui. Pas maintenant —
+      à 14h30. Dans le passé."
+      <br>
+      "Sans log externe. Sans alerting mis en place à l'avance.
+      Sans avoir anticipé cette question au moment du développement.
+      Parce que l'information est dans le log d'events, elle l'a
+      toujours été."
+      <br>
+      <b>TRANSITION</b>
+      <br>
       "Le time travel, c'est la conséquence directe du log d'events.
       Ce n'est pas une feature qu'on ajoute — c'est une propriété
       qu'on obtient gratuitement si la projection est pure.
       La prochaine slide, c'est l'autre cadeau gratuit : l'audit trail."
+      </div>
     </aside>
   </section>
 
@@ -1261,17 +1301,17 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     <h2>L'audit trail — <span class="glow-green">le log brut, toujours disponible</span></h2>
 
     <div class="cols cols-2" style="margin-top:0.8em">
-      <div>
+      <div class="fragment">
         <div class="event-log" style="font-size:0.5em">
           <div style="color:var(--muted); margin-bottom:8px; font-size:0.9em">GET /rooms/amphi-a/events</div>
-          <div class="line"><span class="ev-v">[  1]</span><span class="ev-type">RoomOpened</span><span class="ev-data">{"roomName":"Amphi A","capacity":3}</span></div>
-          <div class="line"><span class="ev-v">[  2]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">{"attendeeName":"Alice Martin"}</span></div>
-          <div class="line"><span class="ev-v">[  3]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
-          <div class="line"><span class="ev-v">[  4]</span><span class="ev-type">AttendeeCheckedIn</span><span class="ev-data">{"attendeeName":"Charlie Leroy"}</span></div>
-          <div class="line"><span class="ev-v">[  5]</span><span class="ev-type ev-auto" style="min-width:26ch">RoomFull</span><span class="ev-data">{"capacity":3}  <span class="ev-auto">← règle métier</span></span></div>
-          <div class="line"><span class="ev-v">[  6]</span><span class="ev-type">AttendeeCheckedOut</span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
-          <div class="line"><span class="ev-snap ev-v">[💾]</span><span class="ev-type ev-snap">SNAPSHOT</span><span class="ev-data ev-snap">savedAtVersion=6  ← save state</span></div>
-          <div class="line"><span class="ev-v">[  7]</span><span class="ev-type">RoomClosed</span><span class="ev-data">{"reason":"Talk terminé !"}</span></div>
+          <div class="line"><span class="ev-v">[  1]</span><span class="ev-type">RoomOpened                              </span><span class="ev-data" style="color:var(--gold); min-width:10ch">14:00:01</span><span class="ev-data">{"roomName":"Amphi A","capacity":3}</span></div>
+          <div class="line"><span class="ev-v">[  2]</span><span class="ev-type">AttendeeCheckedIn                       </span><span class="ev-data" style="color:var(--gold); min-width:10ch">14:12:34</span><span class="ev-data">{"attendeeName":"Alice Martin"}</span></div>
+          <div class="line"><span class="ev-v">[  3]</span><span class="ev-type">AttendeeCheckedIn                       </span><span class="ev-data" style="color:var(--gold); min-width:10ch">14:18:07</span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
+          <div class="line"><span class="ev-v">[  4]</span><span class="ev-type">AttendeeCheckedIn                       </span><span class="ev-data" style="color:var(--gold); min-width:10ch">14:28:55</span><span class="ev-data">{"attendeeName":"Charlie Leroy"}</span></div>
+          <div class="line"><span class="ev-v">[  5]</span><span class="ev-type ev-auto">RoomFull </span><span class="ev-data" style="color:var(--gold); min-width:10ch">14:28:55</span><span class="ev-data">{"capacity":3}  <span class="ev-auto">← règle métier</span></span></div>
+          <div class="line"><span class="ev-v">[  6]</span><span class="ev-type">AttendeeCheckedOut                      </span><span class="ev-data" style="color:var(--gold); min-width:10ch">14:35:12</span><span class="ev-data">{"attendeeName":"Bob Dupont"}</span></div>
+          <div class="line"><span class="ev-snap ev-v">[💾]</span><span class="ev-type ev-snap">SNAPSHOT                 </span><span class="ev-data" style="color:var(--gold); min-width:10ch">14:35:12</span><span class="ev-data ev-snap">savedAtVersion=6  ← save state</span></div>
+          <div class="line"><span class="ev-v">[  7]</span><span class="ev-type">RoomClosed                              </span><span class="ev-data" style="color:var(--gold); min-width:10ch">15:00:00</span><span class="ev-data">{"reason":"Talk terminé !"}</span></div>
         </div>
         <div class="highlight-box green" style="margin-top:0.6em; font-size:0.6em">
           Ce log EST la source de vérité.<br>
@@ -1279,8 +1319,8 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         </div>
       </div>
       <div>
-        <div class="card">
-          <div class="card-title">Ce qu'on peut répondre</div>
+        <div class="fragment card">
+          <div class="card-title">Ce à quoi on peut répondre</div>
           <ul style="font-size:0.9em; line-height:2">
             <li>Qui a fait quoi, quand, dans quel ordre ?</li>
             <li>Pourquoi la salle était pleine à 14h30 ?</li>
@@ -1288,7 +1328,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
             <li>La règle "RoomFull" a-t-elle été déclenchée ?</li>
           </ul>
         </div>
-        <div class="card magenta" style="margin-top:12px">
+        <div class="fragment card magenta" style="margin-top:12px">
           <div class="card-title">🎮 Dans le jeu</div>
           <p class="small">
             Le fichier replay = cet audit trail.<br>
@@ -1300,81 +1340,78 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     </div>
 
     <aside class="notes">
-      OBJECTIF DE CETTE SLIDE
-      Montrer que l'audit trail n'est pas une feature à développer —
-      c'est une conséquence directe du log d'events.
-      En CRUD, l'audit est un effort supplémentaire.
-      En event sourcing, c'est gratuit. C'est la donnée primaire.
-
-      OUVRIR SUR LE LOG — LIRE QUELQUES LIGNES À VOIX HAUTE
-      Pointer le log et lire lentement les 3-4 premières lignes :
+      <div class="notes-fragment" data-fragment-index="0">
+      <b>OUVRIR SUR LE LOG — LIRE QUELQUES LIGNES À VOIX HAUTE</b>
+      <br>
+      Pointer le log et lire :
+      <br>
       "Version 1 : RoomOpened, capacité 3.
-      Version 2 : Alice Martin entre.
-      Version 3 : Bob Dupont entre.
-      Version 4 : Charlie Leroy entre.
+      (...)
       Version 5 : RoomFull — automatiquement, par règle métier."
+      <br>
       Pause.
+      <br>
       "Je n'ai pas configuré un système de logging.
       Je n'ai pas ajouté de trigger en base.
       Je n'ai pas branché un outil d'observabilité.
       Ce log existe parce que c'est la nature même du système.
       Les events sont la donnée primaire. Le log, c'est eux."
-
-      LE FORMAT — FAIRE LE PARALLÈLE VISUEL AVEC LE JEU
-      "Regardez le format : un numéro de version, un type, un payload.
+      <br>
+      <b>LE FORMAT — FAIRE LE PARALLÈLE VISUEL AVEC LE JEU</b>
+      <br>
+      "Regardez le format : un numéro de version, un horaire, un type, un payload.
       C'est exactement le format de l'event log du platformer —
       un tick, un type d'input, un contexte.
       Même structure. Deux domaines différents."
-      Si possible, avoir les deux côte à côte mentalement :
-      "[  4] JUMP              { tick: 4, x: 42 }"
-      "[  4] AttendeeCheckedIn { attendeeName: Charlie }"
-      "La forme est identique. C'est voulu."
-
-      POINTER LA CARD — LES QUESTIONS AUXQUELLES ON PEUT RÉPONDRE
+        </div>
+      <div class="notes-fragment" data-fragment-index="1">
+      <b>POINTER LA CARD — LES QUESTIONS AUXQUELLES ON PEUT RÉPONDRE</b>
+      <br>
       "Avec ce log, je peux répondre à des questions
       qu'un système CRUD ne peut pas traiter sans infrastructure
       supplémentaire."
-      Lire les questions une par une, en marquant une pause :
+      <br>
       "Bob est-il entré avant ou après Charlie ?
       Version 3 pour Bob, version 4 pour Charlie. Réponse immédiate."
+      <br>
       "La règle RoomFull a-t-elle été déclenchée ?
       Version 5, visible dans le log. Oui, à ce moment précis."
-      "Pourquoi la salle était pleine à 14h30 ?
-      On filtre à 14h30, on rejoue — on voit exactement
-      qui était là et dans quel ordre ils sont entrés."
-
-      LE SNAPSHOT DANS LE LOG
-      Pointer la ligne 💾 SNAPSHOT :
+      <br>
+      <b>LE 💾 SNAPSHOT DANS LE LOG</b>
+      <br>
       "Et ce snapshot là — on le voit aussi dans le log.
-      On sait qu'un save state a été pris à la version 6.
-      L'optimisation elle-même est tracée. Rien n'est caché."
-
-      L'AUDIT RÉGLEMENTAIRE — ALLER VITE MAIS Y TOUCHER
+      On sait qu'un save state a été pris à la version 6."
+      <br>
+      <b>L'AUDIT RÉGLEMENTAIRE — ALLER VITE MAIS Y TOUCHER</b>
+      <br>
       "Pour ceux qui travaillent dans des domaines régulés —
       finance, santé, légal — l'audit trail n'est pas optionnel.
       En CRUD, le construire coûte cher : triggers, tables d'historique,
       outils dédiés. En event sourcing, il est là par défaut.
-      Vous ne pouvez pas ne pas l'avoir."
-
-      LA CARD JEU — L'ANTI-CHEAT
+      Vous ne pouvez pas NE PAS l'avoir."
+        </div>
+      <div class="notes-fragment" data-fragment-index="2">
+      <b>LA CARD JEU — L'ANTI-CHEAT</b>
+      <br>
       "Les systèmes anti-cheat analysent exactement ce type de log.
       Ils rejouent la session d'un joueur suspect et vérifient
       si les events sont physiquement possibles.
       Un headshot à 180° en 12ms ? L'event est là, rejouable,
       vérifiable. C'est de l'audit trail appliqué au gaming."
-
+      <br>
       TRANSITION
       "A trouver..."
+      </div>
     </aside>
   </section>
 
   <!-- 3.3 — Reconstruction d'état / migration -->
   <section>
     <h2>Reconstruction & migration</h2>
-
+    <div class="fragment"><!-- On triche pour mes notes :D --></div>
     <div class="cols cols-2" style="margin-top:0.8em; gap:20px">
       <div>
-        <div class="card green">
+        <div class="fragment card green">
           <div class="card-title">🏗️ Migration de schéma</div>
           <p class="small">Nouvelle version de l'application, nouveau modèle de données ?</p>
           <p class="small mt">En CRUD : migration SQL complexe, point of no return.</p>
@@ -1385,7 +1422,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         </div>
       </div>
       <div>
-        <div class="card magenta">
+        <div class="fragment card magenta">
           <div class="card-title">🔄 Reconstruire sur une nouvelle archi</div>
           <p class="small">Migration vers un nouveau système ?</p>
           <p class="small mt">On rejoue les events dans le nouveau système depuis le début. L'état se reconstruit.</p>
@@ -1393,7 +1430,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
             "Blue-green" à l'event level
           </div>
         </div>
-        <div class="card" style="margin-top:12px">
+        <div class="fragment card" style="margin-top:12px">
           <div class="card-title">🧪 Tests</div>
           <p class="small">Rejouer un scénario réel de prod dans les tests d'intégration.</p>
           <p class="small muted mt">Extraire le stream d'events de prod → rejouer en test → vérifier l'état final.</p>
@@ -1402,73 +1439,98 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     </div>
 
     <aside class="notes">
-      AUDIENCE CIBLE DE CETTE SLIDE
+      <div class="notes-fragment" data-fragment-index="0">
+      <b>AUDIENCE CIBLE DE CETTE SLIDE</b>
+      <br>
       Les architectes et les seniors dans la salle vont particulièrement
       accrocher ici. Ceux qui ont vécu une migration SQL catastrophique
       vont hocher la tête. Jouer là-dessus.
-
-      OUVRIR SUR LA DOULEUR DE LA MIGRATION CRUD
+      <br>
+      <b>OUVRIR SUR LA DOULEUR DE LA MIGRATION CRUD</b>
+      <br>
       "Levez la main si vous avez déjà fait une migration de schéma
       en prod qui vous a coûté un week-end, ou pire."
+      <br>
       Laisser les mains se lever.
+      <br>
       "Une migration CRUD classique c'est : écrire le script SQL,
       le tester en staging, croiser les doigts, l'exécuter en prod,
       et surtout — ne pas se tromper parce que c'est souvent
       un point of no return. Les données transformées ne reviennent
       pas à leur forme originale sans un deuxième script."
+      <br>
       Pause.
+      <br>
       "En event sourcing, le problème est fondamentalement différent."
-
-      LA MIGRATION DE SCHÉMA — L'EXPLIQUER CONCRÈTEMENT
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
+      <b>LA MIGRATION DE SCHÉMA — L'EXPLIQUER CONCRÈTEMENT</b>
+      <br>
       "Imaginez que vous voulez ajouter un champ à votre read model —
       par exemple, suivre non seulement qui est dans la salle,
       mais aussi depuis combien de temps chaque participant est présent."
+      <br>
       "En CRUD : ALTER TABLE, backfill des données existantes,
       migration des enregistrements sans historique — vous inventez
       des valeurs pour le passé que vous n'avez pas."
+      <br>
       "En event sourcing : vous modifiez projectRoom pour calculer
       ce nouveau champ à partir des events existants — qui ont
       tous un occurredAt. Vous rejouez. Le nouveau champ est calculé
       pour toute l'histoire, y compris le passé."
+      <br>
       "L'ancien log n'a pas bougé. Il contient l'information
       depuis le début — vous n'aviez simplement pas encore
       la projection qui la lisait."
-
-      LE BLUE-GREEN À L'EVENT LEVEL — L'IMAGE EST FORTE
+      </div>
+      <div class="notes-fragment" data-fragment-index="2">
+      <b>LE BLUE-GREEN À L'EVENT LEVEL — L'IMAGE EST FORTE</b>
+      <br>
       "Migration vers un nouveau système — nouvelle stack,
       nouveau langage, nouvelle base de données."
+      <br>
       "En CRUD : export, transform, load. ETL complexe,
       risque de perte, fenêtre de maintenance."
+      <br>
       "En event sourcing : vous branchez le nouveau système
       sur le même stream d'events. Il rejoue depuis le début,
       il reconstruit son état. Pendant ce temps l'ancien système
       continue de tourner. Quand le nouveau a rattrapé son retard,
       vous basculez. C'est du blue-green au niveau des données."
+      <br>
       "Pas de fenêtre de maintenance. Pas de risque de perte.
       Rollback trivial si quelque chose cloche."
-
-      LES TESTS — COURT MAIS PUISSANT
+      </div>
+      <div class="notes-fragment" data-fragment-index="3">
+      <b>LES TESTS — COURT MAIS PUISSANT</b>
+      <br>
       "Et pour les tests — extrait un stream d'events de prod,
       rejoue-le dans ton environnement de test, vérifie l'état final.
       Tu testes contre des scénarios réels, pas des données inventées.
       Les bugs de prod qui ne se reproduisent jamais en test ?
       Avec ce pattern, ils se reproduisent — parce que tu rejoues
       exactement ce qui s'est passé."
-
-      NE PAS SURVENDRE — LA NUANCE
+      <br>
+      <b>NE PAS SURVENDRE — LA NUANCE</b>
+      <br>
       "Je ne vous dis pas que c'est sans complexité.
       Les migrations d'events eux-mêmes — si le schéma d'un event
       change — c'est un autre problème qu'on verra en partie 4.
       Ce que je vous dis, c'est que la migration du read model,
       du modèle de lecture, devient un exercice de réinterprétation
       plutôt qu'une opération destructrice."
+      <br>
       "C'est une différence de nature, pas de degré."
-
-      TRANSITION VERS LA DÉMO
+      <br>
+      <b>TRANSITION VERS LA DÉMO</b>
+      <br>
       "On a maintenant tous les concepts. Time travel, audit trail,
       migration. Tout ça découle du même log d'events."
+      <br>
       "C'est le moment de le voir en vrai sur le backend."
-      Passer à la slide DEMO TIME.
+      <br>
+      "Passer à la slide DEMO TIME."
+      </div>
     </aside>
   </section>
 
@@ -1518,12 +1580,12 @@ Cette phrase remet tout le monde avec toi.
   </section>
 
   <!-- 4.1 — Les snapshots -->
-  <section>
+  <section data-slide-offset="-60">
     <h2>Les snapshots — <span class="glow-gold">save states</span></h2>
 
     <div class="cols cols-60-40" style="margin-top:0.8em">
       <div>
-        <pre><code class="language-typescript">// snapshots.ts — optimisation de la relecture
+        <pre style="margin-block:auto;height:26em;"><code class="language-typescript">// snapshots.ts — optimisation de la relecture
   // 🎮 Analogie : les save states d'un émulateur
 
   class SnapshotStore {
@@ -1547,8 +1609,7 @@ Cette phrase remet tout le monde avec toi.
 
   // Usage : au lieu de rejouer depuis le début…
   // 1. Charger le dernier snapshot (état à version N)
-  // 2. Rejouer uniquement les events après N
-  // → O(events_depuis_snapshot) au lieu de O(total)</code></pre>
+  // 2. Rejouer uniquement les events après N</code></pre>
       </div>
       <div>
         <div class="card gold">
@@ -1557,7 +1618,7 @@ Cette phrase remet tout le monde avec toi.
           <p class="small mt">Pour reprendre, on charge le save state et on continue — pas besoin de rejouer depuis le début.</p>
         </div>
         <div class="card" style="margin-top:12px">
-          <div class="card-title">⚠️ Limite importante</div>
+          <div class="card-title">⚠️ Disclaimer</div>
           <p class="small">
             Le snapshot ne <strong>remplace pas</strong> le log d'events.<br>
             Audit trail et time travel <em>avant</em> le snapshot nécessitent toujours le log complet.
@@ -1567,63 +1628,68 @@ Cette phrase remet tout le monde avec toi.
     </div>
 
     <aside class="notes">
-      ENTRÉE EN MATIÈRE — LA RÉALITÉ DE LA PROD
+      <b>ENTRÉE EN MATIÈRE — LA RÉALITÉ DE LA PROD</b>
+      <br>
       "Jusqu'ici tout est élégant. Fonction pure, replay complet,
-      time travel. Mais il y a une question que les gens de prod
+      time travel. Mais il y a une question que les gens
       dans la salle se posent depuis un moment."
-      Pause.
       "Qu'est-ce qui se passe quand j'ai 50 000 events dans un stream ?
       Je rejoue 50 000 events à chaque requête ?"
       "La réponse honnête : oui, si vous ne faites rien.
-      Et oui, ça finit par coûter. C'est O(n) à chaque lecture.
-      Sur un stream court, c'est négligeable. Sur un stream long
-      en prod avec du trafic, c'est un problème réel."
-
-      L'ANALOGIE ÉMULATEUR — LA POSER CONCRÈTEMENT
+      Et oui, ça finit par coûter. C'est un problème réel."
+      <br>
+      <b>L'ANALOGIE ÉMULATEUR — LA POSER CONCRÈTEMENT</b>
+      <br>
       "Les émulateurs ont résolu ce problème il y a longtemps.
-      Vous jouez à un jeu sur émulateur, vous faites F5 —
-      save state. L'émulateur prend une photo complète de l'état
+      Avec le save state. L'émulateur prend une photo complète de l'état
       de la machine virtuelle à cet instant : CPU, RAM, registres,
-      état de la cartouche. Tout."
-      "La prochaine fois que vous chargez, vous partez de ce point.
-      Pas besoin de rejouer depuis le début de la partie.
-      C'est exactement ce que fait un snapshot en event sourcing."
+      état de la ROM. Tout."
+      "Quand vous rechargez, vous partez de ce point.
+      Pas besoin de rejouer depuis le début.
+      C'est EXACTEMENT ce que fait un snapshot en event sourcing."
+      <br>
 
-      EXPLIQUER LE CODE — LES DEUX ÉTAPES
+      <b>EXPLIQUER LE CODE — LES DEUX ÉTAPES</b>
+      <br>
       Pointer le commentaire en bas du code :
       "Au lieu de rejouer depuis l'event 1, on fait deux étapes :
       on charge le dernier snapshot — l'état à la version N —
       et on rejoue uniquement les events postérieurs à N.
       Si j'ai 50 000 events et un snapshot à la version 49 800,
       je rejoue 200 events, pas 50 000."
+      <br>
       "Le seuil de 50 dans shouldSnapshot est configurable —
       en prod vous l'adaptez à votre volume et votre latence cible."
+      <br>
 
-      LA LIMITE — INSISTER, C'EST LE PIÈGE CLASSIQUE
-      Pointer la card "Limite importante" :
+      <b>LA LIMITE — INSISTER, C'EST LE PIÈGE CLASSIQUE</b>
+      <br>
       "Mais attention — et c'est le point le plus important
       de cette slide — le snapshot ne remplace pas le log."
       "Si je veux faire du time travel à une date antérieure
-      au snapshot, j'ai besoin du log complet depuis le début.
-      Si je veux l'audit trail complet, j'ai besoin du log.
-      Le snapshot est un raccourci pour la lecture courante.
-      Ce n'est pas une archive."
+      au snapshot ou si je veux l'audit trail complet, j'ai 
+      besoin du log. Le snapshot est un raccourci pour la lecture 
+      courante. Ce n'est pas une archive."
       "En prod : gardez le log intégralement. Ne supprimez jamais
       les events antérieurs au snapshot sous prétexte que vous
       avez le snapshot. Ce sont deux choses différentes."
+      <br>
 
-      LE SNAPSHOT DANS LE LOG DE LA DÉMO
+      <!-- LE SNAPSHOT DANS LE LOG DE LA DÉMO
       "Vous avez vu dans l'audit trail de la démo — le snapshot
       apparaît lui-même comme une entrée dans le log.
       On sait qu'un save state a été pris, à quelle version,
-      à quel moment. L'optimisation est traçable."
+      à quel moment. L'optimisation est traçable." -->
 
-      LA FORMULE À RETENIR
+      <b>LA FORMULE À RETENIR</b>
+      <br>
       "Le snapshot est un accélérateur, pas une substitution.
       Il optimise le chemin le plus fréquent — lire l'état courant —
       sans sacrifier les propriétés fondamentales du système."
+      <br>
 
-      TRANSITION
+      <b>TRANSITION</b>
+      <br>
       "Les snapshots règlent le problème de performance.
       Mais il reste d'autres limites — moins techniques,
       plus organisationnelles. C'est la slide suivante."
@@ -1673,17 +1739,22 @@ Cette phrase remet tout le monde avec toi.
     </div>
 
     <aside class="notes">
-      POSTURE GÉNÉRALE — L'HONNÊTETÉ EST UNE STRATÉGIE
+      <div class="notes-fragment" data-fragment-index="0">
+      <strong>POSTURE GÉNÉRALE — L'HONNÊTETÉ EST UNE STRATÉGIE</strong>
+      <br>
       Cette slide est aussi importante que les slides sur les bénéfices.
       Une salle sent quand un orateur survend quelque chose.
+      <br>
       Si tu arrives ici avec une liste de limites réelles et concrètes,
       tout ce que tu as dit avant devient beaucoup plus crédible.
       Ton objectif : que les gens repartent avec une vision juste,
       pas avec de l'enthousiasme mal calibré.
-
+      <br>
       FAIRE APPARAÎTRE LES FRAGMENTS UN PAR UN — NE PAS SE PRÉCIPITER
-
-      ⚡ COÛT DE RELECTURE
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
+      <strong>⚡ COÛT DE RELECTURE</strong>
+      <br>
       "On en a parlé avec les snapshots — c'est réel.
       Sur un stream de 100 events, vous ne le sentez pas.
       Sur un stream de 100 000 events sans snapshot,
@@ -1691,48 +1762,64 @@ Cette phrase remet tout le monde avec toi.
       qu'on règle en une heure. Les snapshots aident,
       les projections persistées aident — mais ça demande
       une infrastructure que vous n'avez pas d'emblée."
-
-      🔧 PAS DE CORRECTION DIRECTE
+      </div>
+      <div class="notes-fragment" data-fragment-index="2">
+      <strong>🔧 PAS DE CORRECTION DIRECTE</strong>
+      <br>
       "C'est le changement de mental model le plus difficile
       pour les équipes qui viennent du CRUD."
+      <br>
       Exemple concret :
       "Alice s'est checkée dans la mauvaise salle.
       En CRUD : UPDATE rooms SET attendee=... C'est fait.
       En event sourcing : vous émettez AttendeeCheckedOut
       sur la mauvaise salle, puis AttendeeCheckedIn sur la bonne.
       Deux events. L'erreur est visible dans le log. Pour toujours."
+      <br>
       "Certains trouvent ça rassurant — l'histoire est complète.
       D'autres trouvent ça perturbant — on ne peut pas effacer.
       C'est une question de culture autant que de technique."
-
-      📋 VERSIONING DES EVENTS — LE PIÈGE LE PLUS SOUS-ESTIMÉ
+      </div>
+      <div class="notes-fragment" data-fragment-index="3">
+      <strong>📋 VERSIONING DES EVENTS — LE PIÈGE LE PLUS SOUS-ESTIMÉ</strong>
+      <br>
       "Celui-là, je veux que vous le reteniez parce que c'est
       le problème que personne ne voit venir au départ."
+      <br>
       "Vous avez AttendeeCheckedIn avec { attendeeId, attendeeName }.
       Six mois plus tard, vous voulez ajouter { company }.
       Les 50 000 events déjà en base n'ont pas ce champ.
       Votre nouvelle projection plante sur les anciens events."
+      <br>
       "Solution : upcasting — une fonction qui transforme
       les vieux events dans le nouveau format à la lecture.
       Ça marche. Mais ça veut dire maintenir des convertisseurs
       pour chaque version de chaque event. Pour toujours."
+      <br>
       "C'est un coût réel, souvent invisible dans les POCs."
-
-      🧰 COMPLEXITÉ OUTILLAGE
+      </div>
+      <div class="notes-fragment" data-fragment-index="4">
+      <strong>🧰 COMPLEXITÉ OUTILLAGE</strong>
+      <br>
       "En CRUD, vous avez pgAdmin, DBeaver, Datagrip.
       Vous ouvrez la table, vous voyez les données.
       En event sourcing, vous ouvrez le stream, vous voyez
       des events. Pour comprendre l'état courant, vous devez
       rejouer. Ce n'est pas impossible — mais c'est moins immédiat."
+      <br>
       "Le debugging est plus indirect. Un bug dans l'état courant
       peut venir d'un event émis il y a trois semaines.
       Les stack traces ne vous montrent pas ça directement."
+      <br>
       "EventStoreDB améliore les choses. Mais le tooling reste
       moins mature que l'écosystème SQL classique.
       Planifiez le temps de formation."
-
-      📊 REQUÊTES CROSS-AGGREGATES
+      </div>
+      <div class="notes-fragment" data-fragment-index="5">
+      <strong>📊 REQUÊTES CROSS-AGGREGATES</strong>
+      <br>
       "Dernier piège, et c'est un classique en prod."
+      <br>
       "Dans notre démo, chaque salle est un aggregate indépendant.
       Tant que vos requêtes portent sur une salle, tout va bien.
       Mais si vous voulez 'toutes les salles avec plus de 50 check-ins
@@ -1743,25 +1830,28 @@ Cette phrase remet tout le monde avec toi.
       C'est du CQRS — Command Query Responsibility Segregation.
       Ça fonctionne très bien, mais c'est une couche de complexité
       supplémentaire à concevoir, maintenir et synchroniser."
-
-      CONCLURE HONNÊTEMENT
+      <br>
+      <strong>CONCLURE HONNÊTEMENT</strong>
+      <br>
       "Ces limites ne sont pas rédhibitoires.
       Des équipes font de l'event sourcing en prod avec succès.
       Mais elles ont investi dans la formation, le tooling,
       et elles ont choisi ce pattern pour les bonnes raisons —
       pas parce que c'était à la mode."
+      <br>
       "Ce qui m'amène à la dernière slide de cette partie :
       quand ne pas le faire."
+      </div>
     </aside>
   </section>
 
   <!-- 4.3 — Quand NE PAS utiliser l'event sourcing -->
   <section>
     <h2>Quand <span class="glow-magenta">NE PAS</span> utiliser l'event sourcing</h2>
-
+    <div class="fragment"></div>
     <div class="cols cols-2" style="margin-top:0.8em; gap:16px">
       <div>
-        <div class="card magenta">
+        <div class="fragment card magenta">
           <div class="card-title">❌ Mauvais candidats</div>
           <ul style="font-size:0.9em; line-height:2">
             <li><strong>CRUD simple</strong> — catalogue produits, CMS, settings</li>
@@ -1773,7 +1863,7 @@ Cette phrase remet tout le monde avec toi.
         </div>
       </div>
       <div>
-        <div class="card green">
+        <div class="fragment card green">
           <div class="card-title">✅ Bons candidats</div>
           <ul style="font-size:0.9em; line-height:2">
             <li><strong>Audit réglementaire obligatoire</strong> — finance, santé, légal</li>
@@ -1786,30 +1876,35 @@ Cette phrase remet tout le monde avec toi.
       </div>
     </div>
 
-    <div class="highlight-box gold" style="margin-top:0.8em; font-size:0.68em">
+    <div class="fragment highlight-box gold" style="margin-top:0.8em; font-size:0.68em">
       <strong>Règle pragmatique :</strong> si votre client ne vous demande jamais "qu'est-ce qui s'est passé ici ?", vous n'avez probablement pas besoin d'event sourcing.
     </div>
 
     <aside class="notes">
+      <div class="notes-fragment" data-fragment-index="0">
       POSTURE — LA SLIDE LA PLUS UTILE DU TALK
+      <br>
       "Celle-là, elle est aussi importante que toutes les autres.
       Peut-être plus. Parce que le plus grand risque après ce talk,
       c'est que vous rentriez lundi matin et que vous proposiez
       de l'event sourcing sur un projet qui n'en a pas besoin."
+      <br>
       Pause.
+      <br>
       "Je ne veux pas ça."
-
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
       LES MAUVAIS CANDIDATS — LES DÉFENDRE FRANCHEMENT
-
-      CRUD simple :
+      <br>
+      <b>CRUD simple :</b>
       "Un catalogue produits. Un CMS. Une table de configuration.
       Des settings utilisateur. Vous avez besoin de lire et d'écrire
       un état courant. L'historique n'apporte aucune valeur métier.
       Restez en CRUD. Vraiment. C'est le bon outil pour ça,
       et n'importe quel dev de votre équipe peut le maintenir
       sans formation spécifique."
-
-      Équipe non formée :
+      <br>
+      <b>Équipe non formée :</b>
       "C'est probablement le critère le plus important en pratique.
       L'event sourcing mal compris, c'est pire que du CRUD mal fait.
       Vous vous retrouvez avec un système qui a la complexité
@@ -1817,54 +1912,63 @@ Cette phrase remet tout le monde avec toi.
       parce que personne ne sait écrire des projections correctes,
       personne ne comprend l'immuabilité, et les events finissent
       par être des déguisements de tables CRUD."
+      <br>
       "C'est ce qu'on appelle du cargo cult. Vous avez les formes
       sans le fond. C'est le pire des deux mondes."
-
-      Deadline serrée :
+      <br>
+      <b>Deadline serrée :</b>
       "La courbe d'apprentissage est réelle. Comptez plusieurs
       semaines avant qu'une équipe soit à l'aise. Sur un sprint
       de deux semaines pour livrer un MVP, ce n'est pas le moment
       d'introduire ce pattern. Livrez d'abord, refactorez ensuite
       si les besoins le justifient."
-
-      LES BONS CANDIDATS — ÊTRE PRÉCIS
-
-      Audit réglementaire :
+      </div>
+      <div class="notes-fragment" data-fragment-index="2">
+      <b>LES BONS CANDIDATS — ÊTRE PRÉCIS</b>
+      <br>
+      <b>Audit réglementaire :</b>
       "Finance, santé, légal — partout où vous devez prouver
       ce qui s'est passé à un régulateur. L'audit trail gratuit
       n'est plus un nice-to-have, c'est une obligation.
       Et le construire par-dessus du CRUD coûte cher et reste fragile."
-
-      Workflow complexe :
+      <br>
+      <b>Workflow complexe :</b>
       "Une commande e-commerce : créée, validée, en préparation,
       expédiée, livrée, retournée. Chaque transition est un event
       métier. L'historique a de la valeur — le client veut savoir
       où est son colis, le support veut savoir ce qui s'est passé,
       la finance veut tracer chaque changement de statut."
-
-      Google Docs :
+      <br>
+      <b>Google Docs :</b>
       "Google Docs est de l'event sourcing. Chaque frappe,
       chaque modification est un event. C'est ce qui permet
       l'historique des versions, la collaboration temps réel,
       le undo/redo illimité. Quand vous avez ce type de besoin —
       collaboration, versioning, undo — event sourcing s'impose."
-
-      LA RÈGLE PRAGMATIQUE — LA DIRE À VOIX HAUTE
+      </div>
+      <div class="notes-fragment" data-fragment-index="3">
+      <b>LA RÈGLE PRAGMATIQUE — LA DIRE À VOIX HAUTE</b>
+      <br>
       Pointer la highlight-box et lire lentement :
+      <br>
       "Si votre client ne vous demande jamais
       'qu'est-ce qui s'est passé ici ?'
       vous n'avez probablement pas besoin d'event sourcing."
+      <br>
       Pause.
+      <br>
       "C'est le test le plus simple. Posez-vous cette question
       avant de commencer. Si la réponse est 'jamais' ou 'rarement',
       gardez le CRUD. Si la réponse est 'tout le temps' ou
       'c'est critique pour nous' — vous avez votre réponse."
-
-      TRANSITION VERS LA CONCLUSION
+      <br>
+      <b>TRANSITION VERS LA CONCLUSION</b>
       "On a fait le tour. Les bénéfices, les limites, les pièges,
       et maintenant les critères de choix."
+      <br>
       "Avant de conclure — five takeaways. Cinq choses
       à retenir si vous ne retenez rien d'autre."
+      </div>
     </aside>
   </section>
 </section>

@@ -105,6 +105,73 @@ const matrixBurst = (function () {
   return { trigger };
 })();
 
+// ── Wrappers highlight post-highlight.js ─────────────────────
+// Groupes de lignes (index 0-based, inclusif) pour la slide command handler
+const CODE_HL_GROUPS = [
+  [0,  2],  // step-0 : signature de la fonction
+  [4,  4],  // step-1 : getStream
+  [6,  6],  // step-2 : projectRoom
+  [8,  11], // step-3 : validations
+  [13, 20], // step-4 : construction events + RoomFull
+  [22, 22], // step-5 : append
+];
+
+function wrapCodeLines() {
+  const codeEl = document.querySelector('#cmd-code code');
+  if (!codeEl) return;
+
+  const lines  = codeEl.innerHTML.split('\n');
+  let result   = '';
+  let inGroup  = false;
+  let hlIndex  = -1;
+
+  for (let i = 0; i < lines.length; i++) {
+    const groupIdx = CODE_HL_GROUPS.findIndex(([start]) => i === start);
+    if (groupIdx !== -1) {
+      result  += `<span class="code-hl" data-hl="${groupIdx}" style="display:block">`;
+      inGroup  = true;
+      hlIndex  = groupIdx;
+    }
+
+    result += lines[i] + (i < lines.length - 1 ? '\n' : '');
+
+    if (inGroup && CODE_HL_GROUPS[hlIndex] && i === CODE_HL_GROUPS[hlIndex][1]) {
+      result += '</span>';
+      inGroup = false;
+      hlIndex = -1;
+    }
+  }
+
+  codeEl.innerHTML = result;
+}
+
+// ── Notes synchronisées avec les fragments ───────────────────
+// Usage dans l'aside.notes :
+//   <div class="notes-fragment" data-fragment-index="-1">intro</div>
+//   <div class="notes-fragment" data-fragment-index="0">fragment 0</div>
+//   <div class="notes-fragment" data-fragment-index="1">fragment 1</div>
+//
+// Arrivée slide  → affiche index -1
+// fragmentshown  → affiche le bloc à l'index du fragment
+// fragmenthidden → revient au bloc précédent (index - 1)
+
+function syncFragmentNotes(slide, activeIndex) {
+  const blocks = slide.querySelectorAll('aside.notes .notes-fragment');
+  if (!blocks.length) return;
+  blocks.forEach(block => {
+    const idx = parseInt(block.dataset.fragmentIndex ?? '-99', 10);
+    block.style.display = (idx === activeIndex) ? '' : 'none';
+  });
+}
+
+function initFragmentNotes(slide) {
+  const blocks = slide.querySelectorAll('aside.notes .notes-fragment');
+  if (!blocks.length) return;
+  blocks.forEach(block => { block.style.display = 'none'; });
+  const intro = slide.querySelector('aside.notes .notes-fragment[data-fragment-index="-1"]');
+  if (intro) intro.style.display = '';
+}
+
 // ── Reveal init ─────────────────────────────────────────────
 const deck = new Reveal({
   plugins: [RevealHighlight, RevealNotes],
@@ -123,10 +190,15 @@ deck.initialize({
   highlight: { highlightOnLoad: true },
 });
 
-// ── Speaker notes CSS injection ──────────────────────────────
+// ── Ready — un seul bloc ─────────────────────────────────────
 deck.on('ready', () => {
-  wrapCodeLines(); // ← ajouter cette ligne
+  // Wrappers code highlight — après que highlight.js a tourné
+  wrapCodeLines();
 
+  // Init notes fragments sur la slide courante au démarrage
+  initFragmentNotes(deck.getCurrentSlide());
+
+  // Injection CSS dans la fenêtre speaker notes
   const originalOpen = window.open;
   window.open = function (...args) {
     const w = originalOpen.apply(window, args);
@@ -145,7 +217,9 @@ deck.on('ready', () => {
 
 // ── Slide-specific logic ─────────────────────────────────────
 deck.on('slidechanged', (event) => {
-  const { indexh, indexv } = event;
+  const { indexh, indexv, currentSlide } = event;
+
+  // Hauteur slides avec code long
   const tallSlides = [[3,2],[3,3],[4,1],[5,2],[6,1]];
   const slides = document.querySelector('.slides');
   if (tallSlides.some(([h,v]) => h === indexh && v === indexv)) {
@@ -153,6 +227,24 @@ deck.on('slidechanged', (event) => {
   } else {
     slides.style.height = '974px';
   }
+
+  // Offset vertical personnalisé par slide
+  // Usage : <section data-slide-offset="-80"> (valeur en px)
+  // Reset la slide précédente pour éviter l'accumulation au retour arrière
+  const { previousSlide } = event;
+  if (previousSlide && previousSlide.dataset.slideOffset) {
+    previousSlide.style.transform = previousSlide.style.transform
+      .replace(/\s*translateY\([^)]+\)/, '')
+      .trim();
+  }
+  const offset = currentSlide.dataset.slideOffset;
+  if (offset) {
+    const base = currentSlide.style.transform || '';
+    currentSlide.style.transform = (base + ` translateY(${offset}px)`).trim();
+  }
+
+  // Init notes fragments sur la nouvelle slide
+  initFragmentNotes(currentSlide);
 });
 
 // ── Interception transition titre → whoami ───────────────────
@@ -175,97 +267,69 @@ deck.addEventListener('beforeslidechange', (event) => {
   });
 });
 
-// ── Injection des wrappers après highlight.js ────────────────
-// Groupes de lignes à wrapper par étape (index 0-based, inclusif)
-const CODE_HL_GROUPS = [
-  [0, 2],   // step-0 : signature de la fonction
-  [4, 4],   // step-1 : getStream
-  [6, 6],   // step-2 : projectRoom
-  [8, 11],  // step-3 : validations
-  [13, 20], // step-4 : construction events + RoomFull
-  [22, 22], // step-5 : append
-];
+// ── Command handler — synchronisation flux ↔ code ────────────
+deck.on('fragmentshown', (event) => {
+  const { fragment } = event;
 
-function wrapCodeLines() {
-  const codeEl = document.querySelector('#cmd-code code');
-  if (!codeEl) return;
+  if (fragment.classList.contains('flux-step')) {
+    const step = fragment.id.split('-')[1];
 
-  // Découper le contenu en lignes (highlight.js produit du HTML)
-  const html   = codeEl.innerHTML;
-  const lines  = html.split('\n');
+    // Éteindre colonne gauche
+    document.querySelectorAll('.flux-step').forEach(el => {
+      el.style.background   = '';
+      el.style.borderRadius = '';
+      el.style.fontWeight   = '';
+    });
 
-  // Reconstruire en wrappant les groupes dans des spans data-hl
-  let result = '';
-  let hlIndex = 0;
-  let inGroup = false;
+    // Atténuer tout le code
+    document.querySelectorAll('.code-hl').forEach(el => {
+      el.style.opacity    = '0.3';
+      el.style.background = '';
+    });
 
-  for (let i = 0; i < lines.length; i++) {
-    const group = CODE_HL_GROUPS.findIndex(([start, end]) => i === start);
-    if (group !== -1) {
-      result += `<span class="code-hl" data-hl="${group}" style="display:block">`;
-      inGroup = true;
-      hlIndex = group;
-    }
+    // Allumer la ligne flux active
+    fragment.style.background   = 'rgba(88,166,255,0.13)';
+    fragment.style.borderRadius = '4px';
+    fragment.style.fontWeight   = '600';
 
-    result += lines[i] + (i < lines.length - 1 ? '\n' : '');
-
-    const currentGroup = CODE_HL_GROUPS[hlIndex];
-    if (inGroup && currentGroup && i === currentGroup[1]) {
-      result += '</span>';
-      inGroup = false;
+    // Allumer le bloc de code correspondant
+    const codeEl = document.querySelector(`.code-hl[data-hl="${step}"]`);
+    if (codeEl) {
+      codeEl.style.opacity      = '1';
+      codeEl.style.background   = 'rgba(255,215,0,0.25)';
+      codeEl.style.borderRadius = '3px';
     }
   }
 
-  codeEl.innerHTML = result;
-}
-
-// Appeler dans ready, après que highlight.js a tourné
-deck.on('ready', () => {
-  wrapCodeLines();
-
-  // ... (le reste du ready existant — injection CSS notes)
-});
-
-// ── Synchronisation flux ↔ code ──────────────────────────────
-deck.on('fragmentshown', ({ fragment }) => {
-  if (!fragment.classList.contains('flux-step')) return;
-
-  const step = fragment.id.split('-')[1];
-
-  document.querySelectorAll('.flux-step').forEach(el => {
-    el.style.background   = '';
-    el.style.borderRadius = '';
-    el.style.fontWeight   = '';
-  });
-
-  document.querySelectorAll('.code-hl').forEach(el => {
-    el.style.background = 'rgba(255,215,0,0)';
-  });
-
-  fragment.style.background   = 'rgba(88,166,255,0.13)';
-  fragment.style.borderRadius = '4px';
-  fragment.style.fontWeight   = '600';
-  fragment.style.fontSize     = '0.5em !important';
-
-  const codeEl = document.querySelector(`.code-hl[data-hl="${step}"]`);
-  if (codeEl) {
-    codeEl.style.opacity    = '1';
-    codeEl.style.background = 'rgba(255,215,0,0.25)';
-    codeEl.style.borderRadius = '3px';
+  // Sync notes fragments
+  const slide = fragment.closest('section');
+  if (slide) {
+    const fragmentIndex = parseInt(fragment.dataset.fragmentIndex ?? '0', 10);
+    syncFragmentNotes(slide, fragmentIndex);
   }
 });
 
-deck.on('fragmenthidden', ({ fragment }) => {
-  if (!fragment.classList.contains('flux-step')) return;
+deck.on('fragmenthidden', (event) => {
+  const { fragment } = event;
 
-  document.querySelectorAll('.flux-step').forEach(el => {
-    el.style.background   = '';
-    el.style.borderRadius = '';
-    el.style.fontWeight   = '';
-  });
-  document.querySelectorAll('.code-hl').forEach(el => {
-    el.style.opacity    = '';
-    el.style.background = 'none';
-    el.style.borderRadius = '';
-  });
+  if (fragment.classList.contains('flux-step')) {
+    // Tout remettre à zéro
+    document.querySelectorAll('.flux-step').forEach(el => {
+      el.style.background   = '';
+      el.style.borderRadius = '';
+      el.style.fontWeight   = '';
+    });
+    document.querySelectorAll('.code-hl').forEach(el => {
+      el.style.opacity      = '';
+      el.style.background   = '';
+      el.style.borderRadius = '';
+    });
+  }
+
+  // Sync notes fragments — on revient au bloc précédent
+  const slide = fragment.closest('section');
+  if (slide) {
+    const fragmentIndex = parseInt(fragment.dataset.fragmentIndex ?? '0', 10);
+    syncFragmentNotes(slide, fragmentIndex - 1);
+  }
 });
