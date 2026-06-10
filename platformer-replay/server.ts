@@ -1,7 +1,7 @@
 // Serveur de dev minimal — sert les fichiers statiques + compile TS à la volée
 // Lance avec : deno run --allow-net --allow-read --allow-env server.ts
 
-const PORT = 3000;
+const PORT = 3001;
 
 async function serveFile(path: string): Promise<Response> {
   try {

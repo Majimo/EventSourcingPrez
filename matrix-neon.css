@@ -650,3 +650,17 @@ section[data-background-color] .slide-demo {
 
 /* ── Hauteur slides spécifiques ───────────────────── */
 .reveal .slides.tall { height: 1060px !important; }
+
+/* ── data-line-numbers — atténuation réduite pour projecteur ── */
+
+/* Toutes les lignes : légèrement atténuées */
+.reveal pre code.hljs table.hljs-ln tbody tr {
+  opacity: 0.55 !important;
+}
+
+/* Ligne active : pleine opacité + fond doré */
+.reveal pre code.hljs table.hljs-ln tbody tr.highlight-line {
+  opacity: 1 !important;
+  background: rgba(255, 215, 0, 0.12);
+  border-left: 3px solid var(--gold);
+}

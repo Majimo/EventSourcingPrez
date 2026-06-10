@@ -8,7 +8,7 @@ const matrixBurst = (function () {
   if (!canvas) return { trigger: (cb) => cb && cb() };
 
   const ctx   = canvas.getContext('2d');
-  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@&(§)$£%+=?*#';
   const SIZE  = 16;
 
   const overlay = document.createElement('div');
@@ -48,7 +48,7 @@ const matrixBurst = (function () {
 
   function initDrops() {
     const cols = Math.floor(canvas.width / SIZE);
-    return Array.from({ length: cols }, (_, i) => -(i % 8) * 1.5);
+    return Array.from({ length: cols }, () => Math.random() * -2);
   }
 
   let animId = null;
@@ -83,18 +83,17 @@ const matrixBurst = (function () {
   canvas.style.zIndex        = '9998';
   canvas.style.pointerEvents = 'none';
 
-  const T_FADE_OUT  = 500;
-  const T_RAIN_IN   = 200;
-  const T_RAIN_HOLD = 1800;
-  const T_RAIN_OUT  = 300;
-  const T_FADE_IN   = 700;
+  const T_FADE_OUT   = 500;  // fondu noir sur slide titre
+  const T_RAIN_IN    = 400;  // apparition canvas (fondu)
+  const T_RAIN_OUT   = 400;  // disparition canvas
+  const T_FADE_IN    = 500;  // révélation slide suivante
 
-  async function trigger(onMidpoint) {
+  async function trigger(onMidpoint, rainHold = 1400) {
     await fadeOverlay('1', T_FADE_OUT);
     onMidpoint && onMidpoint();
     startRain();
     await fadeCanvas('1', T_RAIN_IN);
-    await new Promise(r => setTimeout(r, T_RAIN_HOLD));
+    await new Promise(r => setTimeout(r, rainHold)); // ← paramétré
     await fadeCanvas('0', T_RAIN_OUT);
     stopRain();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -252,17 +251,34 @@ let transitioning = false;
 
 deck.addEventListener('beforeslidechange', (event) => {
   const from = deck.getCurrentSlide();
-  const isFromTitle = from && from.querySelector('.slide-title');
-  const toIndex = event.indexh;
+  const toIndex  = event.indexh;
+  const toIndexV = event.indexv ?? 0;
 
-  if (!isFromTitle || toIndex !== 1 || transitioning) return;
+  const fromIndices = deck.getIndices(from);
+  const fromH = fromIndices.h;
+  const fromV = fromIndices.v ?? 0;
+
+  // Paires déclenchant le burst — [fromH, fromV, toH, toV]
+  const burstTransitions = [
+    { from: [0, 0], to: [1, 0], hold: 2400 },  // slide titre → whoami
+    { from: [3, 4], to: [3, 5], hold: 1200 },  // démo jeu → section 2
+    { from: [5, 3], to: [5, 4], hold: 1200 },  // démo backend → section 4
+    { from: [7, 0], to: [8, 0], hold: 2400 },  // takeaways → conclusion
+  ];
+
+  const match = burstTransitions.find(
+    ({ from: [fh, fv], to: [th, tv] }) =>
+      fromH === fh && fromV === fv && toIndex === th && toIndexV === tv
+  );
+
+  if (!match || transitioning) return;
 
   event.preventDefault();
   transitioning = true;
 
   matrixBurst.trigger(() => {
-    deck.slide(1, 0, 0);
-  }).then(() => {
+    deck.slide(match.to[0], match.to[1], 0);
+  }, match.hold).then(() => {
     transitioning = false;
   });
 });
