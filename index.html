@@ -68,18 +68,20 @@
     <div>
       <div class="card green" style="margin-bottom:16px">
         <div class="card-title">Dev</div>
-        <p>Développeur Fullstack <span class="glow-cyan">@CodeWithUs</span> — forte appétence Angular & Typescript.<br>
-        Je rejoins des équipes pour apporter architecture et guidance technique.</p>
+        <p>Développeur Fullstack Typescript <span class="glow-cyan">@CodeWithUs</span>.
+          <!-- <br>
+        Je rejoins des équipes pour apporter architecture et guidance technique. -->
+      </p>
       </div>
       <div class="card" style="margin-bottom:16px">
-        <div class="card-title">Passions</div>
-        <p>Jeux vidéo (Godot) · Architecture logicielle · Homelab Proxmox</p>
+        <div class="card-title">Hobbies</div>
+        <p>Jeux vidéo (Godot) · GameDev</p>
       </div>
-      <div class="card magenta">
+      <!-- <div class="card magenta">
         <div class="card-title">Ce talk</div>
         <p>Une métaphore qui m'a sauté aux yeux un soir en bricolant un système de replay maison.<br>
         Je voulais la partager.</p>
-      </div>
+      </div> -->
     </div>
     <div style="display:flex; flex-direction:column; gap:12px; padding-top:8px">
       <div class="highlight-box green">
@@ -371,10 +373,13 @@ Joue bien l'effet de rupture : c'est le premier petit moment “aha”.
         <p class="small">Fichier <code>.rep</code> de quelques Ko pour une partie d'1h. Contient uniquement les ordres des joueurs horodatés.</p>
         <div class="tag green mt">Fichier replay &lt; 500 Ko</div>
       </div>
-      <div class="fragment card">
-        <div class="card-title">🎮 Doom (1993) — le pionnier</div>
-        <p class="small">Format <code>.lmp</code> : liste des inputs par tic (35/s). Rejoue exactement la même démo sur n'importe quelle machine.</p>
-        <div class="tag cyan mt">32 ans déjà</div>
+      <div class="fragment">
+        <div class="card">
+          <div class="card-title">🎮 Doom (1993) — le pionnier</div>
+          <p class="small">Format <code>.lmp</code> : liste des inputs par tic (35/s). Rejoue exactement la même démo sur n'importe quelle machine.</p>
+          <div class="tag cyan mt">32 ans déjà</div>
+        </div>
+        <img src="assets/doom_lmp_matrix_neon.svg" alt="Illustration octets Doom" style="position:absolute;left:7em;width:75%;top:10em;">
       </div>
       <div class="fragment card magenta">
         <div class="card-title">🔫 CS2 / FPS modernes</div>
@@ -1132,7 +1137,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     <div class="slide-section">
       <div class="section-number">// PARTIE 03</div>
       <div class="section-title">Cas d'usage<br>réels</div>
-      <div class="section-tag">Debug · Audit · Time travel · Résilience</div>
+      <div class="section-tag">Audit · Time travel · Migration</div>
     </div>
 
     <aside class="notes">
@@ -1146,6 +1151,10 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
   <!-- 3.1 — Time travel -->
   <section data-slide-offset="-40">
     <h2>Time travel —  <span class="glow-green">?at=2026-06-24T14:30:00</span></h2>
+
+    <div id="delorean-gif" class="fragment" style="position:absolute;display:flex;justify-content:center;align-items:center;height:100%;width:100%;">
+      <img src="assets/DeLorean.gif" alt="DeLorean Back to the Future 2" style="width:25em;">
+    </div>
 
     <div class="cols cols-60-40" style="margin-top:0.8em">
       <div class="fragment">
@@ -1175,7 +1184,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
             <li>Debug d'un bug en prod survenu à 3h du matin</li>
             <li>Reconstitution d'un incident pour la postmortem</li>
             <li>"L'état était comment avant le déploiement ?"</li>
-            <li>Audit réglementaire (RGPD, finance, santé)</li>
+            <!-- <li>Audit réglementaire (RGPD, finance, santé)</li> -->
           </ul>
         </div>
         <div class="fragment card magenta">
@@ -1206,7 +1215,8 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       "Mais le principe est strictement le même :
       remonter à un instant précis du passé et regarder
       ce qui s'y passait."
-      <br>
+      </div>
+      <div class="notes-fragment" data-fragment-index="1">
       <b>LE CODE</b>
       <br>
       "Regardez ce que ça prend pour implémenter le time travel.
@@ -1221,8 +1231,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       Et on obtient l'état exact du système à cette date.
       Pas de backup. Pas de snapshot. Juste un filtre et un replay."
       </div>
-
-      <div class="notes-fragment" data-fragment-index="1">
+      <div class="notes-fragment" data-fragment-index="2">
       <b>LES CAS D'USAGE</b>
       <br>
       <em>Bug à 3h du matin :</em>
@@ -1242,7 +1251,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       Sans rollback, sans restauration de backup."
       </div>
 
-      <div class="notes-fragment" data-fragment-index="2">
+      <div class="notes-fragment" data-fragment-index="3">
       <b>LE PARALLÈLE JEU — L'ANCRER</b>
       <br>
       "Dans les jeux, on appelle ça le killcam ou le spectator mode.
@@ -1255,7 +1264,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       Le condensateur de flux, c'est le log d'events."
       </div>
 
-      <div class="notes-fragment" data-fragment-index="3">
+      <div class="notes-fragment" data-fragment-index="4">
       <b>LA HIGHLIGHT-BOX — RENDRE CONCRET</b>
       <br>
       "GET /rooms/amphi-a?at=2026-06-24T14:30:00"
@@ -1712,10 +1721,11 @@ Cette phrase remet tout le monde avec toi.
         </div>
       </div>
       <div class="warning-item fragment">
-        <span class="icon">📊</span>
+        <span class="icon">👥</span>
         <div>
-          <span class="label">Requêtes cross-aggregates coûteuses</span>
-          "Toutes les salles avec plus de 10 check-ins ce mois-ci" = rejouer tous les streams. Les projections doivent être construites et maintenues à part (read models).
+          <span class="label">Courbe d'apprentissage équipe</span>
+          Besoin de désapprendre le réflexe CRUD. 
+          Sans formation, on se retrouve avec des events mal nommés, des projections qui font des effets de bord, etc...
         </div>
       </div>
     </div>
@@ -1796,20 +1806,16 @@ Cette phrase remet tout le monde avec toi.
       Planifiez le temps de formation."
       </div>
       <div class="notes-fragment" data-fragment-index="4">
-      <strong>📊 REQUÊTES CROSS-AGGREGATES</strong>
+      <strong>👥 COURBE D'APPRENTISSAGE</strong>
       <br>
-      "Dernier piège, et c'est un classique en prod."
-      <br>
-      "Dans notre démo, chaque salle est un aggregate indépendant.
-      Tant que vos requêtes portent sur une salle, tout va bien.
-      Mais si vous voulez 'toutes les salles avec plus de 50 check-ins
-      ce mois-ci' — vous devez rejouer tous les streams de toutes
-      les salles et agréger."
-      "La solution c'est les read models : des projections persistées,
-      construites en avance, optimisées pour les requêtes fréquentes.
-      C'est du CQRS — Command Query Responsibility Segregation.
-      Ça fonctionne très bien, mais c'est une couche de complexité
-      supplémentaire à concevoir, maintenir et synchroniser."
+      "Vous pouvez avoir la meilleure architecture du monde —
+      si le premier junior qui arrive ne comprend pas pourquoi
+      on ne fait pas d'UPDATE, il va en faire un.
+      Et si le tech lead ne peut pas expliquer la différence
+      entre une commande et un event en moins de deux minutes,
+      le pattern ne tiendra pas sur la durée.
+      L'event sourcing demande un investissement formation réel.
+      Pas une heure de démo. Plusieurs semaines de pratique."
       <br>
       <strong>CONCLURE HONNÊTEMENT</strong>
       <br>

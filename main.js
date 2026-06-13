@@ -317,11 +317,25 @@ deck.on('fragmentshown', (event) => {
     }
   }
 
-  // Sync notes fragments
+  // Fade out DeLorean gif au fragment suivant
   const slide = fragment.closest('section');
   if (slide) {
+    const gif = slide.querySelector('#delorean-gif');
+    if (gif) {
+      const fragIndex = parseInt(fragment.dataset.fragmentIndex ?? '0', 10);
+      if (fragIndex >= 1) {
+        gif.classList.add('fade-out');
+      } else {
+        gif.classList.remove('fade-out');
+      }
+    }
+  }
+
+  // Sync notes fragments
+  const slideSection = fragment.closest('section');
+  if (slideSection) {
     const fragmentIndex = parseInt(fragment.dataset.fragmentIndex ?? '0', 10);
-    syncFragmentNotes(slide, fragmentIndex);
+    syncFragmentNotes(slideSection, fragmentIndex);
   }
 });
 
@@ -342,10 +356,21 @@ deck.on('fragmenthidden', (event) => {
     });
   }
 
-  // Sync notes fragments — on revient au bloc précédent
   const slide = fragment.closest('section');
   if (slide) {
+    const gif = slide.querySelector('#delorean-gif');
+    if (gif) {
+      const fragIndex = parseInt(fragment.dataset.fragmentIndex ?? '0', 10);
+      if (fragIndex <= 1) {
+        gif.classList.remove('fade-out');
+      }
+    }
+  }
+
+  // Sync notes fragments — on revient au bloc précédent
+  const slideSection = fragment.closest('section');
+  if (slideSection) {
     const fragmentIndex = parseInt(fragment.dataset.fragmentIndex ?? '0', 10);
-    syncFragmentNotes(slide, fragmentIndex - 1);
+    syncFragmentNotes(slideSection, fragmentIndex - 1);
   }
 });
