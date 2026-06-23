@@ -111,28 +111,28 @@
 
   <div class="cols cols-2" style="margin-top:1em; gap:16px">
     <div class="card green">
-      <div class="card-title">Partie 1 — ~10 min</div>
+      <div class="card-title">Partie 1</div>
       <p style="font-size:0.78em; line-height:1.7">
         <span class="glow-green mono">01.</span> Un replay, ce n'est pas une vidéo<br>
         <span class="muted small">Comment les jeux stockent et rejouent une partie</span>
       </p>
     </div>
     <div class="card">
-      <div class="card-title">Partie 2 — ~12 min</div>
+      <div class="card-title">Partie 2</div>
       <p style="font-size:0.78em; line-height:1.7">
         <span class="glow-cyan mono">02.</span> De la partie au système<br>
         <span class="muted small">Introduction concrète à l'event sourcing</span>
       </p>
     </div>
     <div class="card magenta">
-      <div class="card-title">Partie 3 — ~10 min</div>
+      <div class="card-title">Partie 3</div>
       <p style="font-size:0.78em; line-height:1.7">
         <span class="glow-magenta mono">03.</span> Cas d'usage réels<br>
-        <span class="muted small">Debug, audit, time travel, résilience</span>
+        <span class="muted small">Audit, time travel, migration</span>
       </p>
     </div>
     <div class="card gold">
-      <div class="card-title">Partie 4 — ~10 min</div>
+      <div class="card-title">Partie 4</div>
       <p style="font-size:0.78em; line-height:1.7">
         <span class="glow-gold mono">04.</span> Limites et conseils pragmatiques<br>
         <span class="muted small">Snapshots, coût, tooling, quand NE PAS l'utiliser</span>
@@ -197,7 +197,7 @@
 
   <!-- 1.1 — Le killcam, tout le monde connaît -->
   <section>
-    <h2>Le killcam — tout le monde connaît</h2>
+    <h2>La killcam — tout le monde connaît</h2>
 
     <div class="cols cols-60-40" style="margin-top:0.8em">
       <div>
@@ -405,7 +405,7 @@ Joue bien l'effet de rupture : c'est le premier petit moment “aha”.
       Le revers : si Blizzard sort un patch qui change le comportement
       d'une unité, les anciens replays deviennent faux — le moteur recalcule
       différemment. C'est un avant-goût d'un problème qu'on verra en partie 4
-      avec le versioning des events. Glisser : "même idée, même piège."
+      avec le versioning des events.
       </div>
 
       <div class="notes-fragment" data-fragment-index="1">
@@ -530,7 +530,7 @@ Joue bien l'effet de rupture : c'est le premier petit moment “aha”.
       <br>
       "recorder, c'est le magnétoscope. Il note ce que le joueur fait,
       mais uniquement quand ça change — pas 60 fois par seconde en permanence.
-      player, c'est le magnétoscope qu'on rembobine. Il reprend depuis
+      player, c'est la VHS qu'on rembobine. Il reprend depuis
       le début et réinjecte tout dans le même moteur. C'est lui qui fait
       le replay et le killcam."
       <br>
@@ -602,9 +602,8 @@ Ne cherche pas la performance de joueur. Cherche la lisibilité de la mécanique
       <br>
 Transition nette.
 
-« On vient de voir comment un jeu stocke une partie sans stocker de vidéo. Maintenant, je vais vous montrer qu'un backend peut stocker un processus métier sans stocker uniquement son état final. »
-
-L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on change juste de décor.
+<p>« On vient de voir comment un jeu stocke une partie sans stocker de vidéo. Maintenant, je vais vous montrer qu'un backend peut stocker un processus métier sans stocker uniquement son état final. On va utiliser une petite application où on log les participations à des conférences du Bzhcamp»</p> 
+<p>« Spoiler, vous avez tous un event store sur votre machine. Il s'appelle Git. "git log", c'est votre audit trail. "git checkout", c'est votre time travel. Ce qu'on va faire côté backend, c'est exactement ça — mais pour vos données métier. »</p> 
 </aside>
   </section>
 
@@ -692,6 +691,9 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       <p>"Et ce RoomFull marqué 'auto' — ce n'est pas le client qui l'a envoyé.
       C'est la règle métier qui l'a émis automatiquement quand la capacité
       a été atteinte. On y reviendra dans la slide suivante."</p>
+      <p>"Quand je dis log d'events, j'entends pas des logs applicatifs qu'on enverrait dans Datadog ou Kibana. 
+      Je parle d'un stockage persistant, structuré, interrogeable. C'est bien votre base de données. 
+      Sauf qu'au lieu de stocker l'état final, elle stocke chaque décision qui a mené à cet état."</p>
       <strong>TRANSITION</strong>
       <p>"Donc : même idée que le replay de jeu. Même structure.
       Voyons maintenant comment ça s'organise concrètement."</p>
@@ -750,7 +752,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         AttendeeCheckedIn, pas CheckInAttendee."<br>"La différence n'est pas stylistique. OpenRoom, c'est un ordre —
         quelqu'un demande quelque chose. RoomOpened, c'est un fait —
         quelque chose s'est passé. Un fait ne peut pas être annulé.
-        Il peut seulement être compensé par un autre fait."<br>"Si j'ai écrit RoomOpened dans mon log,
+        Il peut seulement être compensé par un autre fait."<br>"Si j'ai écrit RoomOpened dans mon stream,
         je ne peux pas l'effacer. Si j'ai fait une erreur, j'émets
         RoomClosed. L'erreur reste visible. La correction aussi."</p>
         <p>"Et Immuable ça signifie qu'une fois écrit, un event ne change jamais.
@@ -789,7 +791,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     <div class="cols cols-2" style="margin-top:0.8em">
         <pre style="height:26.5em;margin-block:auto;"><code class="language-typescript" data-line-numbers="10, 13-16, 22-24">// eventStore.ts — le cœur du système
   class EventStore {
-    // Le log global — ici en mémoire pour la démo
+    // Le stream global — ici en mémoire pour la démo
     // En prod : PostgreSQL, EventStoreDB, Kafka…
     private events: DomainEvent[] = [];
 
@@ -798,7 +800,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       for (const event of events) {
         this.events.push(event);
 
-        // Log formaté — le parallèle avec le jeu
+        // Stream formaté — le parallèle avec le jeu
         const v = String(event.version).padStart(3,' ');
         const type = event.type.padEnd(24,' ');
         const data = JSON.stringify(event.payload);
@@ -1122,7 +1124,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
     joueur appuie sur SHOOT et le moteur décide PLAYER_HIT si la hitbox correspond.
     <br>
     <strong>ÉTAPE 6 — APPEND ONLY</strong>
-    eventStore.append() écrit les events dans le log. Jamais de UPDATE, jamais
+    eventStore.append() écrit les events dans l'event store. Jamais de UPDATE, jamais
     de DELETE. Une erreur future sera un event compensatoire, pas une correction
     en base. Une fois append() appelé, c'est un fait historique.
   </aside>
@@ -1144,7 +1146,8 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       <strong>TIMING - 30:00</strong>
       <br>
       Accélérer si à 33:00<br>
-    « Ok, le modèle est en place. Maintenant la vraie question, c'est : pourquoi s'infliger ça ? Qu'est-ce que ça apporte concrètement ? »
+    <p>« Ok, le modèle est en place. Maintenant la vraie question, c'est : pourquoi s'infliger ça ? Qu'est-ce que ça apporte concrètement ? »</p>
+    <p>Google Docs, Figma, Notion — tout ce qui fait de la collaboration temps réel avec historique et undo illimité repose sur ce principe. Vous utilisez en réalité de l'event-sourcing tous les jours sans le savoir.</p>
     </aside>
   </section>
 
@@ -1190,7 +1193,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
         <div class="fragment card magenta">
           <div class="card-title">🎮 Dans le jeu</div>
           <p class="small">
-            Killcam = time travel sur les 5 derniers ticks.<br>
+            Killcam = time travel sur les 300 derniers ticks.<br>
             Spectator mode = time travel en temps réel.<br>
             Rewind = time travel interactif.
           </p>
@@ -1208,7 +1211,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       <b>INTRO — LA RÉFÉRENCE PLAISIR</b>
       <br>
       "Marty McFly avait une DeLorean et 1,21 gigawatts.
-      Nous, on a un log d'events et un filtre de date."
+      Nous, on a un stream d'events et un filtre de date."
       <br>
       Pause. Laisser les sourires.
       <br>
@@ -1261,7 +1264,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
       il rejoue jusqu'à la date demandée, puis s'arrête."
       <br>
       "La DeLorean, c'est projectRoom.
-      Le condensateur de flux, c'est le log d'events."
+      Le condensateur de flux, c'est le stream d'events."
       </div>
 
       <div class="notes-fragment" data-fragment-index="4">
@@ -1404,7 +1407,7 @@ L'idée, c'est de faire sentir qu'on ne change pas vraiment de sujet — on chan
           <p class="small mt">En CRUD : migration SQL complexe, point of no return.</p>
           <p class="small mt" style="color:var(--green)">En ES : on rejoue tous les events avec la nouvelle projection. L'ancien log reste intact.</p>
           <div class="highlight-box green" style="margin-top:8px; font-size:0.7em">
-            Nouvelle projection = nouvelle lecture du même log
+            Nouvelle projection = nouvelle lecture du même stream
           </div>
         </div>
       </div>
@@ -1742,6 +1745,7 @@ Cette phrase remet tout le monde avec toi.
       pas avec de l'enthousiasme mal calibré.
       <br>
       FAIRE APPARAÎTRE LES FRAGMENTS UN PAR UN — NE PAS SE PRÉCIPITER
+      <div style="height: 10px;"></div>
       <div class="notes-fragment" data-fragment-index="0">
       <strong>⚡ COÛT DE RELECTURE</strong>
       <br>
@@ -1972,7 +1976,7 @@ Cette phrase remet tout le monde avec toi.
     </div>
     <div class="takeaway fragment">
       <div class="num">02</div>
-      <div class="text">L'event sourcing applique exactement cette idée à nos SI : on stocke les décisions métier, pas l'état final.</div>
+      <div class="text">L'event sourcing applique exactement cette idée dans nos backends : on stocke les décisions métier, pas l'état final.</div>
     </div>
     <div class="takeaway fragment">
       <div class="num">03</div>
@@ -1989,17 +1993,25 @@ Cette phrase remet tout le monde avec toi.
   </div>
 
   <aside class="notes">
-      <strong>TIMING - 45:00</strong>
-      <br>
-Fais apparaître les takeaways un par un, avec un vrai rythme de fin de conf.
-
-À chaque point, reformule oralement plutôt que de lire.
-
-Sur le dernier, appuie fort : « Ce n'est pas parce que la métaphore est belle, ni parce que la démo est cool, qu'il faut en mettre partout. »
-
-C'est ta dernière grande note de pragmatisme avant la conclusion.
-</aside>
-</section>
+    <strong>TIMING - 45:00</strong>
+    <br>
+    <div class="notes-fragment" data-fragment-index="0">
+      Un replay de jeu = état initial + log d'events rejoués par une fonction pure. Pas une vidéo. Jamais.
+    </div>
+    <div class="notes-fragment" data-fragment-index="1">
+      L'event sourcing applique exactement cette idée dans nos backends : on stocke les décisions métier, pas l'état final.
+    </div>
+    <div class="notes-fragment" data-fragment-index="2">
+      La projection est une fonction pure : <code>f(events) → état</code>. Déterministe = time travel possible.
+    </div>
+    <div class="notes-fragment" data-fragment-index="3">
+      Use cases réels : audit trail gratuit, debug en prod, migration de schéma, reconstruction sur nouvelle archi.
+    </div>
+    <div class="notes-fragment" data-fragment-index="4">
+      Mais : coût de relecture, versioning, complexité outillage. NE PAS utiliser pour du CRUD simple.
+    </div>
+  </aside>
+  </section>
 
 <!-- ═══════════════════════════════════════════════════════════
      SLIDE FINALE
@@ -2011,7 +2023,7 @@ C'est ta dernière grande note de pragmatisme avant la conclusion.
     <h1>Questions ?</h1>
 
     <div class="subtitle">
-      "Un jeu et un SI stockent tous les deux<br>
+      "Un jeu et un backend stockent tous les deux<br>
       une chronologie d'événements, pas un état figé."
     </div>
 
@@ -2035,6 +2047,8 @@ C'est ta dernière grande note de pragmatisme avant la conclusion.
         <p class="small muted mt">Les deux projets sont<br>dans le repo.</p>
       </div>
     </div>
+
+    <img src="assets/openfeedback.png" style="position: absolute;right: 50px;top: 50px;width: 8em;" alt="Openfeedback Breizhcamp 2026">
   </div>
 
   <aside class="notes">
@@ -2060,6 +2074,8 @@ Garde de l'énergie à ce moment-là : la fin doit sembler ouverte et accessible
      ═══════════════════════════════════════════════════════════ -->
 <section>
   <h2>Bonus — <span class="glow-gold">Le grand mapping</span></h2>
+
+  <img src="assets/linktree_qrcode.png" alt="QR code Linktree Pierre FERVEL" style="width:250px; position:absolute; top:-12rem; right:2rem;">
 
   <p class="muted small" style="margin-bottom:0.6em">Le parallèle complet jeu ↔ backend</p>
 

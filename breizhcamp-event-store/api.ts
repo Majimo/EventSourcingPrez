@@ -1,6 +1,6 @@
 // ============================================================
-// API HTTP — serveur Deno (zero-config, TypeScript natif)
-// Lancer : deno run --allow-net api.ts
+// API HTTP — serveur Deno
+// deno run --allow-net api.ts
 // ============================================================
 
 import { eventStore } from "./src/eventStore.ts";
@@ -35,7 +35,8 @@ async function handler(req: Request): Promise<Response> {
         body.talkTitle,
         body.speaker
       );
-      return json({ ok: true, roomId: body.roomId }, 201);
+      const { roomId, ...roomWithoutId } = body;
+      return json({ ok: true, roomId, room: roomWithoutId }, 201);
     }
 
     // ── GET /rooms ──────────────────────────────────────────
@@ -77,7 +78,7 @@ async function handler(req: Request): Promise<Response> {
     if (method === "POST" && checkinMatch) {
       const body = await req.json();
       checkIn(checkinMatch[1], body.attendeeId, body.attendeeName);
-      return json({ ok: true });
+      return json({ ok: true, attendee: body });
     }
 
     // ── POST /rooms/:id/checkout ────────────────────────────
@@ -85,7 +86,7 @@ async function handler(req: Request): Promise<Response> {
     if (method === "POST" && checkoutMatch) {
       const body = await req.json();
       checkOut(checkoutMatch[1], body.attendeeId, body.attendeeName);
-      return json({ ok: true });
+      return json({ ok: true, attendee: body });
     }
 
     // ── POST /rooms/:id/close ───────────────────────────────
@@ -93,7 +94,7 @@ async function handler(req: Request): Promise<Response> {
     if (method === "POST" && closeMatch) {
       const body = await req.json();
       closeRoom(closeMatch[1], body.reason ?? "Talk terminé");
-      return json({ ok: true });
+      return json({ ok: true, reason: body.reason });
     }
 
     // ── GET /rooms/:id/events ───────────────────────────────

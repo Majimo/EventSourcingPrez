@@ -6,7 +6,55 @@
 
 const BASE = "http://localhost:8000";
 
-// ── Helpers ──────────────────────────────────────────────────
+// ── Couleurs ANSI ─────────────────────────────────────────────
+const R  = '\x1b[0m';   // reset
+const B  = '\x1b[1m';   // bold
+const DM = '\x1b[2m';   // dim
+
+const GR = '\x1b[32m';  // green
+const CY = '\x1b[36m';  // cyan
+const YL = '\x1b[33m';  // yellow
+const MG = '\x1b[35m';  // magenta
+const RD = '\x1b[31m';  // red
+const WH = '\x1b[97m';  // white
+
+// ── Colorisation JSON ─────────────────────────────────────────
+function colorJson(obj: unknown, indent = 0): string {
+  const pad = '  '.repeat(indent);
+  const pad1 = '  '.repeat(indent + 1);
+
+  if (obj === null)            return `${MG}null${R}`;
+  if (typeof obj === 'boolean')return `${MG}${obj}${R}`;
+  if (typeof obj === 'number') return `${YL}${obj}${R}`;
+  if (typeof obj === 'string') return `${GR}"${obj}"${R}`;
+
+  if (Array.isArray(obj)) {
+    if (obj.length === 0) return `${DM}[]${R}`;
+    const items = obj.map(v => `${pad1}${colorJson(v, indent + 1)}`).join(',\n');
+    return `${DM}[${R}\n${items}\n${pad}${DM}]${R}`;
+  }
+
+  if (typeof obj === 'object') {
+    const entries = Object.entries(obj as Record<string, unknown>);
+    if (entries.length === 0) return `${DM}{}${R}`;
+    const lines = entries.map(([k, v]) => {
+      // Colorisation spéciale selon la clé
+      let keyColor = CY;
+      if (k === 'error')         keyColor = RD;
+      if (k === 'ok')            keyColor = GR;
+      if (k === 'type')          keyColor = YL;
+      if (k === 'version')       keyColor = MG;
+      if (k === 'occurredAt')    keyColor = DM;
+      if (k === 'eventId')       keyColor = DM;
+      return `${pad1}${keyColor}"${k}"${R}: ${colorJson(v, indent + 1)}`;
+    });
+    return `${DM}{${R}\n${lines.join(',\n')}\n${pad}${DM}}${R}`;
+  }
+
+  return String(obj);
+}
+
+// ── Helpers ───────────────────────────────────────────────────
 
 async function post(path: string, body: unknown) {
   const res = await fetch(`${BASE}${path}`, {
@@ -16,36 +64,40 @@ async function post(path: string, body: unknown) {
   });
   const data = await res.json();
   const ok = res.status === 200 || res.status === 201;
-  console.log(`  ${ok ? "✅" : "❌"} POST ${path}`);
-  console.log(`     ${JSON.stringify(data)}`);
+
+  console.log(`  ${ok ? `${GR}✅${R}` : `${RD}❌${R}`} ${B}POST${R} ${CY}${path}${R}`);
+  const lines = colorJson(data, 1).split('\n');
+  lines.forEach(l => console.log(`  ${l}`));
   return data;
 }
 
 async function get(path: string) {
   const res = await fetch(`${BASE}${path}`);
   const data = await res.json();
-  console.log(`  ✅ GET  ${path}`);
-  console.log(JSON.stringify(data, null, 2)
-    .split("\n")
-    .map(l => `     ${l}`)
-    .join("\n")
-  );
+
+  console.log(`  ${GR}✅${R} ${B}GET ${R} ${CY}${path}${R}`);
+  const lines = colorJson(data, 1).split('\n');
+  lines.forEach(l => console.log(`  ${l}`));
   return data;
 }
 
 // Attend une pression sur Entrée
 async function waitForEnter(label: string) {
   const buf = new Uint8Array(1);
-  await Deno.stdout.write(new TextEncoder().encode(`\n${"─".repeat(60)}\n`));
-  await Deno.stdout.write(new TextEncoder().encode(`👉 ${label}  [Entrée pour continuer]`));
+  await Deno.stdout.write(new TextEncoder().encode(
+    `\n${DM}${'─'.repeat(60)}${R}\n`
+  ));
+  await Deno.stdout.write(new TextEncoder().encode(
+    `${YL}👉${R} ${B}${label}${R}  ${DM}[Entrée pour continuer]${R}`
+  ));
   await Deno.stdin.read(buf);
 }
 
 // Affiche le titre d'une étape
 function step(n: number, title: string) {
-  console.log(`\n${"═".repeat(60)}`);
-  console.log(`  ${n}. ${title}`);
-  console.log(`${"═".repeat(60)}\n`);
+  console.log(`\n${CY}${'═'.repeat(60)}${R}`);
+  console.log(`  ${B}${WH}${n}.${R} ${B}${title}${R}`);
+  console.log(`${CY}${'═'.repeat(60)}${R}\n`);
 }
 
 // ── Scénario ──────────────────────────────────────────────────
@@ -64,9 +116,9 @@ await post("/rooms", {
 await post("/rooms", {
   roomId: "salle-b1",
   roomName: "Salle B1",
-  capacity: 20,
+  capacity: 10,
   talkTitle: "Deno pour les dev Node.js",
-  speaker: "Marie Curie",
+  speaker: "Naruto Shinobi",
 });
 
 await waitForEnter("Check-ins dans l'Amphi A");
@@ -76,9 +128,8 @@ step(2, "Check-ins (Alice + Bob)");
 await post("/rooms/amphi-a/checkin", { attendeeId: "att-001", attendeeName: "Alice Martin" });
 await post("/rooms/amphi-a/checkin", { attendeeId: "att-002", attendeeName: "Bob Dupont" });
 
-// Mémorise la date pour le time travel (avant le 3ème check-in)
 const timeTravelDate = new Date().toISOString();
-console.log(`\n  ⏱️  Date mémorisée pour le time travel : ${timeTravelDate}`);
+console.log(`\n  ${YL}⏱️${R}  Date mémorisée pour le time travel : ${B}${timeTravelDate}${R}`);
 
 await waitForEnter("3ème check-in → déclenche RoomFull automatiquement");
 
@@ -108,7 +159,7 @@ await waitForEnter(`Time travel → état AVANT le 3ème check-in`);
 
 // ── 7. Time travel ────────────────────────────────────────────
 step(7, `Time travel → état à ${timeTravelDate}`);
-console.log("  (on rejoue les events jusqu'à cette date, comme une killcam)\n");
+// console.log(`  ${DM}(on rejoue les events jusqu'à cette date, comme une killcam)${R}\n`);
 await get(`/rooms/amphi-a?at=${timeTravelDate}`);
 
 await waitForEnter("Audit trail → le log brut des events");
@@ -135,6 +186,6 @@ await waitForEnter("Fermeture de la salle — fin du talk 🎉");
 step(11, "Fermeture de l'Amphi A");
 await post("/rooms/amphi-a/close", { reason: "Talk terminé, merci !" });
 
-console.log("\n" + "═".repeat(60));
-console.log("  ✅ Démo terminée — merci BreizhCamp ! 🎮");
-console.log("═".repeat(60) + "\n");
+console.log(`\n${CY}${'═'.repeat(60)}${R}`);
+console.log(`  ${GR}✅${R} ${B}Démo terminée — merci BreizhCamp ! 🎮${R}`);
+console.log(`${CY}${'═'.repeat(60)}${R}\n`);
